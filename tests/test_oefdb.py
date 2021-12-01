@@ -1,4 +1,4 @@
-def test_import() -> None:
+def test_oefdb_import_statement() -> None:
     import oefdb  # noqa: F401
 
-    assert "Empty test to ensure pytest passes."
+    assert "Empty assert to ensure pytest passes as long as the above imports succeeds."
