@@ -61,19 +61,22 @@ tox -- test
 
 #### Principles
 
-* Simple for developers to get up-and-running
+* Simple for developers to get up-and-running (`poetry`, `poethepoet`)
+* Unit tests with test coverage reports (`pytest`, `tox`)
 * Consistent style (`isort`, `black`, `flake8`)
-* Future-proof (`pyupgrade`)
-* Full type hinting (`mypy`)
+* Prevent use of old Python syntax (`pyupgrade`)
+* Encourage type hinting (`mypy`) [optional]
 
 #### Development tools
 
-* `poetry` for dependency management
-* `poethepoet` as local task runner
-* `isort`, `black`, `pyupgrade` and `flake8` linting
-* `pre-commit` to run linting
-* `mypy` for type checking
-* `tox` and GitHub Actions for tests and CI
+* [`poetry`](https://python-poetry.org/) for dependency management
+* [`poethepoet`](https://github.com/nat-n/poethepoet) as local task runner
+* [`isort`](https://github.com/PyCQA/isort), [`black`](https://github.com/psf/black), [`pyupgrade`](https://github.com/asottile/pyupgrade) and [`flake8`](https://flake8.pycqa.org/en/latest/) linting
+* [`mypy`](https://mypy.readthedocs.io/en/stable/) for type hinting
+* [`pre-commit`](https://pre-commit.com/) to run linting / dependency checks
+* [`pytest`](https://docs.pytest.org/), and [`tox`](https://tox.wiki) to run tests
+* [`tox`]() and [GitHub Actions](https://github.com/features/actions) for running tests against different Python versions
+* [`editorconfig`](https://editorconfig.org/) for telling the IDE how to format tabs/newlines etc
 
 #### CI
 
