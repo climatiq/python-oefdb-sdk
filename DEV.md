@@ -10,7 +10,7 @@ Then, install dependencies:
 poetry install
 ```
 
-This sets up a local Python environment with all the relevant dependencies.
+This sets up a local Python environment with all the relevant dependencies, including the Development Tools listed further down in this readme.
 
 The remaining commands in this readme assume you have activated it by running:
 
