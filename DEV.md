@@ -65,7 +65,7 @@ tox -- test
 * Unit tests with test coverage reports (`pytest`, `tox`)
 * Consistent style (`isort`, `black`, `flake8`)
 * Prevent use of old Python syntax (`pyupgrade`)
-* Encourage type hinting (`mypy`) [optional]
+* Require type hinting (`mypy`)
 
 #### Development tools
 
