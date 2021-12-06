@@ -25,7 +25,13 @@ def export_for_github(oefdb_df: DataFrame) -> None:
     else:
         import pyperclip
 
-        pyperclip.copy(oefdb_csv)
-        print(  # noqa: T001
-            "The OEFDB CSV contents has been copied into the clipboard."
-        )
+        try:
+            pyperclip.copy(oefdb_csv)
+            print(  # noqa: T001
+                "The OEFDB CSV contents has been copied into the clipboard."
+            )
+        except pyperclip.PyperclipException:
+            print(  # noqa: T001
+                "Copy the following OEFDB CSV contents to the clipboard:"
+            )
+            print(oefdb_csv)  # noqa: T001
