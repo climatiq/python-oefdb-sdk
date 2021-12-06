@@ -28,7 +28,7 @@ oefdb_df = oefdb.import_from_github()
 
 After making suggested changes to the imported dataframe, you can contribute these changes to OEFDB as per follows:
 
-1. Run the following to validate the dataframe contents/structure and present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
+1. Run the following to present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
 
 ```py
 oefdb.export_for_github(oefdb_df)
@@ -47,7 +47,7 @@ oefdb.export_for_github(oefdb_df)
 oefdb_df_under_review = oefdb.import_from_github(pr=123)
 ```
 
-2. Use Python to review the data, comparing it to the main revision data as necessary. For instance, you can use [DataFrame.compare](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.compare.html) to compare differences.
+2. Use Python to review the data, comparing it to the main revision data as necessary.
 3. Add review comments via the GitHub UI as necessary and approve when discussions are resolved.
 
 ## Development
