@@ -57,6 +57,17 @@ Run tests against all supported Python environments:
 tox -- test
 ```
 
+### Using the development version of python-oefdb-sdk in a notebook
+
+Run the following to install a Jupyter kernel and opening the example Jupyter notebook:
+
+```
+poe install_kernel
+jupyter-notebook example-notebook.py
+```
+
+After selecting the `python-oefdb-sdk` kernel in Jupyter you should be able to interact with the development version as if it was installed via pip.
+
 ### Development setup
 
 #### Principles
