@@ -25,4 +25,8 @@ oefdb_df
 oefdb_df_under_review = oefdb.import_from_github(pr=83)
 oefdb_df_under_review
 
+oefdb.to_oefdb_csv(oefdb_df)
+
+oefdb.export_for_github(oefdb_df)
+
 
