@@ -23,6 +23,7 @@ packages = [{ include = "oefdb" }]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+PyGithub = "^1.55"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "*"
