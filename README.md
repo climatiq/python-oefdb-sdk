@@ -39,6 +39,12 @@ oefdb.export_for_github(oefdb_df)
 4. Paste the copied data from above into the editor on GitHub.
 5. Follow the instructions [here](https://github.com/climatiq/Open-Emission-Factors-DB/blob/main/CONTRIBUTING.md#2-create-a-pull-request) to create a Pull Request with your changes.
 
+_Note_: If you are familiar with Git, you may instead benefit of cloning the [Open Emission Factors DB](https://github.com/climatiq/Open-Emission-Factors-DB) repo and exporting the changed dataframe as a file instead:
+
+```py
+oefdb.export_for_github(oefdb_df, export_path="/path/to/OpenEmissionFactorsDB.csv")
+```
+
 ### Reviewing someone else's [OEFDB Pull Request](https://github.com/climatiq/Open-Emission-Factors-DB/pulls)
 
 1. Use the number of the Pull Request in [OEFDB Pull Request](https://github.com/climatiq/Open-Emission-Factors-DB/pulls) when importing the data:
