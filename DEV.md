@@ -12,16 +12,26 @@ poetry install
 
 This sets up a local Python environment with all the relevant dependencies, including the Development Tools listed further down in this readme.
 
-The remaining commands in this readme assume you have activated it by running:
+The remaining commands in this readme assume you have activated the local Python environment by running:
 
 ```
 poetry shell
 ```
 
+(Note: This is equivalent of running `source <activate-venv-script>` if we were using `venv` instead of Poetry)
+
 Now install the Git hooks that will make it harder to accidentally commit incorrectly formatted files:
 
 ```
 pre-commit install
+```
+
+### Installing new dependencies added by collaborators
+
+When new dependencies gets added/updated/removed (in `pyproject.toml`) by collaborators, you need to run the following to update the correct environment with the latest dependencies:
+
+```
+poetry update
 ```
 
 ### Run tests, formatters and linters
@@ -57,6 +67,17 @@ Run tests against all supported Python environments:
 tox -- test
 ```
 
+### Using the development version of python-oefdb-sdk in a notebook
+
+Run the following to install a Jupyter kernel and opening the example Jupyter notebook:
+
+```
+poe install_kernel
+jupyter-notebook example-notebook.py
+```
+
+After selecting the `python-oefdb-sdk` kernel in Jupyter you should be able to interact with the development version as if it was installed via pip.
+
 ### Development setup
 
 #### Principles
@@ -65,7 +86,7 @@ tox -- test
 * Unit tests with test coverage reports (`pytest`, `tox`)
 * Consistent style (`isort`, `black`, `flake8`)
 * Prevent use of old Python syntax (`pyupgrade`)
-* Encourage type hinting (`mypy`) [optional]
+* Require type hinting (`mypy`)
 
 #### Development tools
 

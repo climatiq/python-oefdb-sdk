@@ -18,3 +18,4 @@ ignore =
 
 per-file-ignores =
   *tests/*:D205,D400,D401,S101,S106,E501,E731
+  example-notebook.py:W391
