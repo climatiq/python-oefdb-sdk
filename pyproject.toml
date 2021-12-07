@@ -2,6 +2,7 @@
 name = "oefdb"
 version = "0.1.0"
 description = "Tools for interacting with and contributing to the Open Emission Factors DB (https://github.com/climatiq/Open-Emission-Factors-DB)."
+license = "ISC"
 authors = ["Climatiq <info@climatiq.io>"]
 readme = "README.md"
 homepage = "https://github.com/climatiq/python-oefdb-sdk"
@@ -10,6 +11,7 @@ documentation = "https://github.com/climatiq/python-oefdb-sdk"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Web Environment",
+    "License :: OSI Approved :: ISC License (ISCL)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.7",
