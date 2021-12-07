@@ -18,6 +18,8 @@ The remaining commands in this readme assume you have activated the local Python
 poetry shell
 ```
 
+(Note: This is equivalent of running `source <activate-venv-script>` if we were using `venv` instead of Poetry)
+
 Now install the Git hooks that will make it harder to accidentally commit incorrectly formatted files:
 
 ```
