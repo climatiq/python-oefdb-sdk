@@ -133,7 +133,13 @@ poetry config pypi-token.test-pypi <your-pypi-token>
 
 1. Create a new branch, called `release` and create a PR named `Release x.y.z`
 2. Bump the semantic version number in [pyproject.toml](./pyproject.toml) and commit the change to the branch (Message: `Bump version to x.y.z`)
-3. Build a new package with the updated version number:
+3. Make sure that you have no uncommitted changes in your git repo:
+
+```shell
+git stash
+```
+
+4. Build a new package with the updated version number:
 
 ```shell
 poetry build
