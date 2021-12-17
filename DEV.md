@@ -151,7 +151,13 @@ poetry publish -r test-pypi
 ```shell
 cd test-project
 poetry env remove python
-poetry update
+poetry update # installs the package via poetry
+```
+
+You can also ask others to install and test the package via pip:
+
+```shell
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple oefdb
 ```
 
 8. Commit and changes and fixes
