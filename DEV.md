@@ -152,6 +152,7 @@ poetry publish -r test-pypi
 cd test-project
 poetry env remove python
 poetry update # installs the package via poetry
+poetry run pytest
 ```
 
 You can also ask others to install and test the package via pip:
