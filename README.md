@@ -4,8 +4,16 @@ Tools for interacting with and contributing to the [Open Emission Factors DB](ht
 
 ## Installation
 
+Using pip:
+
 ```shell
 pip install oefdb
+```
+
+Using [Poetry](https://python-poetry.org/):
+
+```shell
+poetry add oefdb
 ```
 
 ## Usage
