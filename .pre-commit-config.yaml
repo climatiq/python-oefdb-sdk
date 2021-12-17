@@ -4,17 +4,20 @@ repos:
     rev: v5.9.3
     hooks:
       - id: isort
+        exclude: ^example-notebook.py
 
   # python code formatting - will amend files
   - repo: https://github.com/ambv/black
     rev: 21.8b0
     hooks:
       - id: black
+        exclude: ^example-notebook.py
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.25.0
     hooks:
       - id: pyupgrade
+        exclude: ^example-notebook.py
 
   # Flake8 includes pyflakes, pycodestyle, mccabe, pydocstyle, bandit
   - repo: https://gitlab.com/pycqa/flake8
@@ -27,6 +30,7 @@ repos:
           - flake8-docstrings
           - flake8-logging-format
           - flake8-print
+        exclude: ^example-notebook.py
 
   # python static type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -42,4 +46,4 @@ repos:
           - --no-implicit-optional
           - --ignore-missing-imports
           - --follow-imports=silent
-        exclude: ^(tests|test-project)
+        exclude: ^(tests|test-project|example-notebook.py)
