@@ -103,3 +103,75 @@ After selecting the `python-oefdb-sdk` kernel in Jupyter you should be able to i
 
 There is a `.github/workflows/test.yaml` file that is used
 to run all the tests on GitHub against all supported Python versions.
+
+### Publishing
+
+#### Preparations
+
+To be able to publish new official versions of the package:
+
+1. Register an account on [https://pypi.org]().
+2. Get added as an Owner or Moderator.
+3. Configure access locally:
+
+```shell
+poetry config pypi-token.pypi <your-pypi-token>
+```
+
+To test/verify publishing as a developer:
+
+1. Register an account on [https://test.pypi.org]()
+2. Add a token on [https://test.pypi.org/manage/account/token/]()
+3. Configure access locally:
+
+```shell
+poetry config repositories.test-pypi https://test.pypi.org/legacy/
+poetry config pypi-token.test-pypi <your-pypi-token>
+```
+
+#### Release process
+
+1. Create a new branch, called `release` and create a PR named `Release x.y.z`
+2. Bump the semantic version number in [pyproject.toml](./pyproject.toml) and commit the change to the branch (Message: `Bump version to x.y.z`)
+3. Make sure that you have no uncommitted changes in your git repo:
+
+```shell
+git stash
+```
+
+4. Build a new package with the updated version number:
+
+```shell
+poetry build
+```
+
+5. Dry-run publish via TestPyPi to verify that it works
+
+```shell
+poetry publish -r test-pypi
+```
+
+6. Check the README at TestPyPi etc to see that it is correct: https://test.pypi.org/project/oefdb/
+7. Verify that the package installs and works properly in a new environment:
+
+```shell
+cd test-project
+poetry env remove python
+poetry update # installs the package via poetry
+poetry run pytest
+```
+
+You can also ask others to install and test the package via pip:
+
+```shell
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple oefdb
+```
+
+8. Commit and changes and fixes
+9. After verification, publish officially via PyPi:
+
+```shell
+poetry publish
+```
+
+10. Merge the PR after review approval.

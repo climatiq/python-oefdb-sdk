@@ -42,4 +42,4 @@ repos:
           - --no-implicit-optional
           - --ignore-missing-imports
           - --follow-imports=silent
-        exclude: ^tests
+        exclude: ^(tests|test-project)
