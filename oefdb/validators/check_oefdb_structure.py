@@ -2,9 +2,12 @@ import numpy as np
 from pandas import DataFrame
 
 
-def check_oefdb_structure(df: DataFrame):
-    """Function to check that number of columns is correct
-    and their headers are following the oefdb structure, and columns have specific datatype
+def check_oefdb_structure(df: DataFrame) -> bool:
+    """
+    Check OEFDB structure.
+
+    Function to check that number of columns is correct and their headers
+    are following the oefdb structure, and columns have specific datatype
 
     Parameters
     ----------
@@ -12,7 +15,8 @@ def check_oefdb_structure(df: DataFrame):
 
     Returns
     ----------
-    Message if the columns and their names are intact, if not which columns to check and to which
+    Message if the columns and their names are intact,
+    if not which columns to check and to which
     name should they comply
     ----------
     """
@@ -43,7 +47,7 @@ def check_oefdb_structure(df: DataFrame):
             )
         )
         print("These columns are missing: {}".format(set(col).difference(df.columns)))
-        return
+        return False
 
     if len(df.columns) == len(col):
         print("Number of columns looks good!")
@@ -55,7 +59,9 @@ def check_oefdb_structure(df: DataFrame):
             "match the correct naming:",
             col[col != df.columns],
         )
-        return
+        return False
 
     if (col == df.columns).sum() == len(col):
         print("All headers are intact!")
+
+    return True
