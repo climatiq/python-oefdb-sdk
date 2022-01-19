@@ -1,12 +1,14 @@
+from typing import Tuple
+
 from pandas import DataFrame
 
 
-def check_ids_for_unsupported_characters(df: DataFrame) -> bool:
+def check_ids_for_unsupported_characters(df: DataFrame) -> Tuple[bool, list[str]]:
     """
     Check ids for unsupported characters.
 
     Function to check for unsupported characters in the ids
-    (curretly IDs consist of alphanumeric characters and
+    (currently IDs consist of alphanumeric characters and
     "-", "_", "." (hyphens, underscroes and dots))
 
     Parameters
@@ -20,16 +22,20 @@ def check_ids_for_unsupported_characters(df: DataFrame) -> bool:
     and prints out IDs to be checked and their respective numbers
     ----------
     """
+    validation_messages = []
+
     wrong_char_ids = df[~df["id"].replace({r"-|_|\.": ""}, regex=True).str.isalnum()]
     if len(wrong_char_ids) == 0:
-        print("IDs look good! There are no funny characters found")
-        return True
+        validation_messages.append("IDs look good! There are no funny characters found")
+        return True, validation_messages
 
-    print(
-        "Check the following IDs for unsupported characters: \n",
-        wrong_char_ids.id.unique(),
-        " \nin lines:",
-        list(wrong_char_ids.index + 2),
-        sep="\n",
+    validation_messages.append(
+        "Check the following IDs for unsupported characters:"
+        + "\n"
+        + str(wrong_char_ids.id.unique())
+        + "\n"
+        + "\nin lines:"
+        + "\n"
+        + str(list(wrong_char_ids.index + 2))
     )
-    return False
+    return False, validation_messages

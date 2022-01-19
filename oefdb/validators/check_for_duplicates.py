@@ -1,7 +1,9 @@
+from typing import Tuple
+
 from pandas import DataFrame
 
 
-def check_for_duplicates(df: DataFrame) -> bool:
+def check_for_duplicates(df: DataFrame) -> Tuple[bool, list[str]]:
     """
     Check for duplicates.
 
@@ -22,17 +24,22 @@ def check_for_duplicates(df: DataFrame) -> bool:
     and prints the total number of non-unique entries
     ----------
     """
+    validation_messages = []
+
     dupl_oefdb = df[
         df.duplicated(subset=["id", "year", "region", "source", "unit"], keep=False)
     ].reset_index()
     if len(dupl_oefdb) == 0:
-        print("All good! There are no duplicates in the OEFDB")
-        return True
+        validation_messages.append("All good! There are no duplicates in the OEFDB")
+        return True, validation_messages
     dupl_oefdb["line_number"] = dupl_oefdb["index"] + 2
     dupl_line_numbers = (
         dupl_oefdb.groupby(["id", "year", "region", "source", "unit"])
         .apply(lambda x: list(x.line_number))
         .reset_index(name="line_number")
     )
-    print("Total number of duplicates in the OFEDB: ", len(dupl_oefdb))
-    return False
+    validation_messages.append(
+        f"Total number of duplicates in the OFEDB: {len(dupl_oefdb)}."
+        f"Line numbers: {str(dupl_line_numbers)}"
+    )
+    return False, validation_messages

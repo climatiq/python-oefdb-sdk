@@ -1,8 +1,10 @@
+from typing import Tuple
+
 import numpy as np
 from pandas import DataFrame
 
 
-def check_oefdb_structure(df: DataFrame) -> bool:
+def check_oefdb_structure(df: DataFrame) -> Tuple[bool, list[str]]:
     """
     Check OEFDB structure.
 
@@ -20,6 +22,8 @@ def check_oefdb_structure(df: DataFrame) -> bool:
     name should they comply
     ----------
     """
+    validation_messages = []
+
     col = np.array(
         [
             "sector",
@@ -40,28 +44,34 @@ def check_oefdb_structure(df: DataFrame) -> bool:
     )
 
     if len(df.columns) != len(col):
-        print("The header of OEFDB is wrong: please check the file!")
-        print(
-            "These columns should not be there: {}".format(
-                set(df.columns).difference(col)
-            )
+        validation_messages.append(
+            "The header of OEFDB is wrong: please check the file!"
         )
-        print("These columns are missing: {}".format(set(col).difference(df.columns)))
-        return False
+        validation_messages.append(
+            f"These columns should not be there: {set(df.columns).difference(col)}"
+        )
+        validation_messages.append(
+            "These columns are missing: {}".format(set(col).difference(df.columns))
+        )
+        return False, validation_messages
 
     if len(df.columns) == len(col):
-        print("Number of columns looks good!")
+        validation_messages.append("Number of columns looks good!")
 
     if (col != df.columns).sum():
-        print(
-            "Check that headers of the columns:",
-            np.where(col != df.columns)[0] + 1,
-            "match the correct naming:",
-            col[col != df.columns],
+        validation_messages.append(
+            "Check that headers of the columns:"
+            + "\n"
+            + str(np.where(col != df.columns)[0] + 1)
+            + "\n"
+            + "match the correct naming:"
+            + "\n"
+            + str(col[col != df.columns])
+            + "\n"
         )
-        return False
+        return False, validation_messages
 
     if (col == df.columns).sum() == len(col):
-        print("All headers are intact!")
+        validation_messages.append("All headers are intact!")
 
-    return True
+    return True, validation_messages
