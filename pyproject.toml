@@ -54,6 +54,3 @@ test = ["pytest", "lint"]
 pytest = "pytest --cov=oefdb --verbose tests/"
 lint = "pre-commit run --all-files"
 install_kernel = "python -m ipykernel install --user --name python-oefdb-sdk"
-
-[tool.black]
-force-exclude = 'example-notebook.py'
