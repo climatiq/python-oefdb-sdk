@@ -9,3 +9,4 @@ poetry.lock
 test.db
 .ipynb_checkpoints
 dist
+.env

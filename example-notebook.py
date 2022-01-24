@@ -17,6 +17,12 @@
 # %reload_ext autoreload
 # %autoreload 2
 
+# optional, run to increase the GitHub API rate limit
+import getpass
+import os
+
+os.environ['GH_TOKEN'] = getpass.getpass()
+
 import oefdb
 
 oefdb_df = oefdb.import_from_github()

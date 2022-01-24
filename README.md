@@ -64,6 +64,34 @@ oefdb_df_under_review = oefdb.import_from_github(pr=123)
 2. Use Python to review the data, comparing it to the main revision data as necessary.
 3. Add review comments via the GitHub UI as necessary and approve when discussions are resolved.
 
+## FAQ
+
+### Why am I getting an `github.GithubException.RateLimitExceededException` error?
+
+This library uses the GitHub API to import OEFDB data and the API has a rate limit and you may run into `github.GithubException.RateLimitExceededException: 403 {"message": "API rate limit exceeded for 62.78.170.105. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)", "documentation_url": "https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}`. By waiting or by authenticating with the API, this limit can be avoided/raised.
+
+#### Authenticating with the GitHub API
+
+1. Go to [https://github.com/settings/tokens/new]() to create a read-only personal access token. No checkboxes needs to be checked.
+
+2. Call it something like `oefdb-github-api-token` and press `Generate token`.
+
+3. Make sure to click the Copy-icon to copy the token (it is too easy to accidentally select some strange whitespace when selecting the token text)
+
+4. Add your token to the `GH_TOKEN` env var.
+
+In a notebook, you can do this via:
+
+```py
+import os
+os.environ['GH_TOKEN'] = "foo123"
+# or, in a shared notebook:
+import getpass
+os.environ['GH_TOKEN'] = getpass.getpass()
+```
+
+As a developer with the python-oefdb-sdk code checked out, copy the `.env.example` file as `.env` and add your token to `.env`.
+
 ## Development
 
 To work on improving this library, please read [DEV.md](./DEV.md).
