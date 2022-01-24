@@ -6,6 +6,12 @@ from pandas import DataFrame
 def export_for_github(oefdb_df: DataFrame, export_path: Optional[str] = None) -> None:
     import oefdb
 
+    validation_result, results_from_validators = oefdb.validate(oefdb_df)
+    for validator_name, validator_results in results_from_validators.items():
+        validation_result, validation_messages = validator_results
+        for validation_message in validation_messages:
+            print(f"{validator_name}: {validation_message}")  # noqa: T001
+
     oefdb_csv = oefdb.to_oefdb_csv(oefdb_df)
 
     if export_path:

@@ -24,6 +24,10 @@ def check_ids_for_unsupported_characters(df: DataFrame) -> Tuple[bool, List[str]
     """
     validation_messages = []
 
+    if "id" not in df.columns:
+        validation_messages.append("No ID column found")
+        return False, validation_messages
+
     wrong_char_ids = df[~df["id"].replace({r"-|_|\.": ""}, regex=True).str.isalnum()]
     if len(wrong_char_ids) == 0:
         validation_messages.append("IDs look good! There are no funny characters found")

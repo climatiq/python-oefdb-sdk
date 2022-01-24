@@ -36,7 +36,7 @@ oefdb_df = oefdb.import_from_github()
 
 After making suggested changes to the imported dataframe, you can contribute these changes to OEFDB as per follows:
 
-1. Run the following to present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
+1. Run the following to validate the dataframe contents/structure and present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
 
 ```py
 oefdb.export_for_github(oefdb_df)
