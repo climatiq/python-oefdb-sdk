@@ -58,7 +58,7 @@ poe pytest
 Run a specific test:
 
 ```
-poe pytest tests/test_oefdb.py
+pytest tests/test_oefdb.py
 ```
 
 Run tests against all supported Python environments:
