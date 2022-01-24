@@ -1,9 +1,9 @@
-from typing import Tuple
+from typing import List, Tuple
 
 from pandas import DataFrame
 
 
-def check_for_duplicates(df: DataFrame) -> Tuple[bool, list[str]]:
+def check_for_duplicates(df: DataFrame) -> Tuple[bool, List[str]]:
     """
     Check for duplicates.
 

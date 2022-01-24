@@ -1,10 +1,10 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 from pandas import DataFrame
 
 
-def check_oefdb_structure(df: DataFrame) -> Tuple[bool, list[str]]:
+def check_oefdb_structure(df: DataFrame) -> Tuple[bool, List[str]]:
     """
     Check OEFDB structure.
 

@@ -1,9 +1,9 @@
-from typing import Tuple
+from typing import List, Tuple
 
 from pandas import DataFrame
 
 
-def check_ids_for_unsupported_characters(df: DataFrame) -> Tuple[bool, list[str]]:
+def check_ids_for_unsupported_characters(df: DataFrame) -> Tuple[bool, List[str]]:
     """
     Check ids for unsupported characters.
 
