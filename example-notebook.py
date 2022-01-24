@@ -22,6 +22,8 @@ import oefdb
 oefdb_df = oefdb.import_from_github()
 oefdb_df
 
+oefdb.validate(oefdb_df)
+
 oefdb_df_under_review = oefdb.import_from_github(pr=83)
 oefdb_df_under_review
 
