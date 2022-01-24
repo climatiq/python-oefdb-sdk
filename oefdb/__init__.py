@@ -3,3 +3,4 @@
 from .export_for_github import export_for_github  # noqa: F401
 from .import_from_github import import_from_github  # noqa: F401
 from .util import to_oefdb_csv  # noqa: F401
+from .validate import validate  # noqa: F401
