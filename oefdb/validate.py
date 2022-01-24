@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from pandas import DataFrame
 
@@ -9,7 +9,7 @@ from oefdb.validators.check_ids_for_unsupported_characters import (
 from oefdb.validators.check_oefdb_structure import check_oefdb_structure
 
 
-def validate(oefdb_df: DataFrame) -> Tuple[bool, dict[str, Tuple[bool, List[str]]]]:
+def validate(oefdb_df: DataFrame) -> Tuple[bool, Dict[str, Tuple[bool, List[str]]]]:
 
     # run validations
     results_from_validators = {
