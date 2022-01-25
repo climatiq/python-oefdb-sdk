@@ -51,9 +51,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 test = ["pytest", "lint"]
-pytest = "pytest --cov=oefdb --verbose tests/"
+pytest = "pytest"
 lint = "pre-commit run --all-files"
 install_kernel = "python -m ipykernel install --user --name python-oefdb-sdk"
-
-[tool.black]
-force-exclude = 'example-notebook.py'

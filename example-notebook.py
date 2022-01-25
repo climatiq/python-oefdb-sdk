@@ -17,12 +17,6 @@
 # %reload_ext autoreload
 # %autoreload 2
 
-# optional, run to increase the GitHub API rate limit
-import getpass
-import os
-
-os.environ['GH_TOKEN'] = getpass.getpass()
-
 import oefdb
 
 oefdb_df = oefdb.import_from_github()
@@ -30,11 +24,11 @@ oefdb_df
 
 oefdb.validate(oefdb_df)
 
-oefdb_df_under_review = oefdb.import_from_github(pr=83)
-oefdb_df_under_review
-
 oefdb.to_oefdb_csv(oefdb_df)
 
 oefdb.export_for_github(oefdb_df)
 
-
+# optional, run to increase the GitHub API rate limit
+import getpass
+import os
+os.environ['GH_TOKEN'] = getpass.getpass()
