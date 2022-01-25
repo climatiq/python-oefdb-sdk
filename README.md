@@ -85,12 +85,16 @@ In a notebook, you can do this via:
 ```py
 import os
 os.environ['GH_TOKEN'] = "foo123"
-# or, in a shared notebook:
+```
+
+Or, in a shared notebook:
+```py
+import os
 import getpass
 os.environ['GH_TOKEN'] = getpass.getpass()
 ```
 
-As a developer with the python-oefdb-sdk code checked out, copy the `.env.example` file as `.env` and add your token to `.env`.
+Alternatively, you can add a file called `.env` to the notebook's working directory and fill it with `GH_TOKEN=your-token`.
 
 ## Development
 
