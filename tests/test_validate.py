@@ -1,7 +1,9 @@
 def test_validate() -> None:
     import oefdb
 
-    oefdb_df = oefdb.import_from_github(repo_reference="motin/Open-Emission-Factors-DB")
+    oefdb_df = oefdb.import_from_github(
+        repo_reference="climatiq/Open-Emission-Factors-DB-Dev"
+    )
 
     validation_result, validation_messages = oefdb.validate(oefdb_df)
 
