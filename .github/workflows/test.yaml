@@ -40,4 +40,6 @@ jobs:
         run: poetry run poe lint
 
       - name: Run tests
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: poetry run poe pytest
