@@ -1,9 +1,9 @@
-from typing import List, Tuple
-
 from pandas import DataFrame
 
+from oefdb.validators._typing import validator_result_type
 
-def check_ids_for_unsupported_characters(df: DataFrame) -> Tuple[bool, List[str]]:
+
+def check_ids_for_unsupported_characters(df: DataFrame) -> validator_result_type:
     """
     Check ids for unsupported characters.
 

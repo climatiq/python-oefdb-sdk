@@ -58,16 +58,15 @@ def get_blob_content(repo: Repository, branch: str, path_name: str) -> GitBlob.G
     ref = f"heads/{branch}"
     try:
         git_ref = repo.get_git_ref(ref)
-        found = True
+        tree = repo.get_git_tree(git_ref.object.sha, recursive="/" in path_name).tree
+        sha = [x.sha for x in tree if x.path == path_name]
+        if not sha:
+            raise Exception(
+                f"The file '{path_name}' was not found in branch '{branch}'"
+            )
+        return repo.get_git_blob(sha[0])
     except UnknownObjectException:
-        found = False
-    if not found:
-        raise Exception(f"The branch '{branch}' was not found")
-    tree = repo.get_git_tree(git_ref.object.sha, recursive="/" in path_name).tree
-    sha = [x.sha for x in tree if x.path == path_name]
-    if not sha:
-        raise Exception(f"The file '{path_name}' was not found in branch '{branch}'")
-    return repo.get_git_blob(sha[0])
+        raise Exception(f"The branch '{branch}' was not found") from None
 
 
 def get_oefdb_csv_bytes(repo: Repository, branch: Optional[str] = None) -> BytesIO:

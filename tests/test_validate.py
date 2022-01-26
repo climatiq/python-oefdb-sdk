@@ -1,11 +1,11 @@
+from tests.utils import load_oefdb_fixture
+
+
 def test_validate() -> None:
     import oefdb
 
-    oefdb_df = oefdb.import_from_github(
-        repo_reference="climatiq/Open-Emission-Factors-DB-Dev"
-    )
+    valid_oefdb_df = load_oefdb_fixture("valid_oefdb_df")
 
-    validation_result, validation_messages = oefdb.validate(oefdb_df)
+    validation_result, results_from_validators = oefdb.validate(valid_oefdb_df)
 
-    # TODO: assert this once main branch is passing validation
-    # assert validation_result is True
+    assert validation_result is True
