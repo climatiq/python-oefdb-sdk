@@ -1,10 +1,10 @@
-from typing import List, Tuple
-
 import numpy as np
 from pandas import DataFrame
 
+from oefdb.validators._typing import validator_result_type
 
-def check_oefdb_structure(df: DataFrame) -> Tuple[bool, List[str]]:
+
+def check_oefdb_structure(df: DataFrame) -> validator_result_type:
     """
     Check OEFDB structure.
 

@@ -1,9 +1,9 @@
-from typing import List, Tuple
-
 from pandas import DataFrame
 
+from oefdb.validators._typing import validator_result_type
 
-def check_for_duplicates(df: DataFrame) -> Tuple[bool, List[str]]:
+
+def check_for_duplicates(df: DataFrame) -> validator_result_type:
     """
     Check for duplicates.
 
