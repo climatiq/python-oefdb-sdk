@@ -1,5 +1,6 @@
-from typing import List, Optional
+from typing import Optional
 
+import click
 from pandas import DataFrame
 
 
@@ -17,6 +18,7 @@ def export_for_github(oefdb_df: DataFrame, export_path: Optional[str] = None) ->
 
     if export_path:
         export_oefdb_csv_to_file(oefdb_csv, export_path)
+        return
 
     from IPython import get_ipython
 
@@ -61,22 +63,19 @@ def export_for_github_via_notebook_textarea_copy_paste(oefdb_csv: str) -> None:
     )
 
 
-def cli(args: List[str] = None) -> None:
-    import argparse
-
+@click.command()
+@click.option(
+    "--input",
+    "-i",
+    required=True,
+    type=click.Path(exists=True),
+    help="OEFDB CSV file to validate",
+)
+@click.option(
+    "--output", "-o", required=True, type=str, help="OEFDB CSV file export path"
+)
+def cli(input: str, output: str) -> None:
     import oefdb
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", help="OEFDB CSV file")
-    parser.add_argument("-o", "--output", help="OEFDB CSV file export path")
-    args = parser.parse_args(args)
-    print("args", args)
-    if not args.input:
-        print("Missing --input argument")  # noqa: T001
-        exit(1)
-    if not args.output:
-        print("Missing --output argument")  # noqa: T001
-        exit(1)
-
-    oefdb_df = oefdb.from_oefdb_csv(args.input)
-    oefdb.export_for_github(oefdb_df, export_path=args.output)
+    oefdb_df = oefdb.from_oefdb_csv(input)
+    oefdb.export_for_github(oefdb_df, export_path=output)

@@ -1,5 +1,6 @@
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 
+import click
 from pandas import DataFrame
 
 from oefdb.validators._typing import validator_result_type
@@ -33,23 +34,21 @@ def validate(oefdb_df: DataFrame) -> Tuple[bool, results_from_validators_type]:
     return overall_validation_result, results_from_validators
 
 
-def cli(args: List[str] = None) -> None:
-    import argparse
-
+@click.command()
+@click.option(
+    "--input",
+    "-i",
+    required=True,
+    type=click.Path(exists=True),
+    help="OEFDB CSV file to validate",
+)
+def cli(input: str) -> None:
     import oefdb
     from oefdb.util.present_results_from_validators import (
         present_results_from_validators,
     )
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", help="OEFDB CSV file")
-    args = parser.parse_args(args)
-    print("args", args)
-    if not args.input:
-        print("Missing --input argument")  # noqa: T001
-        exit(1)
-
-    oefdb_df = oefdb.from_oefdb_csv(args.input)
+    oefdb_df = oefdb.from_oefdb_csv(input)
 
     oefdb.validate(oefdb_df)
 

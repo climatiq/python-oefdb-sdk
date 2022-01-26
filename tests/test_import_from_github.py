@@ -1,3 +1,6 @@
+from click.testing import CliRunner
+
+
 def test_import_from_github() -> None:
     import oefdb
 
@@ -9,3 +12,14 @@ def test_import_from_github() -> None:
     assert (
         "Empty assert to ensure pytest passes as long as the above commands succeeds."
     )
+
+
+def test_import_from_github_cli():
+    from oefdb.import_from_github import cli
+
+    runner = CliRunner()
+    from tempfile import NamedTemporaryFile
+
+    output_file = NamedTemporaryFile()
+    result = runner.invoke(cli, ["-o", output_file.name])
+    assert result.exit_code == 0

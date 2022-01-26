@@ -1,6 +1,7 @@
 from io import BytesIO
-from typing import List, Optional
+from typing import Optional
 
+import click
 from github import (
     GitBlob,
     RateLimitExceededException,
@@ -13,8 +14,10 @@ oefdb_csv_filename = "OpenEmissionFactorsDB.csv"
 
 
 def import_from_github(
-    pr: Optional[int] = None, repo_reference: str = "climatiq/Open-Emission-Factors-DB"
+    pr: Optional[int] = None, repo_reference: Optional[str] = None
 ) -> DataFrame:
+    if repo_reference is None:
+        repo_reference = "climatiq/Open-Emission-Factors-DB"
     try:
         if pr:
             return import_from_github_pr(pr, repo_reference=repo_reference)
@@ -84,31 +87,22 @@ def get_oefdb_csv_bytes(repo: Repository, branch: Optional[str] = None) -> Bytes
     return BytesIO(blob_bytes)
 
 
-def cli(args: List[str] = None) -> None:
-    import argparse
-
+@click.command()
+@click.option(
+    "--output", "-o", required=True, type=str, help="OEFDB CSV file export path"
+)
+@click.option("--pr", "-p", default=None, type=int, help="OEFDB repo pull request id")
+@click.option(
+    "--repo_reference", "-r", default=None, type=str, help="OEFDB repo org and name"
+)
+def cli(
+    output: str, pr: Optional[int] = None, repo_reference: Optional[str] = None
+) -> None:
     import oefdb
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", help="OEFDB CSV file export path")
-    parser.add_argument("-r", "--repo_reference", help="OEFDB repo org and name")
-    parser.add_argument("-p", "--pr", help="OEFDB repo pull request id")
-
-    args = parser.parse_args(args)
-    print("args", args)
-    if not args.output:
-        print("Missing --output argument")  # noqa: T001
-        exit(1)
-    pr = None
-    if args.pr:
-        pr = int(args.pr)
-    repo_reference = None
-    if args.repo_reference:
-        repo_reference = args.repo_reference
 
     oefdb_df = oefdb.import_from_github(pr=pr, repo_reference=repo_reference)
     oefdb_csv = oefdb.to_oefdb_csv(oefdb_df)
 
     from oefdb.export_for_github import export_oefdb_csv_to_file
 
-    export_oefdb_csv_to_file(oefdb_csv, args.output)
+    export_oefdb_csv_to_file(oefdb_csv, output)
