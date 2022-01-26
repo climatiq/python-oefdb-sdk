@@ -1,5 +1,6 @@
 from typing import Dict, Tuple
 
+import click
 from pandas import DataFrame
 
 from oefdb.validators._typing import validator_result_type
@@ -31,3 +32,31 @@ def validate(oefdb_df: DataFrame) -> Tuple[bool, results_from_validators_type]:
             overall_validation_result = False
 
     return overall_validation_result, results_from_validators
+
+
+@click.command()
+@click.option(
+    "--input",
+    "-i",
+    required=True,
+    type=click.Path(exists=True),
+    help="OEFDB CSV file to validate",
+)
+def cli(input: str) -> None:
+    import oefdb
+    from oefdb.util.present_results_from_validators import (
+        present_results_from_validators,
+    )
+
+    oefdb_df = oefdb.from_oefdb_csv(input)
+
+    oefdb.validate(oefdb_df)
+
+    validation_result, results_from_validators = oefdb.validate(oefdb_df)
+
+    present_results_from_validators(validation_result, results_from_validators)
+
+    if validation_result is False:
+        exit(1)
+    else:
+        exit(0)

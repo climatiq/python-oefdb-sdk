@@ -1,6 +1,7 @@
 from io import BytesIO
 from typing import Optional
 
+import click
 from github import (
     GitBlob,
     RateLimitExceededException,
@@ -13,8 +14,10 @@ oefdb_csv_filename = "OpenEmissionFactorsDB.csv"
 
 
 def import_from_github(
-    pr: Optional[int] = None, repo_reference: str = "climatiq/Open-Emission-Factors-DB"
+    pr: Optional[int] = None, repo_reference: Optional[str] = None
 ) -> DataFrame:
+    if repo_reference is None:
+        repo_reference = "climatiq/Open-Emission-Factors-DB"
     try:
         if pr:
             return import_from_github_pr(pr, repo_reference=repo_reference)
@@ -82,3 +85,24 @@ def get_oefdb_csv_bytes(repo: Repository, branch: Optional[str] = None) -> Bytes
         blob_bytes = b64decode(blob.content)
 
     return BytesIO(blob_bytes)
+
+
+@click.command()
+@click.option(
+    "--output", "-o", required=True, type=str, help="OEFDB CSV file export path"
+)
+@click.option("--pr", "-p", default=None, type=int, help="OEFDB repo pull request id")
+@click.option(
+    "--repo_reference", "-r", default=None, type=str, help="OEFDB repo org and name"
+)
+def cli(
+    output: str, pr: Optional[int] = None, repo_reference: Optional[str] = None
+) -> None:
+    import oefdb
+
+    oefdb_df = oefdb.import_from_github(pr=pr, repo_reference=repo_reference)
+    oefdb_csv = oefdb.to_oefdb_csv(oefdb_df)
+
+    from oefdb.export_for_github import export_oefdb_csv_to_file
+
+    export_oefdb_csv_to_file(oefdb_csv, output)
