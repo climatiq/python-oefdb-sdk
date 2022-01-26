@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Optional
+from typing import List, Optional
 
 from github import (
     GitBlob,
@@ -82,3 +82,33 @@ def get_oefdb_csv_bytes(repo: Repository, branch: Optional[str] = None) -> Bytes
         blob_bytes = b64decode(blob.content)
 
     return BytesIO(blob_bytes)
+
+
+def cli(args: List[str] = None) -> None:
+    import argparse
+
+    import oefdb
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--output", help="OEFDB CSV file export path")
+    parser.add_argument("-r", "--repo_reference", help="OEFDB repo org and name")
+    parser.add_argument("-p", "--pr", help="OEFDB repo pull request id")
+
+    args = parser.parse_args(args)
+    print("args", args)
+    if not args.output:
+        print("Missing --output argument")  # noqa: T001
+        exit(1)
+    pr = None
+    if args.pr:
+        pr = int(args.pr)
+    repo_reference = None
+    if args.repo_reference:
+        repo_reference = args.repo_reference
+
+    oefdb_df = oefdb.import_from_github(pr=pr, repo_reference=repo_reference)
+    oefdb_csv = oefdb.to_oefdb_csv(oefdb_df)
+
+    from oefdb.export_for_github import export_oefdb_csv_to_file
+
+    export_oefdb_csv_to_file(oefdb_csv, args.output)

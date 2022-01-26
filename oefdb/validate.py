@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 from pandas import DataFrame
 
@@ -31,3 +31,33 @@ def validate(oefdb_df: DataFrame) -> Tuple[bool, results_from_validators_type]:
             overall_validation_result = False
 
     return overall_validation_result, results_from_validators
+
+
+def cli(args: List[str] = None) -> None:
+    import argparse
+
+    import oefdb
+    from oefdb.util.present_results_from_validators import (
+        present_results_from_validators,
+    )
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--input", help="OEFDB CSV file")
+    args = parser.parse_args(args)
+    print("args", args)
+    if not args.input:
+        print("Missing --input argument")  # noqa: T001
+        exit(1)
+
+    oefdb_df = oefdb.from_oefdb_csv(args.input)
+
+    oefdb.validate(oefdb_df)
+
+    validation_result, results_from_validators = oefdb.validate(oefdb_df)
+
+    present_results_from_validators(validation_result, results_from_validators)
+
+    if validation_result is False:
+        exit(1)
+    else:
+        exit(0)

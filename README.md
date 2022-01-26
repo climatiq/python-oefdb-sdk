@@ -64,6 +64,26 @@ oefdb_df_under_review = oefdb.import_from_github(pr=123)
 2. Use Python to review the data, comparing it to the main revision data as necessary.
 3. Add review comments via the GitHub UI as necessary and approve when discussions are resolved.
 
+## Command line scripts
+
+### Import from GitHub
+
+```shell
+oefdb_import_from_github --output <oefdb-csv-file-save-path> [--pr <pull-request-id>]
+```
+
+### Validate an OEFDB CSV file
+
+```shell
+oefdb_validate --input <path-to-oefdb-csv-file>
+```
+
+### Export an OEFDB CSV file
+
+```shell
+oefdb_export_for_github --input <path-to-oefdb-csv-file> --output <oefdb-csv-file-export-path>
+```
+
 ## FAQ
 
 ### Why am I getting an `github.GithubException.RateLimitExceededException` error?
