@@ -7,7 +7,7 @@ from github import (
     Repository,
     UnknownObjectException,
 )
-from pandas import DataFrame, read_csv
+from pandas import DataFrame
 
 oefdb_csv_filename = "OpenEmissionFactorsDB.csv"
 
@@ -40,14 +40,18 @@ def get_oefdb_repo(repo_reference: str) -> Repository:
 
 
 def import_from_github_pr(number: int, repo_reference: str) -> DataFrame:
+    from oefdb.util.from_oefdb_csv import from_oefdb_csv
+
     repo = get_oefdb_repo(repo_reference)
     pr = repo.get_pull(number)
-    return read_csv(get_oefdb_csv_contents(pr.head.repo, pr.head.ref))
+    return from_oefdb_csv(get_oefdb_csv_bytes(pr.head.repo, pr.head.ref))
 
 
 def import_from_github_main_branch(repo_reference: str) -> DataFrame:
+    from oefdb.util.from_oefdb_csv import from_oefdb_csv
+
     repo = get_oefdb_repo(repo_reference)
-    return read_csv(get_oefdb_csv_contents(repo))
+    return from_oefdb_csv(get_oefdb_csv_bytes(repo))
 
 
 def get_blob_content(repo: Repository, branch: str, path_name: str) -> GitBlob.GitBlob:
@@ -66,7 +70,7 @@ def get_blob_content(repo: Repository, branch: str, path_name: str) -> GitBlob.G
     return repo.get_git_blob(sha[0])
 
 
-def get_oefdb_csv_contents(repo: Repository, branch: Optional[str] = None) -> BytesIO:
+def get_oefdb_csv_bytes(repo: Repository, branch: Optional[str] = None) -> BytesIO:
     if branch is None:
         branch = "main"
     blob = get_blob_content(repo, branch, oefdb_csv_filename)
