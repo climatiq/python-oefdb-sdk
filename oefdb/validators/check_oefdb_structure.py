@@ -28,9 +28,9 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
         [
             "sector",
             "category",
-            "id",
+            "activity_id",
             "name",
-            "unit",
+            "activity_unit",
             "kgCO2e-AR5",
             "kgCO2e-AR4",
             "kgCO2",
@@ -38,18 +38,17 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
             "kgN2O",
             "kgCO2e-OtherGHGs-AR5",
             "kgCO2e-OtherGHGs-AR4",
-            "scope",
             "uncertainty",
+            "scope",
+            "lca_activity",
             "source",
-            "year",
+            "year_released",
             "region",
             "date_accessed",
             "description",
             "source_link",
-            "lca_activity",
         ]
     )
-
     if len(df.columns) != len(col):
         validation_messages.append(
             "The header of OEFDB is wrong: please check the file!"
