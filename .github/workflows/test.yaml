@@ -22,9 +22,15 @@ jobs:
           application_private_key: ${{ secrets.OEFDB_BOT_APP_PRIVATE_KEY }}
 
       - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
+
+      - name: Load cached Poetry installation
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/runner  # The poetry installation
+          key: poetry-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('pyproject.toml') }} # cache poetry as long as no dependencies change
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -37,7 +43,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('pyproject.toml') }}
+          key: venv-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('pyproject.toml') }}
 
       - name: Install dependencies
         run: poetry install
