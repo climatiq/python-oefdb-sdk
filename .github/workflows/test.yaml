@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.local/runner  # The poetry installation
-          key: poetry-0  # increment this if you want to reset the poetry cache
+          key: poetry-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('pyproject.toml') }} # cache poetry as long as no dependencies change
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
