@@ -24,11 +24,13 @@ def check_ids_for_unsupported_characters(df: DataFrame) -> validator_result_type
     """
     validation_messages = []
 
-    if "id" not in df.columns:
+    if "activity_id" not in df.columns:
         validation_messages.append("No ID column found")
         return False, validation_messages
 
-    wrong_char_ids = df[~df["id"].replace({r"-|_|\.": ""}, regex=True).str.isalnum()]
+    wrong_char_ids = df[
+        ~df["activity_id"].replace({r"-|_|\.": ""}, regex=True).str.isalnum()
+    ]
     if len(wrong_char_ids) == 0:
         validation_messages.append("IDs look good! There are no funny characters found")
         return True, validation_messages
@@ -36,7 +38,7 @@ def check_ids_for_unsupported_characters(df: DataFrame) -> validator_result_type
     validation_messages.append(
         "Check the following IDs for unsupported characters:"
         + "\n"
-        + str(wrong_char_ids.id.unique())
+        + str(wrong_char_ids.activity_id.unique())
         + "\n"
         + "\nin lines:"
         + "\n"
