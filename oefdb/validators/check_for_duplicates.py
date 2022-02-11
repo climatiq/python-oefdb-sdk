@@ -27,14 +27,33 @@ def check_for_duplicates(df: DataFrame) -> validator_result_type:
     validation_messages = []
 
     dupl_oefdb = df[
-        df.duplicated(subset=["id", "year", "region", "source", "unit"], keep=False)
+        df.duplicated(
+            subset=[
+                "activity_id",
+                "year_released",
+                "region",
+                "source",
+                "activity_unit",
+                "lca_activity",
+            ],
+            keep=False,
+        )
     ].reset_index()
     if len(dupl_oefdb) == 0:
         validation_messages.append("All good! There are no duplicates in the OEFDB")
         return True, validation_messages
     dupl_oefdb["line_number"] = dupl_oefdb["index"] + 2
     dupl_line_numbers = (
-        dupl_oefdb.groupby(["id", "year", "region", "source", "unit"])
+        dupl_oefdb.groupby(
+            [
+                "activity_id",
+                "year_released",
+                "region",
+                "source",
+                "activity_unit",
+                "lca_activity",
+            ]
+        )
         .apply(lambda x: list(x.line_number))
         .reset_index(name="line_number")
     )

@@ -9,7 +9,7 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
     Check OEFDB structure.
 
     Function to check that number of columns is correct and their headers
-    are following the oefdb structure, and columns have specific datatype
+    are following the oefdb structure
 
     Parameters
     ----------
@@ -28,21 +28,27 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
         [
             "sector",
             "category",
-            "id",
+            "activity_id",
             "name",
-            "unit",
-            "factor",
+            "activity_unit",
+            "kgCO2e-AR5",
+            "kgCO2e-AR4",
+            "kgCO2",
+            "kgCH4",
+            "kgN2O",
+            "kgCO2e-OtherGHGs-AR5",
+            "kgCO2e-OtherGHGs-AR4",
             "uncertainty",
+            "scope",
+            "lca_activity",
             "source",
-            "year",
+            "year_released",
             "region",
             "date_accessed",
             "description",
             "source_link",
-            "lca_activity",
         ]
     )
-
     if len(df.columns) != len(col):
         validation_messages.append(
             "The header of OEFDB is wrong: please check the file!"

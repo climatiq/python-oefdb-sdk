@@ -16,10 +16,20 @@ def test_check_for_duplicates():
     )
     assert validation_result is False
 
-    oefdb_df_with_a_compound_key_duplicate = load_oefdb_fixture(
-        "oefdb_df_with_a_compound_key_duplicate"
+    oefdb_df_with_a_compound_key_is_duplicate = load_oefdb_fixture(
+        "oefdb_df_with_a_compound_key_is_duplicate"
     )
     validation_result, validation_messages = check_for_duplicates(
-        oefdb_df_with_a_compound_key_duplicate
+        oefdb_df_with_a_compound_key_is_duplicate
     )
+
     assert validation_result is False
+
+    oefdb_df_with_a_compound_key_is_not_duplicate = load_oefdb_fixture(
+        "oefdb_df_with_a_compound_key_not_duplicate"
+    )
+    validation_result, validation_messages = check_for_duplicates(
+        oefdb_df_with_a_compound_key_is_not_duplicate
+    )
+
+    assert validation_result is True
