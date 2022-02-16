@@ -57,8 +57,28 @@ def check_for_duplicates(df: DataFrame) -> validator_result_type:
         .apply(lambda x: list(x.line_number))
         .reset_index(name="line_number")
     )
+    dupl_line_numbers_short = dupl_line_numbers[["activity_id", "line_number"]]
+    lines = ["\t".join(dupl_line_numbers_short.columns)]
+    for row in dupl_line_numbers_short.values:
+        row_str = "\t".join(map(process_row, row))
+        lines.append(row_str)
+    dupl_line_numbers_str = "\n".join(lines)
+
     validation_messages.append(
-        f"Total number of duplicates in the OFEDB: {len(dupl_oefdb)}."
-        f"Line numbers: {str(dupl_line_numbers)}"
+        f"\n"
+        f"\nTotal number of duplicates in the OFEDB: {len(dupl_line_numbers)}."
+        f"\n"
+        f"\n"
+        f"{(dupl_line_numbers_str)}"
+        # f"{(dupl_line_numbers)}"
+        f"\n"
     )
     return False, validation_messages
+
+
+def process_row(element: DataFrame) -> DataFrame:
+    element = str(element)
+    if len(element) < 80:
+        return element
+    else:
+        return "{}...".format(element[:80])

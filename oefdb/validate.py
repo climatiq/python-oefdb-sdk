@@ -17,11 +17,11 @@ def validate(oefdb_df: DataFrame) -> Tuple[bool, results_from_validators_type]:
 
     # run validations
     results_from_validators: results_from_validators_type = {
-        "check_for_duplicates": check_for_duplicates(oefdb_df),
-        "check_ids_for_unsupported_characters": check_ids_for_unsupported_characters(
+        "---------- checking for duplicates ------": check_for_duplicates(oefdb_df),
+        "------------- checking ids ---------": check_ids_for_unsupported_characters(
             oefdb_df
         ),
-        "check_oefdb_structure": check_oefdb_structure(oefdb_df),
+        "--------- checking the db structure -------": check_oefdb_structure(oefdb_df),
     }
 
     # return the overall validation results, together with explanations

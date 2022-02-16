@@ -36,12 +36,16 @@ def check_ids_for_unsupported_characters(df: DataFrame) -> validator_result_type
         return True, validation_messages
 
     validation_messages.append(
-        "Check the following IDs for unsupported characters:"
+        "\n"
+        + "\n"
+        + "Check the following IDs for unsupported characters:"
+        + "\n"
         + "\n"
         + str(wrong_char_ids.activity_id.unique())
         + "\n"
         + "\nin lines:"
         + "\n"
         + str(list(wrong_char_ids.index + 2))
+        + "\n"
     )
     return False, validation_messages

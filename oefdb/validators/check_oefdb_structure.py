@@ -66,6 +66,7 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
 
     if (col != df.columns).sum():
         validation_messages.append(
+            "\n" + "\n"
             "Check that headers of the columns:"
             + "\n"
             + str(np.where(col != df.columns)[0] + 1)
@@ -78,6 +79,6 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
         return False, validation_messages
 
     if (col == df.columns).sum() == len(col):
-        validation_messages.append("All headers are intact!")
+        validation_messages.append("All headers are intact!" "\n")
 
     return True, validation_messages
