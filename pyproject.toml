@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "oefdb"
-version = "0.0.0"
+name = "oefdb-test" # TODO change back once we have a proper PyPi setup
+version = "0.0.3" # TODO change back once we start using test.pypi for production use...
 description = "Tools for interacting with and contributing to the Open Emission Factors DB (https://github.com/climatiq/Open-Emission-Factors-DB)."
 license = "ISC"
 authors = ["Climatiq <info@climatiq.io>"]
