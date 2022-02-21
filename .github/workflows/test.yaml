@@ -49,6 +49,12 @@ jobs:
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
+      - name: Load cached pre-commit environment
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('.pre-commit-config.yaml') }}
+
       - name: Lint
         run: poetry run poe lint
 
