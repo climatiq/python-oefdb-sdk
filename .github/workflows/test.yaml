@@ -29,8 +29,8 @@ jobs:
       - name: Load cached Poetry installation
         uses: actions/cache@v2
         with:
-          path: ~/.local/runner  # The poetry installation
-          key: poetry-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('pyproject.toml') }} # cache poetry as long as no dependencies change
+          path: ~/.local
+          key: poetry-${{ runner.os }}-${{ hashFiles('.github/workflows/test.yml') }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
