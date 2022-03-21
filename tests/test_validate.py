@@ -22,4 +22,8 @@ def test_validate_cli():
     from tests.utils import fixtures_dir_path
 
     result = runner.invoke(cli, ["-i", join(fixtures_dir_path, "valid_oefdb_df.csv")])
+
+    if result.exit_code != 0:
+        print(result.output)  # noqa: T001
+
     assert result.exit_code == 0
