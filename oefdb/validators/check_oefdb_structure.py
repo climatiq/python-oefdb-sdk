@@ -43,6 +43,8 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
             "lca_activity",
             "source",
             "year_released",
+            "years_valid",
+            "years_calculated_from",
             "region",
             "date_accessed",
             "description",
