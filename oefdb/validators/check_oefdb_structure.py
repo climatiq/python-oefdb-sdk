@@ -46,8 +46,8 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
             "years_valid",
             "years_calculated_from",
             "region",
-            "date_accessed",
             "data_quality",
+            "date_accessed",
             "description",
             "source_link",
         ]
