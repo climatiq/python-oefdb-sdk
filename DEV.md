@@ -42,10 +42,13 @@ Run tests, formatters and linters (using the currently active Python version):
 poe test
 ```
 
-#### Tests package
+### Tests package
 
 The package tests themselves are _outside_ of the main library code, in
 the directory aptly named `tests`.
+
+The tests use the climatiq/Open-Emission-Factors-DB-Dev repo as a target.
+Developers need to make sure to configure a GitHub Personal Access Token that has access to this repo, or else the tests will fail.
 
 #### Running tests only
 
