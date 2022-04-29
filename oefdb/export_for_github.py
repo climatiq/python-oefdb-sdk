@@ -1,10 +1,10 @@
-from typing import Optional
+from __future__ import annotations
 
 import click
 from pandas import DataFrame
 
 
-def export_for_github(oefdb_df: DataFrame, export_path: Optional[str] = None) -> None:
+def export_for_github(oefdb_df: DataFrame, export_path: str | None = None) -> None:
     import oefdb
 
     validation_result, results_from_validators = oefdb.validate(oefdb_df)

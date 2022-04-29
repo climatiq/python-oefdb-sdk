@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pandas import DataFrame, read_csv
 from pandas._typing import FilePathOrBuffer
 

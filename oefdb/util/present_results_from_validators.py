@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from oefdb.validate import results_from_validators_type
 
 
