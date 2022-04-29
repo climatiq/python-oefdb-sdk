@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 from io import BytesIO
-from typing import Optional
 
 import click
 from github import (
-    GitRef,
     GitBlob,
+    GitRef,
     RateLimitExceededException,
     Repository,
     UnknownObjectException,
@@ -15,7 +16,7 @@ oefdb_csv_filename = "OpenEmissionFactorsDB.csv"
 
 
 def import_from_github(
-    pr: Optional[int] = None, repo_reference: Optional[str] = None
+    pr: int | None = None, repo_reference: str | None = None
 ) -> DataFrame:
     try:
         (repo, git_ref) = get_commit_metadata(repo_reference, pr)
@@ -28,11 +29,9 @@ def import_from_github(
         )
 
 
-def import_oefdb_df_from_github(
-    repo: Repository,
-    commit_sha: str
-) -> DataFrame:
+def import_oefdb_df_from_github(repo: Repository, commit_sha: str) -> DataFrame:
     from oefdb.util.from_oefdb_csv import from_oefdb_csv
+
     return from_oefdb_csv(get_oefdb_csv_bytes(repo, commit_sha))
 
 
@@ -49,7 +48,9 @@ def get_oefdb_repo(repo_reference: str) -> Repository:
     return g.get_repo(repo_reference)
 
 
-def get_commit_metadata(repo_reference: Optional[str] = None, pr: Optional[int] = None) -> (Repository, GitRef.GitRef):
+def get_commit_metadata(
+    repo_reference: str | None = None, pr: int | None = None
+) -> tuple[Repository, GitRef.GitRef]:
     if repo_reference is None:
         repo_reference = "climatiq/Open-Emission-Factors-DB"
     repo = get_oefdb_repo(repo_reference)
@@ -63,10 +64,14 @@ def get_commit_metadata(repo_reference: Optional[str] = None, pr: Optional[int] 
         git_ref = repo.get_git_ref(ref)
         return (repo, git_ref)
     except UnknownObjectException:
-        raise Exception(f"The branch '{branch}' was not found in repo '{repo_reference}'") from None
+        raise Exception(
+            f"The branch '{branch}' was not found in repo '{repo_reference}'"
+        ) from None
 
 
-def get_blob_content(repo: Repository, commit_sha: str, path_name: str) -> GitBlob.GitBlob:
+def get_blob_content(
+    repo: Repository, commit_sha: str, path_name: str
+) -> GitBlob.GitBlob:
     try:
         tree = repo.get_git_tree(commit_sha, recursive="/" in path_name).tree
         matching_sha = [x.sha for x in tree if x.path == path_name]
@@ -100,9 +105,7 @@ def get_oefdb_csv_bytes(repo: Repository, commit_sha: str) -> BytesIO:
 @click.option(
     "--repo_reference", "-r", default=None, type=str, help="OEFDB repo org and name"
 )
-def cli(
-    output: str, pr: Optional[int] = None, repo_reference: Optional[str] = None
-) -> None:
+def cli(output: str, pr: int | None = None, repo_reference: str | None = None) -> None:
     import oefdb
 
     oefdb_df = oefdb.import_from_github(pr=pr, repo_reference=repo_reference)
