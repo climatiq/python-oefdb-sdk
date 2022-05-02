@@ -23,6 +23,6 @@ def test_validate_cli():
     result = runner.invoke(cli, ["-i", join(fixtures_dir_path, "valid_oefdb_df.csv")])
 
     if result.exit_code != 0:
-        print(result.output)  # noqa: T001
+        print(result.output)  # noqa: T001,T201
 
     assert result.exit_code == 0

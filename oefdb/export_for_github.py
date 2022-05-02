@@ -37,14 +37,16 @@ def export_for_github(oefdb_df: DataFrame, export_path: str | None = None) -> No
 def export_oefdb_csv_to_file(oefdb_csv: str, export_path: str) -> None:
     with open(export_path, "w") as file:
         file.write(oefdb_csv)
-    print(f'OEFDB CSV exported to "{export_path}"')  # noqa: T001
+    print(f'OEFDB CSV exported to "{export_path}"')  # noqa: T001,T201
 
 
 def export_for_github_via_copy_to_clipboard(oefdb_csv: str) -> None:
     import pyperclip
 
     pyperclip.copy(oefdb_csv)
-    print("The OEFDB CSV contents has been copied into the clipboard.")  # noqa: T001
+    print(  # noqa: T001,T201
+        "The OEFDB CSV contents has been copied into the clipboard."
+    )
 
 
 def export_for_github_via_notebook_textarea_copy_paste(oefdb_csv: str) -> None:

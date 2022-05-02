@@ -9,4 +9,4 @@ def present_results_from_validators(
     for validator_name, validator_results in results_from_validators.items():
         validation_result, validation_messages = validator_results
         for validation_message in validation_messages:
-            print(f"{validator_name}: {validation_message}")  # noqa: T001
+            print(f"{validator_name}: {validation_message}")  # noqa: T001,T201
