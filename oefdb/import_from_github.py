@@ -29,13 +29,15 @@ def import_from_github(
         )
 
 
-def import_oefdb_df_from_github(repo: Repository, commit_sha: str) -> DataFrame:
+def import_oefdb_df_from_github(
+    repo: Repository.Repository, commit_sha: str
+) -> DataFrame:
     from oefdb.util.from_oefdb_csv import from_oefdb_csv
 
     return from_oefdb_csv(get_oefdb_csv_bytes(repo, commit_sha))
 
 
-def get_oefdb_repo(repo_reference: str) -> Repository:
+def get_oefdb_repo(repo_reference: str) -> Repository.Repository:
     import os
 
     from dotenv import load_dotenv
@@ -49,7 +51,8 @@ def get_oefdb_repo(repo_reference: str) -> Repository:
 
 
 def get_commit_metadata(
-    repo_reference: str | None = None, pr: int | None = None
+    repo_reference: str | None,
+    pr: int | None,
 ) -> tuple[Repository, GitRef.GitRef]:
     if repo_reference is None:
         repo_reference = "climatiq/Open-Emission-Factors-DB"
@@ -70,7 +73,7 @@ def get_commit_metadata(
 
 
 def get_blob_content(
-    repo: Repository, commit_sha: str, path_name: str
+    repo: Repository.Repository, commit_sha: str, path_name: str
 ) -> GitBlob.GitBlob:
     try:
         tree = repo.get_git_tree(commit_sha, recursive="/" in path_name).tree
@@ -84,7 +87,7 @@ def get_blob_content(
         raise Exception(f"The commit '{commit_sha}' was not found") from None
 
 
-def get_oefdb_csv_bytes(repo: Repository, commit_sha: str) -> BytesIO:
+def get_oefdb_csv_bytes(repo: Repository.Repository, commit_sha: str) -> BytesIO:
     blob = get_blob_content(repo, commit_sha, oefdb_csv_filename)
 
     if blob.encoding == "utf-8":
