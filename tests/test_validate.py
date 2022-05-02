@@ -1,10 +1,9 @@
 from click.testing import CliRunner
 
-from tests.utils import load_oefdb_fixture
-
 
 def test_validate() -> None:
     import oefdb
+    from tests.utils import load_oefdb_fixture
 
     valid_oefdb_df = load_oefdb_fixture("valid_oefdb_df")
 
@@ -24,6 +23,6 @@ def test_validate_cli():
     result = runner.invoke(cli, ["-i", join(fixtures_dir_path, "valid_oefdb_df.csv")])
 
     if result.exit_code != 0:
-        print(result.output)  # noqa: T001
+        print(result.output)  # noqa: T001,T201
 
     assert result.exit_code == 0

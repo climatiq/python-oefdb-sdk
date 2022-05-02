@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pandas import DataFrame
 
 from oefdb.validators._typing import validator_result_type
