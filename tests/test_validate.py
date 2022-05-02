@@ -1,10 +1,9 @@
 from click.testing import CliRunner
 
-from tests.utils import load_oefdb_fixture
-
 
 def test_validate() -> None:
     import oefdb
+    from tests.utils import load_oefdb_fixture
 
     valid_oefdb_df = load_oefdb_fixture("valid_oefdb_df")
 
