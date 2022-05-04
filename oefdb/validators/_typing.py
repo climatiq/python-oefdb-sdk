@@ -1,3 +1,5 @@
 from __future__ import annotations
 
-validator_result_type = tuple[bool, list[str]]
+from typing import List, Tuple
+
+validator_result_type = Tuple[bool, List[str]]
