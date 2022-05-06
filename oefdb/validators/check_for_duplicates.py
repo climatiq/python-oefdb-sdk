@@ -28,16 +28,18 @@ def check_for_duplicates(df: DataFrame) -> validator_result_type:
     """
     validation_messages = []
 
+    unique_column_set = [
+        "activity_id",
+        "year_released",
+        "region",
+        "source",
+        "activity_unit",
+        "lca_activity",
+    ]
+
     dupl_oefdb = df[
         df.duplicated(
-            subset=[
-                "activity_id",
-                "year_released",
-                "region",
-                "source",
-                "activity_unit",
-                "lca_activity",
-            ],
+            subset=unique_column_set,
             keep=False,
         )
     ].reset_index()
@@ -46,16 +48,7 @@ def check_for_duplicates(df: DataFrame) -> validator_result_type:
         return True, validation_messages
     dupl_oefdb["line_number"] = dupl_oefdb["index"] + 2
     dupl_line_numbers = (
-        dupl_oefdb.groupby(
-            [
-                "activity_id",
-                "year_released",
-                "region",
-                "source",
-                "activity_unit",
-                "lca_activity",
-            ]
-        )
+        dupl_oefdb.groupby(unique_column_set)
         .apply(lambda x: list(x.line_number))
         .reset_index(name="line_number")
     )
