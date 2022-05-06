@@ -15,9 +15,11 @@ def test_check_for_empty_uuids():
         oefdb_df_with_a_duplicate_row
     )
     assert validation_result is False
+    # TODO: Run create_uuids and validate again, asserting True
 
     oefdb_df_with_a_duplicate_row = load_oefdb_fixture("oefdb_df_with_many_empty_uuids")
     validation_result, validation_messages = check_for_empty_uuids(
         oefdb_df_with_a_duplicate_row
     )
     assert validation_result is False
+    # TODO: Run create_uuids and validate again, asserting True
