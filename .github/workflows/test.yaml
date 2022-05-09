@@ -30,7 +30,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.local
-          key: poetry-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('.github/workflows/test.yml') }}
+          key: poetry-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('.github/workflows/test.yml') }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('pyproject.toml') }}
+          key: venv-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}
 
       - name: Install dependencies
         run: poetry install
@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pre-commit
-          key: pre-commit-${{ runner.os }}-${{matrix.python}}-${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Lint
         run: poetry run poe lint
