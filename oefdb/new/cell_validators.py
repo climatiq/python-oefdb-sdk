@@ -71,5 +71,5 @@ ALL_VALIDATORS = {
     "is_link": is_link,
     "is_year": is_year,
     "is_float_or_not_supplied": is_float_or_not_supplied,
-    "is_int_or_empty": is_int,
+    "is_int": is_int,
 }

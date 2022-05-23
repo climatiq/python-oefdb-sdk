@@ -60,7 +60,7 @@ allow_empty = true
 
 [[columns]]
 name = "uncertainty"
-validators = ["is_int_or_empty"]
+validators = ["is_int"]
 allow_empty = true
 
 [[columns]]
