@@ -14,13 +14,13 @@ from oefdb.new.configuration import load_schema_definition
 def test_foo():
     schema = load_schema_definition("./tests/schema.toml")
 
-    with open('./tests/input.csv', newline='') as csvfile:
+    with open("./tests/input.csv", newline="") as csvfile:
         reader = csv.reader(csvfile)
         # todo skip header
 
         headers = next(reader)
 
-        schema.validate_columns(headers)
+        schema.validate_header(headers)
 
         for row in reader:
             print(row)
@@ -29,6 +29,8 @@ def test_foo():
             # print(row['first_name'], row['last_name'])
 
     raise Exception("sfd")
+
+
 #     # csv = read_csv("./tests/input.csv")
 #
 #     for (column_name, column_data) in csv.iteritems():
@@ -62,4 +64,3 @@ def test_foo():
 #         # print(configuration_for_column)
 #
 #     raise Exception("sdfds")
-
