@@ -2,7 +2,8 @@ import pprint
 
 import toml
 
-from oefdb.schema_validation.configuration import ColumnConfiguration, ColumnSchema
+from oefdb.schema_validation.column_schema import ColumnSchema
+from oefdb.schema_validation.schema import Schema
 
 
 def schema_fixture():
@@ -20,8 +21,8 @@ def schema_fixture():
 
     conf = toml.loads(toml_conf)
 
-    columns = [ColumnConfiguration(**conf) for conf in conf["columns"]]
-    schema = ColumnSchema(columns=columns)
+    columns = [ColumnSchema(**conf) for conf in conf["columns"]]
+    schema = Schema(columns=columns)
 
     return schema
 
@@ -57,7 +58,7 @@ def test_validation_of_csv_files():
 
 
 def test_validation_of_year():
-    config = ColumnConfiguration(
+    config = ColumnSchema(
         name="config", validators=["is_year"], allow_empty=False
     )
 
@@ -67,7 +68,7 @@ def test_validation_of_year():
 
 
 def test_validation_of_wrong_year():
-    config = ColumnConfiguration(
+    config = ColumnSchema(
         name="config", validators=["is_year"], allow_empty=False
     )
 

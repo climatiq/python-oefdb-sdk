@@ -6,9 +6,10 @@ from typing import Dict
 
 import click
 import pydantic
+from click import echo
 from pandas import DataFrame
 
-from oefdb.schema_validation.configuration import ColumnSchema
+from oefdb.schema_validation.schema import Schema
 from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
 from oefdb.validators._typing import validator_result_type
 from oefdb.validators.check_for_duplicates import check_for_duplicates
@@ -38,10 +39,10 @@ results_from_validators_type = Dict[str, validator_result_type]
 def cli(schema: str, input: str) -> None:
     try:
         try:
-            schema = ColumnSchema.load_schema_definition(schema)
+            schema = Schema.load_schema_definition(schema)
         except pydantic.ValidationError as e:
-            print("Error loading TOML file")
-            print(e)
+            echo("Error loading TOML file")
+            echo(e)
             exit(1)
 
         oefdb_csv = from_oefdb_csv_raw(input)
@@ -49,44 +50,44 @@ def cli(schema: str, input: str) -> None:
         headers = oefdb_csv[0]
         rows = oefdb_csv[1:]
 
-        print(headers)
-        print(rows[0])
+        echo(headers)
+        echo(rows[0])
 
         validation_result, errors = schema.validate_headers(headers)
         if validation_result is False:
-            print("ERROR VALIDATING COLUMN STRUCTURE")
-            print("Please edit the column schema.")
-            print("Errors:")
+            echo("ERROR VALIDATING COLUMN STRUCTURE")
+            echo("Please edit the column schema.")
+            echo("Errors:")
 
             format_errors(errors)
 
             for e in errors:
-                print(e)
+                echo(e)
             exit(1)
 
         validation_result, errors = schema.validate_rows(rows)
-        print(validation_result, errors)
+        echo(validation_result, errors)
         if validation_result is False:
-            print("ERROR VALIDATING COLUMN STRUCTURE")
-            print("Please edit the column schema.")
-            print("Errors:")
+            echo("ERROR VALIDATING COLUMN STRUCTURE")
+            echo("Please edit the column schema.")
+            echo("Errors:")
 
             format_errors(errors)
 
             for e in errors:
-                print(e)
+                echo(e)
             exit(1)
 
         exit(0)
     except Exception as e:
-        print("Exception when running command", e)
-        print(traceback.format_exc())
+        echo("Exception when running command", e)
+        echo(traceback.format_exc())
         exit(1)
 
 
 def format_errors(error_structure):
     for (row, errors) in error_structure():
-        print("--------------------------")
-        print(f"Error in row {row}")
+        echo("--------------------------")
+        echo(f"Error in row {row}")
 
-        print("\n\n\n")
+        echo("\n\n\n")

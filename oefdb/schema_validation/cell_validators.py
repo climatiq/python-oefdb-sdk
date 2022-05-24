@@ -1,4 +1,9 @@
+from __future__ import annotations
+
+import typing
 from datetime import datetime
+
+from pydantic import BaseModel
 
 from oefdb.validators._typing import validator_result_type
 
@@ -15,7 +20,8 @@ def is_string_without_comma(cell_value: str) -> validator_result_type:
             return False, ["Cell is empty"]
         else:
             return True, []
-    return False, [f"'{cell_value}' was not a valid string"]
+
+    return False, [f"'{cell_value}' was not a valid string"]  # type:ignore
 
 
 def is_year(cell_value: str) -> validator_result_type:
@@ -52,7 +58,7 @@ def is_int(cell_value: str) -> validator_result_type:
 
 def is_date(cell_value: str) -> validator_result_type:
     try:
-        time = datetime.strptime(cell_value, "%Y/%m/%d")
+        _time = datetime.strptime(cell_value, "%Y/%m/%d")
         return True, []
     except ValueError:
         return False, [
@@ -78,3 +84,11 @@ ALL_VALIDATORS = {
     "is_float_or_not_supplied": is_float_or_not_supplied,
     "is_int": is_int,
 }
+
+
+class CellValidator(BaseModel):
+    validator_name: str
+    validator_function: typing.Callable[[str], validator_result_type]
+
+    def validate(self, obj) -> validator_result_type:
+        return self.validator_function(obj)

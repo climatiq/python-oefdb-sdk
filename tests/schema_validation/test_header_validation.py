@@ -1,6 +1,7 @@
 import toml
 
-from oefdb.schema_validation.configuration import ColumnConfiguration, ColumnSchema
+from oefdb.schema_validation.column_schema import ColumnSchema
+from oefdb.schema_validation.schema import Schema
 
 
 def schema():
@@ -18,8 +19,8 @@ def schema():
 
     conf = toml.loads(toml_conf)
 
-    columns = [ColumnConfiguration(**conf) for conf in conf["columns"]]
-    schema = ColumnSchema(columns=columns)
+    columns = [ColumnSchema(**conf) for conf in conf["columns"]]
+    schema = Schema(columns=columns)
 
     return schema
 

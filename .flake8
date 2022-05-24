@@ -16,6 +16,9 @@ ignore =
   # pycodestyle - style checker (PEP8)
   W503  # line break before binary operator
 
+  E501 # Line length - enforced by black
+
+
 per-file-ignores =
-  *tests/*:D205,D400,D401,S101,S106,E501,E731
+  *tests/*:D205,D400,D401,S101,S106,E501,E731,T201
   example-notebook.py:W391

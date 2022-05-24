@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from typing import Any, List
+from typing import Any
 
 from pandas import DataFrame, read_csv
 
