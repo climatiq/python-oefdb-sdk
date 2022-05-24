@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
+import csv
+from typing import Any, List
 
 from pandas import DataFrame, read_csv
 
@@ -9,3 +10,11 @@ def from_oefdb_csv(
     filepath_or_buffer: Any,
 ) -> DataFrame:
     return read_csv(filepath_or_buffer=filepath_or_buffer)
+
+
+def from_oefdb_csv_raw(
+    path: str,
+) -> list[list[str]]:
+    with open(path, newline="") as csvfile:
+        reader = csv.reader(csvfile)
+        return list(reader)

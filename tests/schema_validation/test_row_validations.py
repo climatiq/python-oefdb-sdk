@@ -8,19 +8,15 @@ from typing import List, Optional
 import toml
 from pydantic import BaseModel
 
-from oefdb.new.configuration import (
-    ColumnConfiguration,
-    ColumnSchema,
-    load_schema_definition,
-)
+from oefdb.schema_validation.configuration import ColumnConfiguration, ColumnSchema
 
 
-def schema():
+def schema_fixture():
     toml_conf = """
         [[columns]]
         name = "hello"
         validators = ["is_float_or_not_supplied"]
-        allow_empty = true
+        allow_empty = false
 
         [[columns]]
         name = "world"
@@ -42,7 +38,7 @@ def test_validation_of_csv_files_will_return_ok_on_valid():
         ["1", "2013"],
     ]
 
-    (valid, errors) = schema().validate_all(csv)
+    (valid, errors) = schema_fixture().validate_all(csv)
     print(valid, errors)
     pprint.pp(errors)
 
@@ -56,7 +52,7 @@ def test_validation_of_csv_files():
         ["1", "not_a_year"],
     ]
 
-    (valid, errors) = schema().validate_all(csv)
+    (valid, errors) = schema_fixture().validate_all(csv)
     print(valid, errors)
     pprint.pp(errors)
 
@@ -98,7 +94,7 @@ def test_validation_of_larger_csv_files():
         ["not_float", "2021"],
     ]
 
-    (valid, errors) = schema().validate_all(csv)
+    (valid, errors) = schema_fixture().validate_all(csv)
     print(valid, errors)
     pprint.pp(errors)
 
@@ -109,6 +105,48 @@ def test_validation_of_larger_csv_files():
             "hello": {
                 "is_float_or_not_supplied": [
                     "'not_float' was not a valid float " "or the string 'not-supplied'"
+                ]
+            }
+        },
+    }
+
+
+def test_validation_is_empty_accepts_empty_values_if_set_to_true():
+    csv = [
+        ["hello", "world"],
+        ["1.32", ""],
+    ]
+
+    toml_schema = schema_fixture()
+    print(toml_schema)
+
+    (valid, errors) = toml_schema.validate_all(csv)
+    print(valid, errors)
+    pprint.pp(errors)
+
+    assert valid is True
+    assert errors == {}
+
+
+def test_validation_is_empty_rejects_empty_values_if_set_to_false():
+    csv = [
+        ["hello", "world"],
+        ["", "2013"],
+    ]
+
+    toml_schema = schema_fixture()
+    print(toml_schema)
+
+    (valid, errors) = toml_schema.validate_all(csv)
+    print(valid, errors)
+    pprint.pp(errors)
+
+    assert valid is False
+    assert errors == {
+        2: {
+            "hello": {
+                "is_float_or_not_supplied": [
+                    "'' was not a valid float or the " "string 'not-supplied'"
                 ]
             }
         },

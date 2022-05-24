@@ -1,6 +1,6 @@
 import toml
 
-from oefdb.new.configuration import ColumnConfiguration, ColumnSchema
+from oefdb.schema_validation.configuration import ColumnConfiguration, ColumnSchema
 
 
 def schema():
@@ -50,5 +50,5 @@ def test_header_validation_returns_error_with_too_few_headers():
     (valid, errors) = schema().validate_headers(headers)
 
     print(valid, errors)
-    assert errors[0] == "Expected column 1 to be world, but found no column"
+    assert errors[0] == "Expected column 1 to be 'world', but found no column"
     assert valid is False

@@ -1,7 +1,5 @@
-import csv
-import datetime
-import itertools
-import math
+from __future__ import annotations
+
 import pprint
 import typing
 from typing import List, Optional
@@ -9,7 +7,7 @@ from typing import List, Optional
 import toml
 from pydantic import BaseModel, Field, validator
 
-from oefdb.new.cell_validators import ALL_VALIDATORS
+from oefdb.schema_validation.cell_validators import ALL_VALIDATORS
 from oefdb.validators._typing import validator_result_type
 
 
@@ -23,11 +21,11 @@ class CellValidator(BaseModel):
 
 class ColumnConfiguration(BaseModel):
     name: str
-    validator_strings: List[str] = Field(alias="validators")
+    validator_strings: list[str] = Field(alias="validators")
     allow_empty: bool
-    legal_values: Optional[str] = None
+    legal_values: str | None = None
 
-    def validators(self) -> List[CellValidator]:
+    def validators(self) -> list[CellValidator]:
         return [
             CellValidator(
                 validator_name=validator_name,
@@ -50,10 +48,10 @@ class ColumnConfiguration(BaseModel):
     Returns
     """
 
-    def validate_cell(self, cell) -> (bool, typing.Dict):
+    def validate_cell(self, cell) -> (bool, dict):
         if cell == "" and self.allow_empty:
             print("Accepting empty cell")
-            return True
+            return True, []
 
         # todo better errors
         all_errors = {}
@@ -72,13 +70,13 @@ class ColumnConfiguration(BaseModel):
 
 
 class ColumnSchema(BaseModel):
-    columns: List[ColumnConfiguration]
+    columns: list[ColumnConfiguration]
 
-    def validate_row(self, row):
+    def validate_single_row(self, row):
         all_errors = {}
 
         for (cell, column) in zip(row, self.columns):
-            print("cell:", cell, "column:", column)
+            # print("cell:", cell, "column:", column)
             valid, errors = column.validate_cell(cell)
             if not valid:
                 all_errors[column.name] = errors
@@ -88,6 +86,23 @@ class ColumnSchema(BaseModel):
             return False, all_errors
         return True, all_errors
 
+    def validate_rows(self, rows: list[list[str]]):
+        errors = {}
+        for index, row in enumerate(rows):
+            csv_index = (
+                index + 2
+            )  # We don't have the header here so we need to skip that, and CSV is 1-indexed
+            valid, error = self.validate_single_row(row)
+            if not valid:
+                print("not valid", error)
+                errors[csv_index] = error
+            else:
+                print("valid!", row)
+
+        if errors:
+            return False, errors
+        return True, errors
+
     # Todo better error messages
     def validate_headers(self, headers) -> validator_result_type:
         errors = []
@@ -96,11 +111,11 @@ class ColumnSchema(BaseModel):
             try:
                 if headers[index] != column.name:
                     errors.append(
-                        f"Expected column {index} to be {column.name}, but got {headers[index]}"
+                        f"Expected column {index+1} to be '{column.name}', but got '{headers[index]}'"
                     )
             except IndexError:
                 errors.append(
-                    f"Expected column {index} to be {column.name}, but found no column"
+                    f"Expected column {index+1} to be '{column.name}', but found no column"
                 )
 
         # If the length is not identical here, it's because there's too many headers
@@ -115,7 +130,7 @@ class ColumnSchema(BaseModel):
         else:
             return True, errors
 
-    def validate_all(self, csv: List):
+    def validate_all(self, csv: list):
         headers = csv[0]
         valid, error = self.validate_headers(headers)
         if valid is False:
@@ -123,26 +138,15 @@ class ColumnSchema(BaseModel):
 
         rows = csv[1:]
 
-        errors = {}
-        for index, row in enumerate(rows):
-            csv_index = index + 1
-            valid, error = self.validate_row(row)
-            if not valid:
-                print("not valid", error)
-                errors[csv_index] = error
-            else:
-                print("valid!", row)
+        return self.validate_rows(rows)
 
-        if errors:
-            return False, errors
-        return True, errors
+    @staticmethod
+    def load_schema_definition(file_path: str) -> ColumnSchema:
+        with open(file_path) as f:
+            toml_fle = f.read()
 
+        configuration = toml.loads(toml_fle)
 
-def load_schema_definition(file_path: str) -> ColumnSchema:
-    with open(file_path) as f:
-        toml_fle = f.read()
+        columns = [ColumnConfiguration(**conf) for conf in configuration["columns"]]
 
-    configuration = toml.loads(toml_fle)
-
-    columns = [ColumnConfiguration(**conf) for conf in configuration["columns"]]
-    return ColumnSchema(columns=columns)
+        return ColumnSchema(columns=columns)

@@ -8,7 +8,15 @@ from oefdb.validators._typing import validator_result_type
 def is_string(cell_value: str) -> validator_result_type:
     # TODO should also check for commas
     if isinstance(cell_value, str):
-        return True, []
+        if "," in cell_value:
+            return False, [
+                f"String '{cell_value}' contains commas. Those are not allowed."
+            ]
+
+        if cell_value == "":
+            return False, ["Cell is empty"]
+        else:
+            return True, []
     return False, [f"'{cell_value}' was not a valid string"]
 
 
@@ -64,7 +72,6 @@ def is_link(cell_value: str) -> validator_result_type:
         return False, [f"Unable to parse '{cell_value}' as a string."]
 
 
-# TODO we should just have a validation thing that has an "isEmpty"
 ALL_VALIDATORS = {
     "is_string": is_string,
     "is_date": is_date,

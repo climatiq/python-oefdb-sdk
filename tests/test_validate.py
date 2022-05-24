@@ -3,9 +3,9 @@ from click.testing import CliRunner
 
 def test_validate() -> None:
     import oefdb
-    from tests.utils import load_oefdb_fixture
+    from tests.utils import load_oefdb_fixture_dataframe
 
-    valid_oefdb_df = load_oefdb_fixture("valid_oefdb_df")
+    valid_oefdb_df = load_oefdb_fixture_dataframe("valid_oefdb_df")
 
     validation_result, results_from_validators = oefdb.validate(valid_oefdb_df)
 
