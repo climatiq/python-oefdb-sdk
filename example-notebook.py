@@ -31,4 +31,5 @@ oefdb.export_for_github(oefdb_df)
 # optional, run to increase the GitHub API rate limit
 import getpass
 import os
-os.environ['GH_TOKEN'] = getpass.getpass()
+
+os.environ["GH_TOKEN"] = getpass.getpass()

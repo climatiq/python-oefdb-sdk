@@ -2,9 +2,8 @@ from os.path import join
 
 from click.testing import CliRunner
 
-import oefdb
 from oefdb import validate_schema
-from tests.utils import fixtures_dir_path, load_oefdb_fixture_raw
+from tests.utils import fixtures_dir_path
 
 
 # TODO

@@ -1,11 +1,9 @@
-import math
-import typing
 from datetime import datetime
 
 from oefdb.validators._typing import validator_result_type
 
 
-def is_string(cell_value: str) -> validator_result_type:
+def is_string_without_comma(cell_value: str) -> validator_result_type:
     # TODO should also check for commas
     if isinstance(cell_value, str):
         if "," in cell_value:
@@ -73,7 +71,7 @@ def is_link(cell_value: str) -> validator_result_type:
 
 
 ALL_VALIDATORS = {
-    "is_string": is_string,
+    "is_string_without_comma": is_string_without_comma,
     "is_date": is_date,
     "is_link": is_link,
     "is_year": is_year,
