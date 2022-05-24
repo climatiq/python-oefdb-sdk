@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import pprint
 import traceback
 from typing import Dict
 
@@ -10,6 +11,7 @@ from click import echo
 from pandas import DataFrame
 
 from oefdb.schema_validation.schema import Schema
+from oefdb.schema_validation.validation_result import RowErrorsType
 from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
 from oefdb.validators._typing import validator_result_type
 from oefdb.validators.check_for_duplicates import check_for_duplicates
@@ -47,47 +49,39 @@ def cli(schema: str, input: str) -> None:
 
         oefdb_csv = from_oefdb_csv_raw(input)
 
-        headers = oefdb_csv[0]
-        rows = oefdb_csv[1:]
+        validation_result = schema.validate_all(oefdb_csv)
 
-        echo(headers)
-        echo(rows[0])
 
-        validation_result, errors = schema.validate_headers(headers)
-        if validation_result is False:
+        if validation_result.column_errors:
             echo("ERROR VALIDATING COLUMN STRUCTURE")
             echo("Please edit the column schema.")
             echo("Errors:")
-
-            format_errors(errors)
-
-            for e in errors:
+            for e in validation_result.column_errors:
                 echo(e)
+
             exit(1)
 
-        validation_result, errors = schema.validate_rows(rows)
-        echo(validation_result, errors)
-        if validation_result is False:
-            echo("ERROR VALIDATING COLUMN STRUCTURE")
-            echo("Please edit the column schema.")
+
+        if validation_result.row_errors:
+            echo("ERROR VALIDATING SOME ROWS")
             echo("Errors:")
 
-            format_errors(errors)
-
-            for e in errors:
-                echo(e)
+            output_row_errors(validation_result.row_errors)
             exit(1)
 
         exit(0)
     except Exception as e:
-        echo("Exception when running command", e)
+        echo("---Internal exception when running command---"
+             "")
+        echo(f"{e}")
         echo(traceback.format_exc())
         exit(1)
 
 
-def format_errors(error_structure):
-    for (row, errors) in error_structure():
-        echo("--------------------------")
-        echo(f"Error in row {row}")
-
-        echo("\n\n\n")
+def output_row_errors(errors: RowErrorsType):
+    for row_number, columns in errors.items():
+        echo(f"--- Error(s) found at row {row_number} ---")
+        for column_name, validators in columns.items():
+            for validator_name, error in validators.items():
+                echo(f"Error found in column '{column_name}' by validator: '{validator_name}': {error}")
+        echo() #newline

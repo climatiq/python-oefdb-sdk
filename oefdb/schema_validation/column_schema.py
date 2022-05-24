@@ -1,17 +1,28 @@
 from __future__ import annotations
 
-import pprint
+import typing
 
-from pydantic import BaseModel, Field, validator
+import pydantic
+from pydantic import BaseModel, Field
 
 from oefdb.schema_validation.cell_validators import ALL_VALIDATORS, CellValidator
 
 
 class ColumnSchema(BaseModel):
-    name: str
+    column_name: str = Field(alias="name")
     validator_strings: list[str] = Field(alias="validators")
     allow_empty: bool
-    legal_values: str | None = None
+    legal_values: typing.Union[str, None] = None  # TODO implement this later
+
+    @pydantic.validator("validator_strings")
+    def check_validator_is_legal_value(cls, v):
+        for validator in v:
+            if validator not in ALL_VALIDATORS:
+                keys = list(ALL_VALIDATORS.keys())
+                raise ValueError(
+                    f"Wrong validator '{validator}' provided. Validator must one of: {keys}"
+                )
+        return v
 
     def validators(self) -> list[CellValidator]:
         return [
@@ -22,36 +33,21 @@ class ColumnSchema(BaseModel):
             for validator_name in self.validator_strings
         ]
 
-    @validator("validator_strings")
-    def check_validator_is_defined(cls, v):
-        for validator in v:
-            if validator not in ALL_VALIDATORS:
-                keys = list(ALL_VALIDATORS.keys())
-                raise ValueError(
-                    f"Wrong validator '{validator}' provided. Validator must one of: {keys}"
-                )
-        return v
-
-    """
-    Returns
-    """
-
-    def validate_cell(self, cell) -> (bool, dict):
+    def validate_cell(self, cell) -> typing.Union[None, dict[str, str]]:
+        """
+        Validates a cell. Returns None for a valid cell, or a dictionary of errors
+        where the keys are the validator names, and the values are the error messages from the validator.
+        """
         if cell == "" and self.allow_empty:
-            print("Accepting empty cell")
-            return True, []
+            return None
 
-        # todo better errors
         all_errors = {}
 
         for validator in self.validators():
-            valid, errors = validator.validate(cell)
-            if valid:
-                pass
-            else:
-                all_errors[f"{validator.validator_name}"] = errors
+            error = validator.validate_cell(cell)
+            if error:
+                all_errors[validator.validator_name] = error
 
-        pprint.pp(all_errors)
         if all_errors:
-            return False, all_errors
-        return True, all_errors
+            return all_errors
+        return None

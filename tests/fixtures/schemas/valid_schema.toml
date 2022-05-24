@@ -98,7 +98,7 @@ allow_empty = true
 
 [[columns]]
 name = "region"
-validators = [] #TODO
+validators = []
 allow_empty = false
 
 [[columns]]
@@ -110,7 +110,7 @@ legal_values = "./metadata/valid_data_quality.toml"
 [[columns]]
 name = "contributor"
 validators = ["is_string_without_comma"]
-allow_empty = false
+allow_empty = true
 
 [[columns]]
 name = "date_accessed"

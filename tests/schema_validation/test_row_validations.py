@@ -33,12 +33,11 @@ def test_validation_of_csv_files_will_return_ok_on_valid():
         ["1", "2013"],
     ]
 
-    (valid, errors) = schema_fixture().validate_all(csv)
-    print(valid, errors)
-    pprint.pp(errors)
+    validation_result = schema_fixture().validate_all(csv)
 
-    assert valid is True
-    assert errors == {}
+    pprint.pp(validation_result)
+
+    assert validation_result.valid() is True
 
 
 def test_validation_of_csv_files():
@@ -47,37 +46,32 @@ def test_validation_of_csv_files():
         ["1", "not_a_year"],
     ]
 
-    (valid, errors) = schema_fixture().validate_all(csv)
-    print(valid, errors)
-    pprint.pp(errors)
+    validation_result = schema_fixture().validate_all(csv)
 
-    assert valid is False
-    assert errors == {
-        1: {"world": {"is_year": ["'not_a_year' was not a valid number"]}}
+    pprint.pp(validation_result)
+
+    assert validation_result.valid() is False
+    assert not validation_result.column_errors
+    assert validation_result.row_errors == {
+        2: {"world": {"is_year": "'not_a_year' was not a valid number"}}
     }
 
 
 def test_validation_of_year():
-    config = ColumnSchema(
-        name="config", validators=["is_year"], allow_empty=False
-    )
+    config = ColumnSchema(name="config", validators=["is_year"], allow_empty=False)
 
-    valid, errors = config.validate_cell("2013")
-    assert valid is True
-    assert errors == {}
+    validation_result = config.validate_cell("2013")
+    assert validation_result is None
 
 
 def test_validation_of_wrong_year():
-    config = ColumnSchema(
-        name="config", validators=["is_year"], allow_empty=False
-    )
+    config = ColumnSchema(name="config", validators=["is_year"], allow_empty=False)
 
-    valid, errors = config.validate_cell("noo")
+    validation_result = config.validate_cell("noo")
 
-    pprint.pp(errors)
+    pprint.pp(validation_result)
 
-    assert valid is False
-    assert errors == {"is_year": ["'noo' was not a valid number"]}
+    assert validation_result == {"is_year": "'noo' was not a valid number"}
 
 
 def test_validation_of_larger_csv_files():
@@ -89,18 +83,19 @@ def test_validation_of_larger_csv_files():
         ["not_float", "2021"],
     ]
 
-    (valid, errors) = schema_fixture().validate_all(csv)
-    print(valid, errors)
-    pprint.pp(errors)
+    validation_result = schema_fixture().validate_all(csv)
 
-    assert valid is False
-    assert errors == {
-        2: {"world": {"is_year": ["'not_a_year' was not a valid number"]}},
-        4: {
+    pprint.pp(validation_result)
+
+    assert validation_result.valid() is False
+    assert not validation_result.column_errors
+    assert validation_result.row_errors == {
+        3: {"world": {"is_year": "'not_a_year' was not a valid number"}},
+        5: {
             "hello": {
-                "is_float_or_not_supplied": [
-                    "'not_float' was not a valid float " "or the string 'not-supplied'"
-                ]
+                "is_float_or_not_supplied":
+                    "'not_float' was not a valid float or the string 'not-supplied'"
+
             }
         },
     }
@@ -113,14 +108,11 @@ def test_validation_is_empty_accepts_empty_values_if_set_to_true():
     ]
 
     toml_schema = schema_fixture()
-    print(toml_schema)
 
-    (valid, errors) = toml_schema.validate_all(csv)
-    print(valid, errors)
-    pprint.pp(errors)
-
-    assert valid is True
-    assert errors == {}
+    validation_result = toml_schema.validate_all(csv)
+    assert validation_result.valid() is True
+    assert not validation_result.row_errors
+    assert not validation_result.column_errors
 
 
 def test_validation_is_empty_rejects_empty_values_if_set_to_false():
@@ -130,19 +122,14 @@ def test_validation_is_empty_rejects_empty_values_if_set_to_false():
     ]
 
     toml_schema = schema_fixture()
-    print(toml_schema)
 
-    (valid, errors) = toml_schema.validate_all(csv)
-    print(valid, errors)
-    pprint.pp(errors)
+    validation_result = toml_schema.validate_all(csv)
 
-    assert valid is False
-    assert errors == {
+    assert validation_result.valid() is False
+    assert not validation_result.column_errors
+
+    assert validation_result.row_errors == {
         2: {
-            "hello": {
-                "is_float_or_not_supplied": [
-                    "'' was not a valid float or the " "string 'not-supplied'"
-                ]
-            }
+            'hello': {'is_float_or_not_supplied': "'' was not a valid float or the string 'not-supplied'"}
         },
     }

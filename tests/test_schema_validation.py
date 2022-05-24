@@ -6,7 +6,6 @@ from oefdb import validate_schema
 from tests.utils import fixtures_dir_path
 
 
-# TODO
 def test_validate_schema_cli():
     runner = CliRunner()
 
@@ -17,6 +16,10 @@ def test_validate_schema_cli():
         validate_schema.cli,
         ["-i", csv_path, "-s", schema_path],
     )
+
+    print("result", result)
+
+
 
     if result.exit_code != 0:
         print(result.output)  # noqa: T001,T201

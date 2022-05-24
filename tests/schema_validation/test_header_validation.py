@@ -28,28 +28,24 @@ def schema():
 def test_header_validation_returns_ok_with_identical_schema():
     headers = ["hello", "world"]
 
-    (valid, errors) = schema().validate_headers(headers)
-    assert valid is True
+    errors = schema().validate_headers(headers)
+    assert not errors
 
 
 def test_header_validation_returns_error_with_too_many_headers():
     headers = ["hello", "world", "wow"]
 
-    (valid, errors) = schema().validate_headers(headers)
+    errors = schema().validate_headers(headers)
 
-    print(valid, errors)
     assert (
         errors[0]
         == "Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns.: ['wow']"
     )
-    assert valid is False
 
 
 def test_header_validation_returns_error_with_too_few_headers():
     headers = ["hello"]
 
-    (valid, errors) = schema().validate_headers(headers)
+    errors = schema().validate_headers(headers)
 
-    print(valid, errors)
-    assert errors[0] == "Expected column 1 to be 'world', but found no column"
-    assert valid is False
+    assert errors[0] == "Expected column 2 to be 'world', but found no column"
