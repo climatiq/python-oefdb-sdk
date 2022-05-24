@@ -12,10 +12,9 @@ class ColumnSchema(BaseModel):
     column_name: str = Field(alias="name")
     validator_strings: list[str] = Field(alias="validators")
     allow_empty: bool
-    legal_values: typing.Union[str, None] = None  # TODO implement this later
 
     @pydantic.validator("validator_strings")
-    def check_validator_is_legal_value(cls, v):
+    def check_validator_exists(cls, v):
         for validator in v:
             if validator not in ALL_VALIDATORS:
                 keys = list(ALL_VALIDATORS.keys())

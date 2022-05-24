@@ -67,19 +67,16 @@ allow_empty = true
 name = "scope"
 validators = []
 allow_empty = true
-legal_values = "./metadata/valid_scopes.toml"
 
 [[columns]]
 name = "lca_activity"
 validators = ["is_string_without_comma"]
 allow_empty = false
-legal_values = "./metadata/valid_lca_activities.toml"
 
 [[columns]]
 name = "source"
 validators = ["is_string_without_comma"]
 allow_empty = false
-legal_values = "./metadata/valid_sources.toml"
 
 [[columns]]
 name = "year_released"
@@ -105,7 +102,6 @@ allow_empty = false
 name = "data_quality"
 validators = []
 allow_empty = false
-legal_values = "./metadata/valid_data_quality.toml"
 
 [[columns]]
 name = "contributor"
