@@ -10,3 +10,6 @@ test.db
 .ipynb_checkpoints
 dist
 .env
+
+# Some of our tests write this file
+*OpenEmissionFactorsDB.csv
