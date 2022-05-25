@@ -2,8 +2,8 @@ import pprint
 
 import toml
 
-from oefdb.schema_validation.column_schema import ColumnSchema
-from oefdb.schema_validation.schema import Schema
+from oefdb.validators.schema.column_schema import ColumnSchema
+from oefdb.validators.schema.schema import Schema
 
 
 def schema_fixture():
@@ -93,9 +93,7 @@ def test_validation_of_larger_csv_files():
         3: {"world": {"is_year": "'not_a_year' was not a valid number"}},
         5: {
             "hello": {
-                "is_float_or_not_supplied":
-                    "'not_float' was not a valid float or the string 'not-supplied'"
-
+                "is_float_or_not_supplied": "'not_float' was not a valid float or the string 'not-supplied'"
             }
         },
     }
@@ -130,6 +128,8 @@ def test_validation_is_empty_rejects_empty_values_if_set_to_false():
 
     assert validation_result.row_errors == {
         2: {
-            'hello': {'is_float_or_not_supplied': "'' was not a valid float or the string 'not-supplied'"}
+            "hello": {
+                "is_float_or_not_supplied": "'' was not a valid float or the string 'not-supplied'"
+            }
         },
     }

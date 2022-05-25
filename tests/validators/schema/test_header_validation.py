@@ -1,7 +1,7 @@
 import toml
 
-from oefdb.schema_validation.column_schema import ColumnSchema
-from oefdb.schema_validation.schema import Schema
+from oefdb.validators.schema.column_schema import ColumnSchema
+from oefdb.validators.schema.schema import Schema
 
 
 def schema():

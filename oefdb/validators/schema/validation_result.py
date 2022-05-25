@@ -5,8 +5,9 @@ from pydantic import BaseModel
 """ Dict of {rowNumber: {column_name: {validator_name: error}}} """
 RowErrorsType = Dict[int, Dict[str, Dict[str, str]]]
 
+
 class SchemaValidationResult(BaseModel):
-    """ Dict of {rowNumber: {column_name: {validator_name: error}}} """
+    """Dict of {rowNumber: {column_name: {validator_name: error}}}"""
 
     # Row number -> Column(s) -> Validator_name -> Error
     """

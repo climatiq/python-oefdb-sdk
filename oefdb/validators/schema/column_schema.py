@@ -5,7 +5,7 @@ import typing
 import pydantic
 from pydantic import BaseModel, Field
 
-from oefdb.schema_validation.cell_validators import ALL_VALIDATORS, CellValidator
+from oefdb.validators.schema.cell_validators import ALL_VALIDATORS, CellValidator
 
 
 class ColumnSchema(BaseModel):
@@ -32,7 +32,7 @@ class ColumnSchema(BaseModel):
             for validator_name in self.validator_strings
         ]
 
-    def validate_cell(self, cell) -> typing.Union[None, dict[str, str]]:
+    def validate_cell(self, cell) -> None | dict[str, str]:
         """
         Validates a cell. Returns None for a valid cell, or a dictionary of errors
         where the keys are the validator names, and the values are the error messages from the validator.

@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 import pprint
-from typing import List, Dict
+from typing import Dict
 
 import toml
 from pydantic import BaseModel
 
-from oefdb.schema_validation.column_schema import ColumnSchema
-from oefdb.schema_validation.validation_result import SchemaValidationResult
-from oefdb.validators._typing import validator_result_type
+from oefdb.validators.schema.column_schema import ColumnSchema
+from oefdb.validators.schema.validation_result import SchemaValidationResult
 
 
 class Schema(BaseModel):
     columns: list[ColumnSchema]
 
-    def validate_single_row(self, row) -> Dict[str, str]:
+    def validate_single_row(self, row) -> dict[str, str]:
         all_errors = {}
 
         for (cell, column) in zip(row, self.columns):
@@ -66,7 +65,6 @@ class Schema(BaseModel):
             error = self.validate_single_row(row)
             if error:
                 row_errors[csv_index] = error
-
 
         pprint.pp(row_errors)
         return SchemaValidationResult(

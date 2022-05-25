@@ -1,24 +1,16 @@
 from __future__ import annotations
 
-import csv
-import pprint
 import traceback
 from typing import Dict
 
 import click
 import pydantic
 from click import echo
-from pandas import DataFrame
 
-from oefdb.schema_validation.schema import Schema
-from oefdb.schema_validation.validation_result import RowErrorsType
 from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
 from oefdb.validators._typing import validator_result_type
-from oefdb.validators.check_for_duplicates import check_for_duplicates
-from oefdb.validators.check_ids_for_unsupported_characters import (
-    check_ids_for_unsupported_characters,
-)
-from oefdb.validators.check_oefdb_structure import check_oefdb_structure
+from oefdb.validators.schema import Schema
+from oefdb.validators.schema.validation_result import RowErrorsType
 
 results_from_validators_type = Dict[str, validator_result_type]
 
@@ -51,7 +43,6 @@ def cli(schema: str, input: str) -> None:
 
         validation_result = schema.validate_all(oefdb_csv)
 
-
         if validation_result.column_errors:
             echo("ERROR VALIDATING COLUMN STRUCTURE")
             echo("Please edit the column schema.")
@@ -60,7 +51,6 @@ def cli(schema: str, input: str) -> None:
                 echo(e)
 
             exit(1)
-
 
         if validation_result.row_errors:
             echo("ERROR VALIDATING SOME ROWS")
@@ -71,8 +61,7 @@ def cli(schema: str, input: str) -> None:
 
         exit(0)
     except Exception as e:
-        echo("---Internal exception when running command---"
-             "")
+        echo("---Internal exception when running command---" "")
         echo(f"{e}")
         echo(traceback.format_exc())
         exit(1)
@@ -83,5 +72,7 @@ def output_row_errors(errors: RowErrorsType):
         echo(f"--- Error(s) found at row {row_number} ---")
         for column_name, validators in columns.items():
             for validator_name, error in validators.items():
-                echo(f"Error found in column '{column_name}' by validator: '{validator_name}': {error}")
-        echo() #newline
+                echo(
+                    f"Error found in column '{column_name}' by validator: '{validator_name}': {error}"
+                )
+        echo()  # newline
