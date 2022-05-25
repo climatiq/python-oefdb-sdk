@@ -31,7 +31,7 @@ allow_empty = true
 [[columns]]
 name = "kgCO2e-AR4"
 validators = ["is_float_or_not_supplied"]
-allow_empty = false
+allow_empty = true
 
 [[columns]]
 name = "kgCO2"

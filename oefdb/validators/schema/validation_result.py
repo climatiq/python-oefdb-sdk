@@ -7,25 +7,11 @@ RowErrorsType = Dict[int, Dict[str, Dict[str, str]]]
 
 
 class SchemaValidationResult(BaseModel):
-    """Dict of {rowNumber: {column_name: {validator_name: error}}}"""
-
-    # Row number -> Column(s) -> Validator_name -> Error
-    """
-    rowNumber (int): {
-        column_name (string): {
-            validator_name (string): {
-                error: string
-            }
-        }
-    }
-
-    """
-
+    """Errors encountered while validating rows"""
     row_errors: RowErrorsType
+    """Errors encountered while validating column structure"""
     column_errors: List[str]
 
+    """Is the thing being validated valid? Returns true if there are no errors."""
     def valid(self):
         return not bool(self.row_errors) and not bool(self.column_errors)
-
-    def __bool__(self):
-        return self.valid()

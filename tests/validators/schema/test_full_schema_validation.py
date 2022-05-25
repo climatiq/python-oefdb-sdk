@@ -19,12 +19,7 @@ def schema_fixture():
         allow_empty = true
         """
 
-    conf = toml.loads(toml_conf)
-
-    columns = [ColumnSchema(**conf) for conf in conf["columns"]]
-    schema = Schema(columns=columns)
-
-    return schema
+    return Schema.from_toml_string(toml_conf)
 
 
 def test_validation_of_csv_files_will_return_ok_on_valid():
@@ -37,7 +32,7 @@ def test_validation_of_csv_files_will_return_ok_on_valid():
 
     pprint.pp(validation_result)
 
-    assert validation_result.valid() is True
+    assert validation_result.valid is True
 
 
 def test_validation_of_csv_files():
@@ -50,11 +45,54 @@ def test_validation_of_csv_files():
 
     pprint.pp(validation_result)
 
-    assert validation_result.valid() is False
+    assert validation_result.valid is False
     assert not validation_result.column_errors
     assert validation_result.row_errors == {
         2: {"world": {"is_year": "'not_a_year' was not a valid number"}}
     }
+
+
+def test_validation_of_csv_files_with_multiple_errors_on_same_row():
+    csv = [
+        ["hello", "world"],
+        ["a_string", "not_a_year"],
+    ]
+
+    validation_result = schema_fixture().validate_all(csv)
+
+    pprint.pp(validation_result)
+
+    assert validation_result.valid is False
+    assert not validation_result.column_errors
+    assert validation_result.row_errors == {
+        2: {'hello': {'is_float_or_not_supplied': "'a_string' was not a valid float or the string 'not-supplied'"},
+            'world': {'is_year': "'not_a_year' was not a valid number"}}}
+
+
+def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
+    toml_conf = """
+            [[columns]]
+            name = "hello"
+            validators = ["is_allowed_string", "is_link"]
+            allow_empty = false
+            """
+
+    schema = Schema.from_toml_string(toml_conf)
+
+    csv = [
+        ["hello"],
+        [","],
+    ]
+
+    validation_result = schema.validate_all(csv)
+
+    pprint.pp(validation_result)
+
+    assert validation_result.valid is False
+    assert not validation_result.column_errors
+    assert validation_result.row_errors == {2: {
+        'hello': {'is_allowed_string': "String ',' contains commas. Those are not allowed.",
+                  'is_link': "Link ',' does not start with 'http'"}}}
 
 
 def test_validation_of_larger_csv_files():
@@ -70,7 +108,7 @@ def test_validation_of_larger_csv_files():
 
     pprint.pp(validation_result)
 
-    assert validation_result.valid() is False
+    assert validation_result.valid is False
     assert not validation_result.column_errors
     assert validation_result.row_errors == {
         3: {"world": {"is_year": "'not_a_year' was not a valid number"}},
@@ -91,7 +129,7 @@ def test_validation_is_empty_accepts_empty_values_if_set_to_true():
     toml_schema = schema_fixture()
 
     validation_result = toml_schema.validate_all(csv)
-    assert validation_result.valid() is True
+    assert validation_result.valid is True
     assert not validation_result.row_errors
     assert not validation_result.column_errors
 
@@ -106,7 +144,7 @@ def test_validation_is_empty_rejects_empty_values_if_set_to_false():
 
     validation_result = toml_schema.validate_all(csv)
 
-    assert validation_result.valid() is False
+    assert validation_result.valid is False
     assert not validation_result.column_errors
 
     assert validation_result.row_errors == {

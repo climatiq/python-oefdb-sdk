@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import pprint
 from typing import Dict
 
 import toml
 from pydantic import BaseModel
 
+from oefdb.validators._typing import CsvRows
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.validation_result import SchemaValidationResult
 
@@ -21,7 +21,6 @@ class Schema(BaseModel):
             if error:
                 all_errors[column.column_name] = error
 
-        print("Errors on row:", all_errors)
         return all_errors
 
     def validate_headers(self, headers) -> list[str]:
@@ -31,23 +30,23 @@ class Schema(BaseModel):
             try:
                 if headers[index] != column.column_name:
                     errors.append(
-                        f"Expected column {index+1} to be '{column.column_name}', but got '{headers[index]}'"
+                        f"Expected column {index + 1} to be '{column.column_name}', but got '{headers[index]}'"
                     )
             except IndexError:
                 errors.append(
-                    f"Expected column {index+1} to be '{column.column_name}', but found no column"
+                    f"Expected column {index + 1} to be '{column.column_name}', but found no column"
                 )
 
         # If the length is not identical here, it's because there's too many headers
         if len(self.columns) != len(headers):
-            surplus = headers[len(self.columns) :]
+            surplus = headers[len(self.columns):]
             errors.append(
                 f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns.: {surplus}"
             )
 
         return errors
 
-    def validate_all(self, csv: list[list[str]]) -> SchemaValidationResult:
+    def validate_all(self, csv: CsvRows) -> SchemaValidationResult:
         headers = csv[0]
         column_errors = self.validate_headers(headers)
         # If we have issues with the header structure it doesn't make much sense to try to parse rows
@@ -59,14 +58,13 @@ class Schema(BaseModel):
 
         row_errors = {}
         for index, row in enumerate(rows):
-            csv_index = (
-                index + 2
-            )  # We don't have the header here,  so we need to skip 1, and 1 more as a CSV is 1-indexed
+            # We don't have the header here,  so we need to skip 1, and 1 more as a CSV is 1-indexed
+            csv_index = index + 2
+
             error = self.validate_single_row(row)
             if error:
                 row_errors[csv_index] = error
 
-        pprint.pp(row_errors)
         return SchemaValidationResult(
             column_errors=column_errors, row_errors=row_errors
         )
@@ -74,9 +72,13 @@ class Schema(BaseModel):
     @staticmethod
     def load_schema_definition(file_path: str) -> Schema:
         with open(file_path) as f:
-            toml_fle = f.read()
+            toml_string = f.read()
 
-        configuration = toml.loads(toml_fle)
+        return Schema.from_toml_string(toml_string)
+
+    @staticmethod
+    def from_toml_string(toml_schema: str) -> Schema:
+        configuration = toml.loads(toml_schema)
 
         columns = [ColumnSchema(**conf) for conf in configuration["columns"]]
 

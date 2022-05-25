@@ -107,6 +107,7 @@ def is_link(cell_value: str) -> cell_validator_return_type:
         return f"Unable to parse '{cell_value}' as a string."
 
 
+"""Mapping of strings in the schema file to the validation function"""
 ALL_VALIDATORS = {
     "is_allowed_string": is_allowed_string,
     "is_date": is_date,
