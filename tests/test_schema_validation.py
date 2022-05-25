@@ -17,11 +17,7 @@ def test_validate_schema_cli():
         ["-i", csv_path, "-s", schema_path],
     )
 
-    print("result", result)
-
-
-
     if result.exit_code != 0:
-        print(result.output)  # noqa: T001,T201
+        print(result.output)
 
     assert result.exit_code == 0

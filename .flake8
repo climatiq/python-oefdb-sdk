@@ -20,5 +20,5 @@ ignore =
 
 
 per-file-ignores =
-  *tests/*:D205,D400,D401,S101,S106,E501,E731,T201
+  *tests/*:D205,D400,D401,S101,S106,E501,E731,T201,T001,T201
   example-notebook.py:W391

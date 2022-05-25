@@ -13,5 +13,5 @@ class SchemaValidationResult(BaseModel):
     column_errors: List[str]
 
     """Is the thing being validated valid? Returns true if there are no errors."""
-    def valid(self):
+    def is_valid(self):
         return not bool(self.row_errors) and not bool(self.column_errors)

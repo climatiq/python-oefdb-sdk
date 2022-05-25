@@ -17,12 +17,7 @@ def schema():
         allow_empty = true
         """
 
-    conf = toml.loads(toml_conf)
-
-    columns = [ColumnSchema(**conf) for conf in conf["columns"]]
-    schema = Schema(columns=columns)
-
-    return schema
+    return Schema.from_toml_string(toml_conf)
 
 
 def test_header_validation_returns_ok_with_identical_schema():
