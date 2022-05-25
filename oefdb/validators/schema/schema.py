@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import List
+
 import tomli
 from pydantic import BaseModel
 

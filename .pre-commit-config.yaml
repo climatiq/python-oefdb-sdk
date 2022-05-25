@@ -18,6 +18,7 @@ repos:
     hooks:
       - id: pyupgrade
         exclude: ^example-notebook.py
+        args: [--py37-plus, --keep-runtime-typing]
 
   # Flake8 includes pyflakes, pycodestyle, mccabe, pydocstyle, bandit
   - repo: https://gitlab.com/pycqa/flake8
