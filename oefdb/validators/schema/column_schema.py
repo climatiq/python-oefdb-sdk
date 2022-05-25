@@ -8,7 +8,7 @@ from oefdb.validators.schema.cell_validators import ALL_VALIDATORS, CellValidato
 
 class ColumnSchema(BaseModel):
     column_name: str = Field(alias="name")
-    validator_strings: list[str] = Field(alias="validators")
+    validator_strings: List[str] = Field(alias="validators")
     allow_empty: bool
 
     @pydantic.validator("validator_strings")
@@ -21,7 +21,7 @@ class ColumnSchema(BaseModel):
                 )
         return v
 
-    def validators(self) -> list[CellValidator]:
+    def validators(self) -> List[CellValidator]:
         return [
             CellValidator(
                 validator_name=validator_name,

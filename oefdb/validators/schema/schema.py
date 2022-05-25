@@ -9,9 +9,9 @@ from oefdb.validators.schema.validation_result import SchemaValidationResult
 
 
 class Schema(BaseModel):
-    columns: list[ColumnSchema]
+    columns: List[ColumnSchema]
 
-    def validate_single_row(self, row: list[str]) -> dict[str, dict[str, str]]:
+    def validate_single_row(self, row: List[str]) -> dict[str, dict[str, str]]:
         all_errors = {}
 
         for (cell, column) in zip(row, self.columns):
@@ -21,7 +21,7 @@ class Schema(BaseModel):
 
         return all_errors
 
-    def validate_headers(self, headers: list[str]) -> list[str]:
+    def validate_headers(self, headers: List[str]) -> List[str]:
         errors = []
 
         for index, column in enumerate(self.columns):
