@@ -20,13 +20,17 @@ class CellValidator(BaseModel):
         return self.validator_function(obj)
 
 
-def is_string_without_comma(cell_value: typing.Any) -> cell_validator_return_type:
+def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
     """
     Checks that the given cell is a non-empty string and contains no commas.
     """
     if isinstance(cell_value, str):
         if "," in cell_value:
             return f"String '{cell_value}' contains commas. Those are not allowed."
+
+        if not cell_value.isascii():
+            return f"String '{cell_value}' contains non-ASCII characters. Those are not allowed."
+
 
         if cell_value == "":
             return "Cell is empty"
@@ -104,7 +108,7 @@ def is_link(cell_value: str) -> cell_validator_return_type:
 
 
 ALL_VALIDATORS = {
-    "is_string_without_comma": is_string_without_comma,
+    "is_allowed_string": is_allowed_string,
     "is_date": is_date,
     "is_link": is_link,
     "is_year": is_year,

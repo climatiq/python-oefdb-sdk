@@ -1,26 +1,26 @@
 [[columns]]
 name = "sector"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
 name = "category"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
 name = "activity_id"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
 name = "name"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
 name = "activity_unit"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
@@ -70,12 +70,12 @@ allow_empty = true
 
 [[columns]]
 name = "lca_activity"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
 name = "source"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]
@@ -85,7 +85,7 @@ allow_empty = false
 
 [[columns]]
 name = "years_valid"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = true
 
 [[columns]]
@@ -105,7 +105,7 @@ allow_empty = false
 
 [[columns]]
 name = "contributor"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = true
 
 [[columns]]
@@ -115,7 +115,7 @@ allow_empty = false
 
 [[columns]]
 name = "description"
-validators = ["is_string_without_comma"]
+validators = ["is_allowed_string"]
 allow_empty = false
 
 [[columns]]

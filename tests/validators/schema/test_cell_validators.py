@@ -31,3 +31,20 @@ def test_validation_of_float_rejects_empty_values_if_allow_empty_set_to_false():
 
     assert validation_result == {'is_float_or_not_supplied': "'' was not a valid float or the string 'not-supplied'"}
 
+
+
+def test_allowed_string_rejects_strings_with_comma():
+    config = ColumnSchema(name="config", validators=["is_allowed_string"], allow_empty=False)
+
+    validation_result = config.validate_cell("hello,")
+
+    assert validation_result == {'is_allowed_string': "String 'hello,' contains commas. Those are not allowed."}
+
+
+def test_allowed_string_rejects_non_ascii_string():
+    config = ColumnSchema(name="config", validators=["is_allowed_string"], allow_empty=False)
+
+    validation_result = config.validate_cell("æøå")
+
+    assert validation_result == {'is_allowed_string': "String 'æøå' contains non-ASCII characters. Those are not allowed."} != {'is_allowed_string': ''}
+
