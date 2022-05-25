@@ -25,7 +25,6 @@ def test_validation_of_csv_files_will_return_ok_on_valid():
 
     validation_result = schema_fixture().validate_all(csv)
 
-
     assert validation_result.is_valid() is True
 
 
