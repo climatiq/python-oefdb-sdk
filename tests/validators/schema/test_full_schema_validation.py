@@ -1,5 +1,3 @@
-import pprint
-
 from oefdb.validators.schema.schema import Schema
 
 
