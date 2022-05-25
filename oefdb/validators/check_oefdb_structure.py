@@ -63,7 +63,7 @@ def check_oefdb_structure(df: DataFrame) -> validator_result_type:
             f"These columns should not be there: {set(df.columns).difference(col)}"
         )
         validation_messages.append(
-            "These columns are missing: {}".format(set(col).difference(df.columns))
+            f"These columns are missing: {set(col).difference(df.columns)}"
         )
         return False, validation_messages
 
