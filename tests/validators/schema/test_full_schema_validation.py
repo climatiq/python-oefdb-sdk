@@ -27,7 +27,6 @@ def test_validation_of_csv_files_will_return_ok_on_valid():
 
     validation_result = schema_fixture().validate_all(csv)
 
-    pprint.pp(validation_result)
 
     assert validation_result.is_valid() is True
 
@@ -39,8 +38,6 @@ def test_validation_of_csv_files():
     ]
 
     validation_result = schema_fixture().validate_all(csv)
-
-    pprint.pp(validation_result)
 
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
@@ -56,8 +53,6 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_row():
     ]
 
     validation_result = schema_fixture().validate_all(csv)
-
-    pprint.pp(validation_result)
 
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
@@ -88,8 +83,6 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
 
     validation_result = schema.validate_all(csv)
 
-    pprint.pp(validation_result)
-
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
     assert validation_result.row_errors == {
@@ -112,8 +105,6 @@ def test_validation_of_larger_csv_files():
     ]
 
     validation_result = schema_fixture().validate_all(csv)
-
-    pprint.pp(validation_result)
 
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
