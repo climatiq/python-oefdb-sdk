@@ -47,8 +47,8 @@ def validate_schema_cli_command(schema: str, input: str) -> None:
             echo("ERROR VALIDATING COLUMN STRUCTURE")
             echo("Please edit the column schema.")
             echo("Errors:")
-            for e in validation_result.column_errors:
-                echo(e)
+            for error in validation_result.column_errors:
+                echo(error)
 
             exit(1)
 
@@ -60,14 +60,14 @@ def validate_schema_cli_command(schema: str, input: str) -> None:
             exit(1)
 
         exit(0)
-    except Exception as e:  # noqa:B902
+    except Exception as error:  # noqa:B902
         echo("---Internal exception when running command---" "")
-        echo(f"{e}")
+        echo(f"{error}")
         echo(traceback.format_exc())
         exit(1)
 
 
-def output_row_errors(errors: RowErrorsType):
+def output_row_errors(errors: RowErrorsType) -> None:
     for row_number, columns in errors.items():
         echo(f"--- Error(s) found at row {row_number} ---")
         for column_name, validators in columns.items():

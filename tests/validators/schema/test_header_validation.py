@@ -31,7 +31,7 @@ def test_header_validation_returns_error_with_too_many_headers():
 
     assert (
         errors[0]
-        == "Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns.: ['wow']"
+        == "Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns: ['wow']"
     )
 
 

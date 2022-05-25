@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import toml
+import tomli
 from pydantic import BaseModel
 
 from oefdb.validators._typing import CsvRows
@@ -11,7 +11,7 @@ from oefdb.validators.schema.validation_result import SchemaValidationResult
 class Schema(BaseModel):
     columns: list[ColumnSchema]
 
-    def validate_single_row(self, row) -> dict[str, str]:
+    def validate_single_row(self, row: list[str]) -> dict[str, dict[str, str]]:
         all_errors = {}
 
         for (cell, column) in zip(row, self.columns):
@@ -21,7 +21,7 @@ class Schema(BaseModel):
 
         return all_errors
 
-    def validate_headers(self, headers) -> list[str]:
+    def validate_headers(self, headers: list[str]) -> list[str]:
         errors = []
 
         for index, column in enumerate(self.columns):
@@ -76,7 +76,7 @@ class Schema(BaseModel):
 
     @staticmethod
     def from_toml_string(toml_schema: str) -> Schema:
-        configuration = toml.loads(toml_schema)
+        configuration = tomli.loads(toml_schema)
 
         columns = [ColumnSchema(**conf) for conf in configuration["columns"]]
 

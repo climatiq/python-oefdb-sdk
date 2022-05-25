@@ -18,5 +18,5 @@ class SchemaValidationResult(BaseModel):
     Is the thing being validated valid? Returns true if there are no errors.
     """
 
-    def is_valid(self):
+    def is_valid(self) -> bool:
         return not bool(self.row_errors) and not bool(self.column_errors)

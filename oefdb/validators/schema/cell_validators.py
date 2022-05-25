@@ -12,14 +12,15 @@ class CellValidator(BaseModel):
     validator_name: str
     validator_function: typing.Callable[[str], cell_validator_return_type]
 
-    def validate_cell(self, obj) -> cell_validator_return_type:
+    def validate_cell(self, cell_value: str) -> cell_validator_return_type:
         """
         Validate that a cell passes the given validator test.
 
         Cell validators return None if no error is relevant, or a string with an error message
         if any errors have occurred
         """
-        return self.validator_function(obj)
+        # See https://github.com/python/mypy/issues/5485 for why we need to ignore the typechecker here
+        return self.validator_function(cell_value)  # type: ignore
 
 
 def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
@@ -92,7 +93,7 @@ def is_link(cell_value: str) -> cell_validator_return_type:
     """Ensure that a given cell is a link."""
     try:
         if cell_value.startswith("http"):
-            return
+            return None
         else:
             return f"Link '{cell_value}' does not start with 'http'"
     except AttributeError:

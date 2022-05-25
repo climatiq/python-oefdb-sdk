@@ -12,7 +12,7 @@ class ColumnSchema(BaseModel):
     allow_empty: bool
 
     @pydantic.validator("validator_strings")
-    def check_validator_exists(cls, v):
+    def check_validator_exists(cls, v: str) -> str:
         for validator in v:
             if validator not in ALL_VALIDATORS:
                 keys = list(ALL_VALIDATORS.keys())
@@ -30,20 +30,20 @@ class ColumnSchema(BaseModel):
             for validator_name in self.validator_strings
         ]
 
-    def validate_cell(self, cell) -> None | dict[str, str]:
+    def validate_cell(self, cell_value: str) -> None | dict[str, str]:
         """
         Validate a cell.
 
         Returns None for a valid cell, or a dictionary of errors
         where the keys are the validator names, and the values are the error messages from the validator.
         """
-        if cell == "" and self.allow_empty:
+        if cell_value == "" and self.allow_empty:
             return None
 
         all_errors = {}
 
         for validator in self.validators():
-            error = validator.validate_cell(cell)
+            error = validator.validate_cell(cell_value)
             if error:
                 all_errors[validator.validator_name] = error
 
