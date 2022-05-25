@@ -39,7 +39,7 @@ class Schema(BaseModel):
 
         # If the length is not identical here, it's because there's too many headers
         if len(self.columns) != len(headers):
-            surplus = headers[len(self.columns):]
+            surplus = headers[len(self.columns) :]
             errors.append(
                 f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns.: {surplus}"
             )

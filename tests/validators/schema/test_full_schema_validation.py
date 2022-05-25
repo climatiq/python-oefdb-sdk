@@ -65,8 +65,13 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_row():
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
     assert validation_result.row_errors == {
-        2: {'hello': {'is_float_or_not_supplied': "'a_string' was not a valid float or the string 'not-supplied'"},
-            'world': {'is_year': "'not_a_year' was not a valid number"}}}
+        2: {
+            "hello": {
+                "is_float_or_not_supplied": "'a_string' was not a valid float or the string 'not-supplied'"
+            },
+            "world": {"is_year": "'not_a_year' was not a valid number"},
+        }
+    }
 
 
 def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
@@ -90,9 +95,14 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
 
     assert validation_result.is_valid() is False
     assert not validation_result.column_errors
-    assert validation_result.row_errors == {2: {
-        'hello': {'is_allowed_string': "String ',' contains commas. Those are not allowed.",
-                  'is_link': "Link ',' does not start with 'http'"}}}
+    assert validation_result.row_errors == {
+        2: {
+            "hello": {
+                "is_allowed_string": "String ',' contains commas. Those are not allowed.",
+                "is_link": "Link ',' does not start with 'http'",
+            }
+        }
+    }
 
 
 def test_validation_of_larger_csv_files():

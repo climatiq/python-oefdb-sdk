@@ -31,7 +31,6 @@ def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
         if not cell_value.isascii():
             return f"String '{cell_value}' contains non-ASCII characters. Those are not allowed."
 
-
         if cell_value == "":
             return "Cell is empty"
         else:
