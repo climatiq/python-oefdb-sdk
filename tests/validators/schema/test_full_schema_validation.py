@@ -57,23 +57,6 @@ def test_validation_of_csv_files():
     }
 
 
-def test_validation_of_year():
-    config = ColumnSchema(name="config", validators=["is_year"], allow_empty=False)
-
-    validation_result = config.validate_cell("2013")
-    assert validation_result is None
-
-
-def test_validation_of_wrong_year():
-    config = ColumnSchema(name="config", validators=["is_year"], allow_empty=False)
-
-    validation_result = config.validate_cell("noo")
-
-    pprint.pp(validation_result)
-
-    assert validation_result == {"is_year": "'noo' was not a valid number"}
-
-
 def test_validation_of_larger_csv_files():
     csv = [
         ["hello", "world"],

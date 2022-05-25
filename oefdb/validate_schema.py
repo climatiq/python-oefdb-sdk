@@ -9,7 +9,7 @@ from click import echo
 
 from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
 from oefdb.validators._typing import validator_result_type
-from oefdb.validators.schema import Schema
+from oefdb.validators.schema.schema import Schema
 from oefdb.validators.schema.validation_result import RowErrorsType
 
 results_from_validators_type = Dict[str, validator_result_type]
@@ -30,7 +30,7 @@ results_from_validators_type = Dict[str, validator_result_type]
     type=click.Path(exists=True),
     help="OEFDB CSV file to validate",
 )
-def cli(schema: str, input: str) -> None:
+def validate_schema_cli_command(schema: str, input: str) -> None:
     try:
         try:
             schema = Schema.load_schema_definition(schema)

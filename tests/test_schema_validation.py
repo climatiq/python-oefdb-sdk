@@ -2,7 +2,7 @@ from os.path import join
 
 from click.testing import CliRunner
 
-from oefdb import validate_schema
+from oefdb.validate_schema import validate_schema_cli_command
 from tests.utils import fixtures_dir_path
 
 
@@ -13,7 +13,7 @@ def test_validate_schema_cli():
     schema_path = join(fixtures_dir_path, "schemas", "valid_schema.toml")
 
     result = runner.invoke(
-        validate_schema.cli,
+        validate_schema_cli_command,
         ["-i", csv_path, "-s", schema_path],
     )
 
