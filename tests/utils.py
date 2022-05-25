@@ -1,6 +1,5 @@
 import csv
 from os.path import dirname, join, realpath
-from typing import List
 
 from pandas import DataFrame
 

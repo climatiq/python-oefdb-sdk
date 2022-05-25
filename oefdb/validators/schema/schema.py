@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Dict
-
 import toml
 from pydantic import BaseModel
 
@@ -41,7 +39,7 @@ class Schema(BaseModel):
         if len(self.columns) != len(headers):
             surplus = headers[len(self.columns) :]
             errors.append(
-                f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns.: {surplus}"
+                f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns: {surplus}"
             )
 
         return errors

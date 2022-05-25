@@ -1,8 +1,5 @@
 import pprint
 
-import toml
-
-from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
 
 

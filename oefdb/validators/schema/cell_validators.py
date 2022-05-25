@@ -14,6 +14,8 @@ class CellValidator(BaseModel):
 
     def validate_cell(self, obj) -> cell_validator_return_type:
         """
+        Validate that a cell passes the given validator test.
+
         Cell validators return None if no error is relevant, or a string with an error message
         if any errors have occurred
         """
@@ -21,9 +23,7 @@ class CellValidator(BaseModel):
 
 
 def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
-    """
-    Checks that the given cell is a non-empty string and contains no commas.
-    """
+    """Ensure that the given cell is a non-empty string and contains no commas."""
     if isinstance(cell_value, str):
         if "," in cell_value:
             return f"String '{cell_value}' contains commas. Those are not allowed."
@@ -41,7 +41,9 @@ def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
 
 def is_year(cell_value: str) -> cell_validator_return_type:
     """
-    Checks that a given cell value is a valid year. Currently, it checks that it is between 1980 and 2030
+    Ensure that a given cell is a valid year.
+
+    Currently, it checks that it is between 1980 and 2030
     as that seems like a very safe bound.
     """
     try:
@@ -55,9 +57,7 @@ def is_year(cell_value: str) -> cell_validator_return_type:
 
 
 def is_float_or_not_supplied(cell_value: str) -> cell_validator_return_type:
-    """
-    Checks that a cell is a float, or the string "not-supplied"
-    """
+    """Ensure that a cell is a float, or the string "not-supplied"."""
     if cell_value == "not-supplied":
         return None
 
@@ -70,9 +70,7 @@ def is_float_or_not_supplied(cell_value: str) -> cell_validator_return_type:
 
 
 def is_int(cell_value: str) -> cell_validator_return_type:
-    """
-    Checks that a given cell can be converted to an int
-    """
+    """Ensure that a given cell can be converted to an int."""
     try:
         int(cell_value)
         return None
@@ -82,21 +80,16 @@ def is_int(cell_value: str) -> cell_validator_return_type:
 
 
 def is_date(cell_value: str) -> cell_validator_return_type:
-    """
-    Checks that a given cell can be converted to a date of the format
-    YYYY-MM-DD
-    """
+    """Ensure that a given cell can be converted to a date of the format YYYY-MM-DD."""
     try:
-        _time = datetime.strptime(cell_value, "%Y/%m/%d")
+        datetime.strptime(cell_value, "%Y/%m/%d")
         return None
     except ValueError:
         return f"'{cell_value}' was not able to be parsed as a date. The format must be YYYY/MM/DD, so e.g. 2020/01/22"
 
 
 def is_link(cell_value: str) -> cell_validator_return_type:
-    """
-    Checks that a given cell is a link or not
-    """
+    """Ensure that a given cell is a link."""
     try:
         if cell_value.startswith("http"):
             return
@@ -106,7 +99,7 @@ def is_link(cell_value: str) -> cell_validator_return_type:
         return f"Unable to parse '{cell_value}' as a string."
 
 
-"""Mapping of strings in the schema file to the validation function"""
+# Mapping of strings in the schema file to the validation function
 ALL_VALIDATORS = {
     "is_allowed_string": is_allowed_string,
     "is_date": is_date,

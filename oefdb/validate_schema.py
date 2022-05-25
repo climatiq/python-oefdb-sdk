@@ -60,7 +60,7 @@ def validate_schema_cli_command(schema: str, input: str) -> None:
             exit(1)
 
         exit(0)
-    except Exception as e:
+    except Exception as e:  # noqa:B902
         echo("---Internal exception when running command---" "")
         echo(f"{e}")
         echo(traceback.format_exc())

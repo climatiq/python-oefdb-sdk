@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import typing
-
 import pydantic
 from pydantic import BaseModel, Field
 
@@ -34,7 +32,9 @@ class ColumnSchema(BaseModel):
 
     def validate_cell(self, cell) -> None | dict[str, str]:
         """
-        Validates a cell. Returns None for a valid cell, or a dictionary of errors
+        Validate a cell.
+
+        Returns None for a valid cell, or a dictionary of errors
         where the keys are the validator names, and the values are the error messages from the validator.
         """
         if cell == "" and self.allow_empty:
