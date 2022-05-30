@@ -50,7 +50,7 @@ def test_allowed_string_rejects_strings_with_comma():
     }
 
 
-def test_allowed_string_rejects_non_ascii_string():
+def test_is_ascii_rejects_non_ascii_string():
     config = ColumnSchema(
         name="config", validators=["is_allowed_string"], allow_empty=False
     )
