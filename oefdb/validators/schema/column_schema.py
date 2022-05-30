@@ -39,8 +39,11 @@ class ColumnSchema(BaseModel):
         Returns None for a valid cell, or a dictionary of errors
         where the keys are the validator names, and the values are the error messages from the validator.
         """
-        if cell_value == "" and self.allow_empty:
-            return None
+        if cell_value == "":
+            if self.allow_empty:
+                return None
+            else:
+                return {"allow_empty": "The cell was empty, but empty cells are not allowed."}
 
         all_errors = {}
 

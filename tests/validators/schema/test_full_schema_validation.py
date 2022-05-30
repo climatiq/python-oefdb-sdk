@@ -145,7 +145,7 @@ def test_validation_is_empty_rejects_empty_values_if_set_to_false():
     assert validation_result.row_errors == {
         2: {
             "hello": {
-                "is_float_or_not_supplied": "'' was not a valid float or the string 'not-supplied'"
+                "allow_empty": "The cell was empty, but empty cells are not allowed."
             }
         },
     }

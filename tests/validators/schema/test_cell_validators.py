@@ -25,8 +25,18 @@ def test_validation_of_float_accepts_empty_values_if_allow_empty_set_to_true():
 
     assert validation_error is None
 
+def test_empty_values_rejected_if_allow_empty_is_false_even_if_there_are_no_validators():
+    config = ColumnSchema(
+        name="config", validators=[], allow_empty=False
+    )
 
-def test_validation_of_float_rejects_empty_values_if_allow_empty_set_to_false():
+    validation_error = config.validate_cell("")
+
+    assert validation_error == {
+        "allow_empty": "The cell was empty, but empty cells are not allowed."
+    }
+
+def test_empty_string_only_triggers_empty_errors_and_not_validator_errors():
     config = ColumnSchema(
         name="config", validators=["is_float_or_not_supplied"], allow_empty=False
     )
@@ -34,7 +44,7 @@ def test_validation_of_float_rejects_empty_values_if_allow_empty_set_to_false():
     validation_error = config.validate_cell("")
 
     assert validation_error == {
-        "is_float_or_not_supplied": "'' was not a valid float or the string 'not-supplied'"
+        "allow_empty": "The cell was empty, but empty cells are not allowed."
     }
 
 
