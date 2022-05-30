@@ -83,4 +83,4 @@ def process_row(element: DataFrame) -> DataFrame:
     if len(element) < 80:
         return element
     else:
-        return "{}...".format(element[:80])
+        return f"{element[:80]}..."
