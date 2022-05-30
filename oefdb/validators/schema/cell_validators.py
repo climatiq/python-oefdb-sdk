@@ -29,13 +29,29 @@ def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
         if "," in cell_value:
             return f"String '{cell_value}' contains commas. Those are not allowed."
 
-        if not cell_value.isascii():
-            return f"String '{cell_value}' contains non-ASCII characters. Those are not allowed."
-
         if cell_value == "":
             return "Cell is empty"
         else:
             return None
+
+    return f"'{cell_value}' was not a valid string"
+
+
+def is_ascii(cell_value: typing.Any) -> cell_validator_return_type:
+    """Ensure that the given cell only contains ASCII characters."""
+    if isinstance(cell_value, str):
+        if cell_value.isascii():
+            return None
+
+        # Try to get a better error message in regards to what string broke
+        for (index, char) in enumerate(cell_value):
+            if 0 <= ord(char) <= 127:
+                pass
+            else:
+                return f"String '{cell_value}' contains disallowed non-ASCII characters. First invalid character is '{char}' at index {index}."
+
+        # If we for some reason can't detect the character - fallback to this error message.
+        return f"String '{cell_value}' contains non-ASCII characters. Those are not allowed."
 
     return f"'{cell_value}' was not a valid string"
 
@@ -103,6 +119,7 @@ def is_link(cell_value: str) -> cell_validator_return_type:
 # Mapping of strings in the schema file to the validation function
 ALL_VALIDATORS = {
     "is_allowed_string": is_allowed_string,
+    "is_ascii": is_ascii,
     "is_date": is_date,
     "is_link": is_link,
     "is_year": is_year,

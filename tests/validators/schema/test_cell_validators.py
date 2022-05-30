@@ -50,17 +50,21 @@ def test_allowed_string_rejects_strings_with_comma():
     }
 
 
-def test_allowed_string_rejects_non_ascii_string():
+def test_is_allowed_string_accepts_non_ascii_string():
     config = ColumnSchema(
         name="config", validators=["is_allowed_string"], allow_empty=False
     )
 
     validation_error = config.validate_cell("æøå")
 
-    assert (
-        validation_error
-        == {
-            "is_allowed_string": "String 'æøå' contains non-ASCII characters. Those are not allowed."
-        }
-        != {"is_allowed_string": ""}
-    )
+    assert validation_error is None
+
+
+def test_is_ascii_rejects_non_ascii_string():
+    config = ColumnSchema(name="config", validators=["is_ascii"], allow_empty=False)
+
+    validation_error = config.validate_cell("æøå")
+
+    assert validation_error == {
+        "is_ascii": "String 'æøå' contains disallowed non-ASCII characters. First invalid character is 'æ' at index 0."
+    }

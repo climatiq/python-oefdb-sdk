@@ -1,16 +1,16 @@
 [[columns]]
 name = "sector"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
 name = "category"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
 name = "activity_id"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
@@ -20,7 +20,7 @@ allow_empty = false
 
 [[columns]]
 name = "activity_unit"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
@@ -70,12 +70,12 @@ allow_empty = true
 
 [[columns]]
 name = "lca_activity"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
 name = "source"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
@@ -85,7 +85,7 @@ allow_empty = false
 
 [[columns]]
 name = "years_valid"
-validators = ["is_allowed_string"]
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = true
 
 [[columns]]
@@ -95,7 +95,7 @@ allow_empty = true
 
 [[columns]]
 name = "region"
-validators = []
+validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
 
 [[columns]]
