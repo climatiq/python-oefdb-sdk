@@ -36,7 +36,7 @@ oefdb_df = oefdb.import_from_github()
 
 After making suggested changes to the imported dataframe, you can contribute these changes to OEFDB as per follows:
 
-1. Run the following to validate the dataframe contents/structure and present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
+1. Run the following to present the dataframe contents/structure and present the data in a way that makes it easy to copy the data for use in a GitHub Pull Request:
 
 ```py
 oefdb.export_for_github(oefdb_df)
@@ -64,6 +64,37 @@ oefdb_df_under_review = oefdb.import_from_github(pr=123)
 2. Use Python to review the data, comparing it to the main revision data as necessary.
 3. Add review comments via the GitHub UI as necessary and approve when discussions are resolved.
 
+## Schema validation
+This SDK supports schema-based validation, where a schema is defined in a TOML file and used to validate the OEFDB CSV.
+
+```toml
+[[columns]]
+name = "kgCO2e-AR5"
+allow_empty = true
+validators = ["is_float_or_not_supplied"]
+
+[[columns]]
+# ... next column here
+```
+
+The schema consists of a top-level `columns` list.
+Each column has a `name` that corresponds to the header row value.
+Then an `allow_empty` - if this is set to true, empty values are always allowed. If it is set to false,
+empty values are never allowed.
+Afterwards, a list of `validators` - which is the name of functions that take the value and ensure it lives up to some sort of standard.
+These are only called if the value is not-empty.
+
+### Cell validators
+A list of all the cell validators currently
+- `has_no_commas`: No commas exist in this cell
+- `is_legal_id`: This cell is a legal id. Checks whether this only consists of alphanumeric characters and `-` `_` and `.`
+- `is_ascii`: This cell only contains valid ASCII characters
+- `is_date`: This cell is a valid date on the format `YYYY/MM/DD` such as "2022/01/12"
+- `is_link`: This cell starts with "http"
+- `is_year`: This cell consists of a single valid year
+- `is_float_or_not_supplied`: This cell consists of a float, or the string `not-supplied`
+- `is_int`: This cell is a valid integer
+
 ## Command line scripts
 
 ### Import from GitHub
@@ -76,6 +107,7 @@ oefdb_import_from_github --output <oefdb-csv-file-save-path> [--pr <pull-request
 
 ```shell
 oefdb_validate --input <path-to-oefdb-csv-file>
+oefdb_validate_schema --input <path-to-oefdb-csv-file> --schema <path-to-schema-file>
 ```
 
 ### Export an OEFDB CSV file
@@ -83,6 +115,12 @@ oefdb_validate --input <path-to-oefdb-csv-file>
 ```shell
 oefdb_export_for_github --input <path-to-oefdb-csv-file> --output <oefdb-csv-file-export-path>
 ```
+
+
+###
+Cell Validators
+
+
 
 ## FAQ
 
