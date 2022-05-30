@@ -60,7 +60,7 @@ pytest = "pytest"
 lint = "pre-commit run --all-files"
 install_kernel = "python -m ipykernel install --user --name python-oefdb-sdk"
 
-
+[tool.poetry.scripts]
 oefdb_validate = "oefdb.validate:cli"
 oefdb_validate_schema = "oefdb.validate_schema:validate_schema_cli_command"
 oefdb_import_from_github = "oefdb.import_from_github:cli"

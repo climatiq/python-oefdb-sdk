@@ -2,6 +2,7 @@
 name = "sector"
 validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+allowed_values = "allowed_sectors."
 
 [[columns]]
 name = "category"
