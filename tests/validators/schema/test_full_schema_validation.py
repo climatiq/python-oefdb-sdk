@@ -67,7 +67,7 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
     toml_conf = """
             [[columns]]
             name = "hello"
-            validators = ["is_allowed_string", "is_link"]
+            validators = ["has_no_commas", "is_link"]
             allow_empty = false
             """
 
@@ -85,7 +85,7 @@ def test_validation_of_csv_files_with_multiple_errors_on_same_cell():
     assert validation_result.row_errors == {
         2: {
             "hello": {
-                "is_allowed_string": "String ',' contains commas. Those are not allowed.",
+                "has_no_commas": "String ',' contains commas. Those are not allowed.",
                 "is_link": "Link ',' does not start with 'http'",
             }
         }

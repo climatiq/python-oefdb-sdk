@@ -38,21 +38,21 @@ def test_validation_of_float_rejects_empty_values_if_allow_empty_set_to_false():
     }
 
 
-def test_allowed_string_rejects_strings_with_comma():
+def test_no_commas_rejects_strings_with_comma():
     config = ColumnSchema(
-        name="config", validators=["is_allowed_string"], allow_empty=False
+        name="config", validators=["has_no_commas"], allow_empty=False
     )
 
     validation_error = config.validate_cell("hello,")
 
     assert validation_error == {
-        "is_allowed_string": "String 'hello,' contains commas. Those are not allowed."
+        "has_no_commas": "String 'hello,' contains commas. Those are not allowed."
     }
 
 
-def test_is_allowed_string_accepts_non_ascii_string():
+def test_has_no_commas_accepts_non_ascii_string():
     config = ColumnSchema(
-        name="config", validators=["is_allowed_string"], allow_empty=False
+        name="config", validators=["has_no_commas"], allow_empty=False
     )
 
     validation_error = config.validate_cell("æøå")
@@ -67,4 +67,13 @@ def test_is_ascii_rejects_non_ascii_string():
 
     assert validation_error == {
         "is_ascii": "String 'æøå' contains disallowed non-ASCII characters. First invalid character is 'æ' at index 0."
+    }
+
+def test_is_legal_id_rejects_punctuation():
+    config = ColumnSchema(name="config", validators=["is_legal_id"], allow_empty=False)
+
+    validation_error = config.validate_cell("hello!")
+
+    assert validation_error == {
+        "is_legal_id": 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
     }
