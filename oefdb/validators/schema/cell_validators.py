@@ -36,8 +36,9 @@ def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
 
     return f"'{cell_value}' was not a valid string"
 
+
 def is_ascii(cell_value: typing.Any) -> cell_validator_return_type:
-    """Ensure that the given cell only contains ASCII characters"""
+    """Ensure that the given cell only contains ASCII characters."""
     if isinstance(cell_value, str):
         if cell_value.isascii():
             return None
