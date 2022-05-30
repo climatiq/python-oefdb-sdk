@@ -43,7 +43,9 @@ class ColumnSchema(BaseModel):
             if self.allow_empty:
                 return None
             else:
-                return {"allow_empty": "The cell was empty, but empty cells are not allowed."}
+                return {
+                    "allow_empty": "The cell was empty, but empty cells are not allowed."
+                }
 
         all_errors = {}
 

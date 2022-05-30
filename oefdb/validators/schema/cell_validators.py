@@ -35,16 +35,14 @@ def has_no_commas(cell_value: typing.Any) -> cell_validator_return_type:
     return f"'{cell_value}' was not a valid string"
 
 
-valid_id_punctuation_regex = re.compile(r'-|_|\.')
+valid_id_punctuation_regex = re.compile(r"-|_|\.")
 
 
-def  is_legal_id(cell_value: str) -> cell_validator_return_type:
+def is_legal_id(cell_value: str) -> cell_validator_return_type:
     # If we have an alphanumeric string after removing all valid punctuation, then our ID is legal
     value_without_punctuation = re.sub(valid_id_punctuation_regex, "", cell_value)
-    print(value_without_punctuation)
-    print("bool", value_without_punctuation.isalnum())
     if not value_without_punctuation.isalnum():
-        return "Cell contains invalid punctuation. IDs can only contain alphanumeric characters and \"-\", \"_\" and \".\""
+        return 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
 
     return None
 
