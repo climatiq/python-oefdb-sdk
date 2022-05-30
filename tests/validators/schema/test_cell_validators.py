@@ -65,8 +65,6 @@ def test_is_ascii_rejects_non_ascii_string():
 
     validation_error = config.validate_cell("æøå")
 
-    print(validation_error)
-
     assert validation_error == {
         "is_ascii": "String 'æøå' contains disallowed non-ASCII characters. First invalid character is 'æ' at index 0."
     }
