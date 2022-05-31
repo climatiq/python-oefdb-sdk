@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import csv
+import pathlib
 import traceback
 from typing import Dict
 
@@ -30,7 +32,7 @@ results_from_validators_type = Dict[str, validator_result_type]
     type=click.Path(exists=True),
     help="OEFDB CSV file to validate",
 )
-@click.option('--fix/--no-fix', default=False, help="Write --fix to attempt to fix any issues that have automatic fixes before validating")
+@click.option('--fix/--no-fix', default=False, help="Write --fix to attempt to fix any issues that have automatic fixes before validating. This will modify the input file in place.")
 def validate_schema_cli_command(schema: str, input: str, fix: bool) -> None:
     try:
         try:
@@ -54,35 +56,53 @@ def validate_schema_cli_command(schema: str, input: str, fix: bool) -> None:
 
         if fix:
             fix_result = schema.fix_all(oefdb_csv)
+
             if fix_result.changes_applied():
                 echo("FIXES APPLIED!")
                 for change in fix_result.changed_rows:
-                    echo(f"Fixed row {change}")
+                    echo(f"Applied fixes on row {change}")
+
+
+                # First write backup file
+                backup_file = pathlib.Path(input).with_suffix(".backup")
+                with open(backup_file, "w+") as backup_file:
+                    echo(f"Writing a backup file of the input before modifying to {backup_file.name}")
+                    writer = csv.writer(backup_file)
+                    writer.writerows(oefdb_csv)
+
+                # Then rewrite the original file
+                with open(input, "w+") as csvfile:
+                    print("Writing back to file", csvfile.name)
+                    writer = csv.writer(csvfile)
+                    writer.writerows(fix_result.rows_with_fixes())
+                    print("finished writing back to file")
+
             oefdb_csv = fix_result.rows_with_fixes()
 
-        else:
-            validation_result = schema.validate_all(oefdb_csv)
 
-            # We should never have column errors here as we've already checked it, but we do it here as a safeguard
-            # just in case fixing something broke the column structure in some weird way.
-            if validation_result.column_errors:
-                echo("ERROR VALIDATING COLUMN STRUCTURE")
-                echo("Please edit the column schema.")
-                echo("Errors:")
-                for error in validation_result.column_errors:
-                    echo(error)
+        # Validate after fixes
+        validation_result = schema.validate_all(oefdb_csv)
 
-                exit(1)
+        # We should never have column errors here as we've already checked it, but we do it here as a safeguard
+        # just in case fixing something broke the column structure in some weird way.
+        if validation_result.column_errors:
+            echo("ERROR VALIDATING COLUMN STRUCTURE")
+            echo("Please edit the column schema.")
+            echo("Errors:")
+            for error in validation_result.column_errors:
+                echo(error)
 
-            if validation_result.row_errors:
-                echo("ERROR VALIDATING SOME ROWS")
-                echo("Errors:")
+            exit(1)
 
-                output_row_errors(validation_result.row_errors)
-                exit(1)
+        if validation_result.row_errors:
+            echo("ERROR VALIDATING SOME ROWS")
+            echo("Errors:")
 
-            echo("Everything looks good!")
-            exit(0)
+            output_row_errors(validation_result.row_errors)
+            exit(1)
+
+        echo("Everything looks good!")
+        exit(0)
     except Exception as error:  # noqa:B902
         echo("---Internal exception when running command---" "")
         echo(f"{error}")

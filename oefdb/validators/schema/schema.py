@@ -58,8 +58,7 @@ class Schema(BaseModel):
                     f"Expected column {index + 1} to be '{column.column_name}', but found no column"
                 )
 
-        # If the length is not identical here, it's because there's too many headers
-        if len(self.columns) != len(headers):
+        if len(self.columns) < len(headers):
             surplus = headers[len(self.columns):]
             errors.append(
                 f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns: {surplus}"
@@ -139,11 +138,17 @@ class Schema(BaseModel):
         configuration = tomli.loads(toml_schema)
 
         columns = []
-        for conf in configuration["columns"]:
-            validators = [ALL_VALIDATORS[v] for v in conf["validators"]]
+        try:
+            for conf in configuration["columns"]:
+                validators = [ALL_VALIDATORS[v] for v in conf["validators"]]
 
-            pprint.pp(conf)
-            pprint.pp(validators)
-            columns.append(ColumnSchema(**{**conf, "validators": validators}))
+                pprint.pp(conf)
+                pprint.pp(validators)
+                columns.append(ColumnSchema(**{**conf, "validators": validators}))
 
-        return Schema(columns=columns)
+            return Schema(columns=columns)
+        except KeyError as e:
+            print("Error while parsing configuration", e)
+            print("Configuration loaded from file: ")
+            print(configuration)
+            raise

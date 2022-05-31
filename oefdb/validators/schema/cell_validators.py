@@ -64,4 +64,5 @@ ALL_VALIDATORS = {
     "is_year": IsYearCellValidator,
     "is_float_or_not_supplied": IsFloatOrNotSuppliedCellValidator,
     "is_int": IsIntCellValidator,
+    "is_uuid": IsUUIDCellValidator,
 }
