@@ -10,6 +10,7 @@ from oefdb.validators.schema.cell_validators import ALL_VALIDATORS, CellValidato
 
 class ColumnSchema(BaseModel):
     column_name: str = Field(alias="name")
+    # TODO make this into not-a-string for ease-of-testing
     validator_strings: List[str] = Field(alias="validators")
     allow_empty: bool
 
@@ -25,10 +26,7 @@ class ColumnSchema(BaseModel):
 
     def validators(self) -> List[CellValidator]:
         return [
-            CellValidator(
-                validator_name=validator_name,
-                validator_function=ALL_VALIDATORS[validator_name],
-            )
+            ALL_VALIDATORS[validator_name]
             for validator_name in self.validator_strings
         ]
 
@@ -57,3 +55,25 @@ class ColumnSchema(BaseModel):
         if all_errors:
             return all_errors
         return None
+
+    def fix_cell(self, cell_value: str) -> None | str:
+        """
+        Fix a cell.
+
+        Returns None for a valid cell, or an updated cell value for a cell that could be fixed
+        """
+
+        original_cell_value = cell_value
+        # This might break at some point if we have fixers that are incompatible, as the "latest" fixer
+        # supplied will "win" and the user will get the message that the problem was fixed even though the cell
+        # still won't validate. I think that's okay.
+        for validator in self.validators():
+            fix_result = validator.fix_cell(cell_value)
+            if fix_result is None:
+                pass
+            else:
+                cell_value = fix_result
+
+        if original_cell_value == cell_value:
+            return None
+        return cell_value

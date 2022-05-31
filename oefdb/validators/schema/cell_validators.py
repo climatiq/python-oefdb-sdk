@@ -12,6 +12,7 @@ cell_validator_return_type = typing.Union[str, None]
 class CellValidator(BaseModel):
     validator_name: str
     validator_function: typing.Callable[[str], cell_validator_return_type]
+    fixer_function: typing.Callable[[str], cell_validator_return_type]
 
     def validate_cell(self, cell_value: str) -> cell_validator_return_type:
         """
@@ -23,6 +24,18 @@ class CellValidator(BaseModel):
         # See https://github.com/python/mypy/issues/5485 for why we need to ignore the typechecker here
         return self.validator_function(cell_value)  # type: ignore
 
+    def fix_cell(self, cell_value: str) -> typing.Union[str, None]:
+        """
+        Attempt to fix the value in a given cell.
+
+        This method when called will return None if the cell cannot be fixed, or does not require fixing.
+        It will return a string with the new value if the cell can be fixed.
+        """
+        pass
+
+def no_fix_available(cell_value: str) -> None:
+    """Dummy function when no fixing function is available"""
+    return None
 
 def has_no_commas(cell_value: typing.Any) -> cell_validator_return_type:
     """Ensure that the given cell is a non-empty string and contains no commas."""
@@ -128,12 +141,12 @@ def is_link(cell_value: str) -> cell_validator_return_type:
 
 # Mapping of strings in the schema file to the validation function
 ALL_VALIDATORS = {
-    "has_no_commas": has_no_commas,
-    "is_legal_id": is_legal_id,
-    "is_ascii": is_ascii,
-    "is_date": is_date,
-    "is_link": is_link,
-    "is_year": is_year,
-    "is_float_or_not_supplied": is_float_or_not_supplied,
-    "is_int": is_int,
+    "has_no_commas": CellValidator(validator_name="", validator_function=has_no_commas, fixer_function=no_fix_available),
+    "is_legal_id": CellValidator(validator_name="", validator_function=is_legal_id, fixer_function=no_fix_available),
+    "is_ascii": CellValidator(validator_name="", validator_function=is_ascii, fixer_function=no_fix_available),
+    "is_date": CellValidator(validator_name="", validator_function=is_date, fixer_function=no_fix_available),
+    "is_link": CellValidator(validator_name="", validator_function=is_link, fixer_function=no_fix_available),
+    "is_year": CellValidator(validator_name="", validator_function=is_year, fixer_function=no_fix_available),
+    "is_float_or_not_supplied": CellValidator(validator_name="", validator_function=is_float_or_not_supplied, fixer_function=no_fix_available),
+    "is_int": CellValidator(validator_name="", validator_function=is_int, fixer_function=no_fix_available),
 }
