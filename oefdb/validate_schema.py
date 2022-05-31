@@ -35,7 +35,8 @@ results_from_validators_type = Dict[str, validator_result_type]
 @click.option(
     "--fix/--no-fix",
     default=False,
-    help="Write --fix to attempt to fix any issues that have automatic fixes before validating. This will modify the input file in place.",
+    help="Write --fix to attempt to fix any issues that have automatic fixes before validating. "
+         "This will create a backup file and modify the input file in place.",
 )
 def validate_schema_cli_command(  # noqa: max-complexity: 12 - splitting up this function doesn't make it more readable
     schema: str, input: str, fix: bool
