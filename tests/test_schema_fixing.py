@@ -14,6 +14,16 @@ def test_fix_schema_cli():
     with tempfile.NamedTemporaryFile(
         "w+",
     ) as csv_file, tempfile.NamedTemporaryFile("w+") as schema_file:
+        writer = csv.writer(csv_file)
+        writer.writerows(
+            [
+                ["id", "foo"],
+                ["", ""],
+                ["not-valid-id", ""],
+                ["34c1ae79-cc9d-4435-b7f3-29fbeb71e742", ""],
+            ]
+        )
+        csv_file.flush()
         csv_file.seek(0)
         original_csv_content = csv_file.read()
         csv_file.seek(0)
