@@ -111,6 +111,13 @@ oefdb_validate --input <path-to-oefdb-csv-file>
 oefdb_validate_schema --input <path-to-oefdb-csv-file> --schema <path-to-schema-file>
 ```
 
+### Fix an OEFDB CSV file
+Some things can automatically be fixed. Adding the `--fix` command will attempt to perform any fixes in-place.
+It will write a backup file with the original values at the same location, but with the file extension `.bak`
+```shell
+oefdb_validate_schema --input <path-to-oefdb-csv-file> --schema <path-to-schema-file> --fix
+ ```
+
 ### Export an OEFDB CSV file
 
 ```shell

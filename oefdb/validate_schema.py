@@ -92,7 +92,7 @@ def fix_oefdb_in_place(schema: Schema, input_path: str, oefdb_csv: CsvRows) -> C
             echo(f"Applied fixes on row {change}")
 
         # First write backup file
-        backup_file_path = pathlib.Path(input_path).with_suffix(".backup")
+        backup_file_path = pathlib.Path(input_path).with_suffix(".bak")
         with backup_file_path.open("w+") as backup_file:
             echo(
                 f"Writing a backup file of the input before modifying to {backup_file.name}"

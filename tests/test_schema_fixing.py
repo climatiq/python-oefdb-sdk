@@ -83,7 +83,7 @@ def test_fix_schema_cli():
         assert csv_lines[3][0] == "34c1ae79-cc9d-4435-b7f3-29fbeb71e742"
 
         # We have a backup file
-        backup_file_path = pathlib.Path(csv_file.name).with_suffix(".backup")
+        backup_file_path = pathlib.Path(csv_file.name).with_suffix(".bak")
         print(backup_file_path)
         with open(backup_file_path) as backup:
             contents = backup.read()
