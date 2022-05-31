@@ -1,10 +1,10 @@
-from oefdb.validators.schema.cell_validator_functions import validate_is_uuid
 from oefdb.validators.schema.cell_validators import (
     HasNoCommasCellValidator,
     IsAsciiCellValidator,
     IsFloatOrNotSuppliedCellValidator,
     IsLegalIdCellValidator,
-    IsYearCellValidator, IsUUIDCellValidator,
+    IsUUIDCellValidator,
+    IsYearCellValidator,
 )
 from oefdb.validators.schema.column_schema import ColumnSchema
 

@@ -13,9 +13,7 @@ from click import echo
 from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
 from oefdb.validators._typing import CsvRows, validator_result_type
 from oefdb.validators.schema.schema import Schema
-from oefdb.validators.schema.validation_result import (
-    RowErrorsType,
-)
+from oefdb.validators.schema.validation_result import RowErrorsType
 
 results_from_validators_type = Dict[str, validator_result_type]
 

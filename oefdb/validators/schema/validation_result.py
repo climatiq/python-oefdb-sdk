@@ -17,9 +17,7 @@ class SchemaValidationResult(BaseModel):
     row_errors: RowErrorsType
 
     def is_valid(self) -> bool:
-        """
-        Checks whether the schema was valid. Returns true if there are no errors.
-        """
+        """Check whether the schema was valid. Returns true if there are no errors."""
         return not bool(self.row_errors) and not bool(self.column_errors)
 
 
@@ -32,14 +30,12 @@ class SchemaFixResult(BaseModel):
     rows_with_fixed_values: CsvRows
 
     def changes_applied(self) -> bool:
-        """
-        Returns whether fixing applied any changes.
-        """
+        """Return whether fixing applied any changes."""
         return bool(self.changed_row_indexes)
 
     def rows_with_fixes(self) -> CsvRows:
         """
-        Returns all CsvRows with any fixes applied.
+        Return all CsvRows with any fixes applied.
 
         This will return the original rows with no changes if no fixes were applied.
         """

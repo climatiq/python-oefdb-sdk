@@ -115,7 +115,8 @@ class Schema(BaseModel):
         all_rows_fixed = csv[0:1] + updated_rows
 
         return SchemaFixResult(
-            changed_row_indexes=indexes_of_changed_rows, rows_with_fixed_values=all_rows_fixed
+            changed_row_indexes=indexes_of_changed_rows,
+            rows_with_fixed_values=all_rows_fixed,
         )
 
     @staticmethod
