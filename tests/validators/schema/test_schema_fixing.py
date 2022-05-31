@@ -1,31 +1,15 @@
 import pprint
 
-from oefdb.validators.schema.cell_validators import CellValidator
+from oefdb.validators.schema.cell_validator_functions import validate_is_uuid, is_uuid
+from oefdb.validators.schema.cell_validators import CellValidator, IsUUIDCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
 
-
-def schema_fixture():
-    toml_conf = """
-        [[columns]]
-        name = "hello"
-        validators = ["is_float_or_not_supplied"]
-        allow_empty = false
-
-        [[columns]]
-        name = "world"
-        validators = ["is_year"]
-        allow_empty = true
-        """
-
-    return Schema.from_toml_string(toml_conf)
-
-
-add_2_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: None,
+add_2_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: "some error",
                                 fixer_function=lambda x: int(x) + 2)
 
-postfix_dots_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: None,
-                                fixer_function=lambda x: x + "...")
+postfix_dots_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: "some error",
+                                       fixer_function=lambda x: x + "...")
 
 
 def test_fixing_infrastructure_returns_updated_rows():
@@ -128,29 +112,79 @@ def test_fixing_attempts_to_fix_empty_values_if_allow_empty_false():
     ]
 
 
-# Todo remove
-def test_fixing_performs_schema_validation_first():
+def test_fixing_only_attempts_fix_if_validation_of_row_fails():
     csv = [
-        ["WrOnG"],
-        ["1",],
-        ["",],
+        ["hello", "world"],
+        ["1", "2013"],
+        ["", "2013"],
     ]
+
+    # This has a fixer, but it returns no error in validation
+    always_validating_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: None,
+                                                fixer_function=lambda x: x + "!")
 
     schema = Schema(columns=[
         ColumnSchema(
             name="hello",
-            validators=[postfix_dots_validator],
-            allow_empty=False
+            validators=[always_validating_validator],
+            allow_empty=True
         ),
         ColumnSchema(
             name="world",
-            validators=[postfix_dots_validator],
+            validators=[always_validating_validator],
             allow_empty=True
         )
     ])
 
     fix_result = schema.fix_all(csv)
 
-    pprint.pp(fix_result)
+    print('changed')
+    pprint.pp(fix_result.changed_rows)
+    print('new values')
+    pprint.pp(fix_result.rows_with_fixed_values)
 
-    raise Exception("sfsd")
+    assert fix_result.changes_applied() is False
+    assert fix_result.changed_rows == []
+    assert fix_result.rows_with_fixes() == [
+        ["hello", "world"],
+        ["1", "2013"],
+        ["", "2013"],
+    ]
+
+
+def test_can_generate_uuid_if_none_exists():
+    csv = [
+        ["id", "world"],
+        ["dce9092b-85b7-4b6b-bffb-faa77c4191e6", "2013"],
+        ["", "2013"],
+        ["not_an_id", "2013"],
+    ]
+
+    schema = Schema(columns=[
+        ColumnSchema(
+            name="hello",
+            validators=[IsUUIDCellValidator],
+            allow_empty=False
+        ),
+        ColumnSchema(
+            name="world",
+            validators=[],
+            allow_empty=True
+        )
+    ])
+
+    fix_result = schema.fix_all(csv)
+
+    print('changed')
+    pprint.pp(fix_result.changed_rows)
+    print('new values')
+    pprint.pp(fix_result.rows_with_fixed_values)
+
+    assert fix_result.changes_applied() is True
+    assert fix_result.changed_rows == [3, 4]
+
+    rows_with_fixes = fix_result.rows_with_fixes()
+
+    assert rows_with_fixes[1] == ["dce9092b-85b7-4b6b-bffb-faa77c4191e6", "2013"]
+    assert is_uuid(rows_with_fixes[2][0])
+    assert is_uuid(rows_with_fixes[3][0])

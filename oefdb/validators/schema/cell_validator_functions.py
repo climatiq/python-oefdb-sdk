@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import typing
+import uuid
 from datetime import datetime
 
 from oefdb.validators.schema.cell_validators import cell_validator_return_type
@@ -112,3 +113,23 @@ def is_link(cell_value: str) -> cell_validator_return_type:
             return f"Link '{cell_value}' does not start with 'http'"
     except AttributeError:
         return f"Unable to parse '{cell_value}' as a string."
+
+
+def validate_is_uuid(cell_value: str) -> cell_validator_return_type:
+    """Ensure that a given cell is a version 4 UUID."""
+    if not is_uuid(cell_value):
+        return f"'{cell_value}' was not a valid version 4 UUID"
+
+    return None
+
+def is_uuid(val: typing.Any) -> bool:
+    try:
+        uuid.UUID(val, version=4)
+        return True
+    except ValueError:
+        return False
+
+
+def generate_uuid(cell_value: str) -> typing.Union[str, None]:
+    """Generates a v4 UUID"""
+    return  str(uuid.uuid4())

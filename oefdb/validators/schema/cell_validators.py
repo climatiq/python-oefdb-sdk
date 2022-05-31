@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from oefdb.validators._typing import cell_validator_return_type
 from oefdb.validators.schema.cell_validator_functions import no_fix_available, has_no_commas, is_legal_id, is_ascii, \
-    is_year, is_float_or_not_supplied, is_int, is_date, is_link
+    is_year, is_float_or_not_supplied, is_int, is_date, is_link, validate_is_uuid, generate_uuid
 
 
 class CellValidator(BaseModel):
@@ -51,6 +51,7 @@ IsFloatOrNotSuppliedCellValidator = CellValidator(validator_name="is_float_or_no
                                                   validator_function=is_float_or_not_supplied,
                                                   fixer_function=no_fix_available)
 IsIntCellValidator = CellValidator(validator_name="is_int", validator_function=is_int, fixer_function=no_fix_available)
+IsUUIDCellValidator = CellValidator(validator_name="is_uuid", validator_function=validate_is_uuid, fixer_function=generate_uuid)
 
 
 # Mapping of strings in the schema file to the corresponding CellValidators

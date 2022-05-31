@@ -1,3 +1,4 @@
+from oefdb.validators.schema.cell_validator_functions import validate_is_uuid
 from oefdb.validators.schema.cell_validators import IsYearCellValidator, IsFloatOrNotSuppliedCellValidator, \
     HasNoCommasCellValidator, IsAsciiCellValidator, IsLegalIdCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
@@ -90,3 +91,11 @@ def test_is_legal_id_rejects_punctuation():
     assert validation_error == {
         "is_legal_id": 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
     }
+
+
+def test_is_uuid_accepts_valid_uuid():
+    assert validate_is_uuid("65039dea-f120-4495-8d9e-7a7b5354a27b") is None
+
+
+def test_is_uuid_accepts_rejects_invalid_uuid():
+    assert validate_is_uuid("foo-bar-qux") == "'foo-bar-qux' was not a valid version 4 UUID"
