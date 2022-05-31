@@ -38,7 +38,7 @@ class ColumnSchema(BaseModel):
             return all_errors
         return None
 
-    def fix_cell(self, cell_value: str) -> typing.Optional[None, str]:
+    def fix_cell(self, cell_value: str) -> typing.Union[None, str]:
         """
         Fix a cell.
 
@@ -49,9 +49,7 @@ class ColumnSchema(BaseModel):
             return None
 
         # If the cell is already valid, do not attempt to fix it
-        print("validate", self.validate_cell(cell_value))
         if self.validate_cell(cell_value) is None:
-            print(f'Returning None because cell "{cell_value}" is already valid')
             return None
 
         original_cell_value = cell_value

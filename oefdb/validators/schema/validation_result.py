@@ -35,12 +35,13 @@ class SchemaFixResult(BaseModel):
     """
     Were any changes applied
     """
+
     def changes_applied(self) -> bool:
         return bool(self.changed_rows)
 
     """
     Get rows with fixes
     """
+
     def rows_with_fixes(self) -> CsvRows:
         return self.rows_with_fixed_values
-

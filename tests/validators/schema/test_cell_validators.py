@@ -1,18 +1,27 @@
 from oefdb.validators.schema.cell_validator_functions import validate_is_uuid
-from oefdb.validators.schema.cell_validators import IsYearCellValidator, IsFloatOrNotSuppliedCellValidator, \
-    HasNoCommasCellValidator, IsAsciiCellValidator, IsLegalIdCellValidator
+from oefdb.validators.schema.cell_validators import (
+    HasNoCommasCellValidator,
+    IsAsciiCellValidator,
+    IsFloatOrNotSuppliedCellValidator,
+    IsLegalIdCellValidator,
+    IsYearCellValidator,
+)
 from oefdb.validators.schema.column_schema import ColumnSchema
 
 
 def test_validation_of_year_returns_none():
-    config = ColumnSchema(name="config", validators=[IsYearCellValidator], allow_empty=False)
+    config = ColumnSchema(
+        name="config", validators=[IsYearCellValidator], allow_empty=False
+    )
 
     validation_error = config.validate_cell("2013")
     assert validation_error is None
 
 
 def test_validation_of_wrong_year_returns_error():
-    config = ColumnSchema(name="config", validators=[IsYearCellValidator], allow_empty=False)
+    config = ColumnSchema(
+        name="config", validators=[IsYearCellValidator], allow_empty=False
+    )
 
     validation_error = config.validate_cell("noo")
 
@@ -74,7 +83,9 @@ def test_has_no_commas_accepts_non_ascii_string():
 
 
 def test_is_ascii_rejects_non_ascii_string():
-    config = ColumnSchema(name="config", validators=[IsAsciiCellValidator], allow_empty=False)
+    config = ColumnSchema(
+        name="config", validators=[IsAsciiCellValidator], allow_empty=False
+    )
 
     validation_error = config.validate_cell("æøå")
 
@@ -84,7 +95,9 @@ def test_is_ascii_rejects_non_ascii_string():
 
 
 def test_is_legal_id_rejects_punctuation():
-    config = ColumnSchema(name="config", validators=[IsLegalIdCellValidator], allow_empty=False)
+    config = ColumnSchema(
+        name="config", validators=[IsLegalIdCellValidator], allow_empty=False
+    )
 
     validation_error = config.validate_cell("hello!")
 
@@ -98,4 +111,7 @@ def test_is_uuid_accepts_valid_uuid():
 
 
 def test_is_uuid_accepts_rejects_invalid_uuid():
-    assert validate_is_uuid("foo-bar-qux") == "'foo-bar-qux' was not a valid version 4 UUID"
+    assert (
+        validate_is_uuid("foo-bar-qux")
+        == "'foo-bar-qux' was not a valid version 4 UUID"
+    )

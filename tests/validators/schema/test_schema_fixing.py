@@ -1,15 +1,21 @@
 import pprint
 
-from oefdb.validators.schema.cell_validator_functions import validate_is_uuid, is_uuid
+from oefdb.validators.schema.cell_validator_functions import is_uuid
 from oefdb.validators.schema.cell_validators import CellValidator, IsUUIDCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
 
-add_2_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: "some error",
-                                fixer_function=lambda x: int(x) + 2)
+add_2_validator = CellValidator(
+    validator_name="add_2_to_int",
+    validator_function=lambda x: "some error",
+    fixer_function=lambda x: int(x) + 2,
+)
 
-postfix_dots_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: "some error",
-                                       fixer_function=lambda x: x + "...")
+postfix_dots_validator = CellValidator(
+    validator_name="add_2_to_int",
+    validator_function=lambda x: "some error",
+    fixer_function=lambda x: x + "...",
+)
 
 
 def test_fixing_infrastructure_returns_updated_rows():
@@ -18,18 +24,12 @@ def test_fixing_infrastructure_returns_updated_rows():
         ["1", "2013"],
     ]
 
-    schema = Schema(columns=[
-        ColumnSchema(
-            name="hello",
-            validators=[add_2_validator],
-            allow_empty=True
-        ),
-        ColumnSchema(
-            name="world",
-            validators=[],
-            allow_empty=True
-        )
-    ])
+    schema = Schema(
+        columns=[
+            ColumnSchema(name="hello", validators=[add_2_validator], allow_empty=True),
+            ColumnSchema(name="world", validators=[], allow_empty=True),
+        ]
+    )
 
     fix_result = schema.fix_all(csv)
 
@@ -51,18 +51,12 @@ def test_fixing_does_not_fix_empty_values_if_allow_empty_true():
         ["", "2013"],
     ]
 
-    schema = Schema(columns=[
-        ColumnSchema(
-            name="hello",
-            validators=[add_2_validator],
-            allow_empty=True
-        ),
-        ColumnSchema(
-            name="world",
-            validators=[],
-            allow_empty=True
-        )
-    ])
+    schema = Schema(
+        columns=[
+            ColumnSchema(name="hello", validators=[add_2_validator], allow_empty=True),
+            ColumnSchema(name="world", validators=[], allow_empty=True),
+        ]
+    )
 
     fix_result = schema.fix_all(csv)
 
@@ -85,18 +79,16 @@ def test_fixing_attempts_to_fix_empty_values_if_allow_empty_false():
         ["", "2013"],
     ]
 
-    schema = Schema(columns=[
-        ColumnSchema(
-            name="hello",
-            validators=[postfix_dots_validator],
-            allow_empty=False
-        ),
-        ColumnSchema(
-            name="world",
-            validators=[postfix_dots_validator],
-            allow_empty=True
-        )
-    ])
+    schema = Schema(
+        columns=[
+            ColumnSchema(
+                name="hello", validators=[postfix_dots_validator], allow_empty=False
+            ),
+            ColumnSchema(
+                name="world", validators=[postfix_dots_validator], allow_empty=True
+            ),
+        ]
+    )
 
     fix_result = schema.fix_all(csv)
 
@@ -120,27 +112,28 @@ def test_fixing_only_attempts_fix_if_validation_of_row_fails():
     ]
 
     # This has a fixer, but it returns no error in validation
-    always_validating_validator = CellValidator(validator_name="add_2_to_int", validator_function=lambda x: None,
-                                                fixer_function=lambda x: x + "!")
+    always_validating_validator = CellValidator(
+        validator_name="add_2_to_int",
+        validator_function=lambda x: None,
+        fixer_function=lambda x: x + "!",
+    )
 
-    schema = Schema(columns=[
-        ColumnSchema(
-            name="hello",
-            validators=[always_validating_validator],
-            allow_empty=True
-        ),
-        ColumnSchema(
-            name="world",
-            validators=[always_validating_validator],
-            allow_empty=True
-        )
-    ])
+    schema = Schema(
+        columns=[
+            ColumnSchema(
+                name="hello", validators=[always_validating_validator], allow_empty=True
+            ),
+            ColumnSchema(
+                name="world", validators=[always_validating_validator], allow_empty=True
+            ),
+        ]
+    )
 
     fix_result = schema.fix_all(csv)
 
-    print('changed')
+    print("changed")
     pprint.pp(fix_result.changed_rows)
-    print('new values')
+    print("new values")
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is False
@@ -160,24 +153,20 @@ def test_can_generate_uuid_if_none_exists():
         ["not_an_id", "2013"],
     ]
 
-    schema = Schema(columns=[
-        ColumnSchema(
-            name="hello",
-            validators=[IsUUIDCellValidator],
-            allow_empty=False
-        ),
-        ColumnSchema(
-            name="world",
-            validators=[],
-            allow_empty=True
-        )
-    ])
+    schema = Schema(
+        columns=[
+            ColumnSchema(
+                name="hello", validators=[IsUUIDCellValidator], allow_empty=False
+            ),
+            ColumnSchema(name="world", validators=[], allow_empty=True),
+        ]
+    )
 
     fix_result = schema.fix_all(csv)
 
-    print('changed')
+    print("changed")
     pprint.pp(fix_result.changed_rows)
-    print('new values')
+    print("new values")
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is True

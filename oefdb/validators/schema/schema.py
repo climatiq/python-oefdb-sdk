@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import pprint
 import typing
 from typing import List
 
@@ -10,7 +9,10 @@ from pydantic import BaseModel
 from oefdb.validators._typing import CsvRows
 from oefdb.validators.schema.cell_validators import ALL_VALIDATORS
 from oefdb.validators.schema.column_schema import ColumnSchema
-from oefdb.validators.schema.validation_result import SchemaValidationResult, SchemaFixResult
+from oefdb.validators.schema.validation_result import (
+    SchemaFixResult,
+    SchemaValidationResult,
+)
 
 
 class Schema(BaseModel):
@@ -32,7 +34,6 @@ class Schema(BaseModel):
         updated_row = []
         for (cell, column) in zip(row, self.columns):
             new_value = column.fix_cell(cell)
-            print("new value", new_value)
             if new_value:
                 updated_row.append(new_value)
                 row_changed = True
@@ -59,7 +60,7 @@ class Schema(BaseModel):
                 )
 
         if len(self.columns) < len(headers):
-            surplus = headers[len(self.columns):]
+            surplus = headers[len(self.columns) :]
             errors.append(
                 f"Got more columns than expected. Please delete the extra columns or configure your schema file with the extra columns: {surplus}"
             )
@@ -91,10 +92,10 @@ class Schema(BaseModel):
 
     def fix_all(self, csv: CsvRows) -> SchemaFixResult:
         """
-        Attempts to fix all rows in the CSV file.
+        Attempt to fix all rows in the CSV file.
 
         It is expected that you have validated the schema before calling this method.
-         """
+        """
         rows = csv[1:]
 
         updated_rows = []
@@ -102,11 +103,9 @@ class Schema(BaseModel):
         for index, row in enumerate(rows):
             # We don't have the header here,  so we need to skip 1, and 1 more as a CSV is 1-indexed
             csv_index = index + 2
-            print("row", index, row)
 
             changed_value = self._fix_single_row(row)
 
-            print('changed value', changed_value)
             if changed_value:
                 updated_rows.append(changed_value)
                 rows_that_were_changed.append(csv_index)
@@ -115,15 +114,8 @@ class Schema(BaseModel):
 
         all_rows_fixed = csv[0:1] + updated_rows
 
-        print('changed rows')
-        pprint.pp(rows_that_were_changed)
-
-        print('rows with fixed values')
-        pprint.pp(all_rows_fixed)
-
         return SchemaFixResult(
-            changed_rows=rows_that_were_changed,
-            rows_with_fixed_values=all_rows_fixed
+            changed_rows=rows_that_were_changed, rows_with_fixed_values=all_rows_fixed
         )
 
     @staticmethod
@@ -142,13 +134,11 @@ class Schema(BaseModel):
             for conf in configuration["columns"]:
                 validators = [ALL_VALIDATORS[v] for v in conf["validators"]]
 
-                pprint.pp(conf)
-                pprint.pp(validators)
                 columns.append(ColumnSchema(**{**conf, "validators": validators}))
 
             return Schema(columns=columns)
         except KeyError as e:
-            print("Error while parsing configuration", e)
-            print("Configuration loaded from file: ")
-            print(configuration)
+            print("Error while parsing configuration", e)  # noqa T201
+            print("Configuration loaded from file: ")  # noqa T201
+            print(configuration)  # noqa T201
             raise

@@ -21,4 +21,3 @@ def test_validate_schema_cli():
         print(result.output)
 
     assert result.exit_code == 0
-

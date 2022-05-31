@@ -1,33 +1,19 @@
 import csv
 import pathlib
 import tempfile
-from os.path import join
 
 from click.testing import CliRunner
 
 from oefdb.validate_schema import validate_schema_cli_command
 from oefdb.validators.schema.cell_validator_functions import is_uuid
-from tests.utils import fixtures_dir_path
 
 
 def test_fix_schema_cli():
     runner = CliRunner()
 
-    with tempfile.NamedTemporaryFile("w+",) as csv_file, tempfile.NamedTemporaryFile("w+") as schema_file:
-
-        with open("./tmp.csv", "w+", newline='') as tmp:
-
-            writer = csv.writer(csv_file)
-            writer.writerows([
-                ["id", "foo"],
-                ["", ""],
-                ["not-valid-id", ""],
-                ["34c1ae79-cc9d-4435-b7f3-29fbeb71e742", ""],
-            ]
-            )
-
-            csv_file.flush()
-            # tmp.close()
+    with tempfile.NamedTemporaryFile(
+        "w+",
+    ) as csv_file, tempfile.NamedTemporaryFile("w+") as schema_file:
         csv_file.seek(0)
         original_csv_content = csv_file.read()
         csv_file.seek(0)
@@ -41,7 +27,8 @@ def test_fix_schema_cli():
 
         print("----")
 
-        schema_file.write("""
+        schema_file.write(
+            """
         [[columns]]
         name = "id"
         validators = ["is_uuid"]
@@ -51,7 +38,8 @@ def test_fix_schema_cli():
         name = "foo"
         validators = []
         allow_empty = true
-        """)
+        """
+        )
         schema_file.flush()
 
         print(csv_file.name)
@@ -87,9 +75,7 @@ def test_fix_schema_cli():
         # We have a backup file
         backup_file_path = pathlib.Path(csv_file.name).with_suffix(".backup")
         print(backup_file_path)
-        with open(backup_file_path, "r") as backup:
+        with open(backup_file_path) as backup:
             contents = backup.read()
             print(contents)
             assert contents == original_csv_content
-
-        assert 1 == 2

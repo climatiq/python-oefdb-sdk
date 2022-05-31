@@ -5,8 +5,19 @@ import typing
 from pydantic import BaseModel
 
 from oefdb.validators._typing import cell_validator_return_type
-from oefdb.validators.schema.cell_validator_functions import no_fix_available, has_no_commas, is_legal_id, is_ascii, \
-    is_year, is_float_or_not_supplied, is_int, is_date, is_link, validate_is_uuid, generate_uuid
+from oefdb.validators.schema.cell_validator_functions import (
+    generate_uuid,
+    has_no_commas,
+    is_ascii,
+    is_date,
+    is_float_or_not_supplied,
+    is_int,
+    is_legal_id,
+    is_link,
+    is_year,
+    no_fix_available,
+    validate_is_uuid,
+)
 
 
 class CellValidator(BaseModel):
@@ -35,23 +46,49 @@ class CellValidator(BaseModel):
         return self.fixer_function(cell_value)  # type: ignore
 
 
-HasNoCommasCellValidator = CellValidator(validator_name="has_no_commas", validator_function=has_no_commas,
-                                         fixer_function=no_fix_available)
-IsLegalIdCellValidator = CellValidator(validator_name="is_legal_id", validator_function=is_legal_id,
-                                       fixer_function=no_fix_available)
-IsAsciiCellValidator = CellValidator(validator_name="is_ascii", validator_function=is_ascii,
-                                     fixer_function=no_fix_available)
-IsDateCellValidator = CellValidator(validator_name="is_date", validator_function=is_date,
-                                    fixer_function=no_fix_available)
-IsLinkCellValidator = CellValidator(validator_name="is_link", validator_function=is_link,
-                                    fixer_function=no_fix_available)
-IsYearCellValidator = CellValidator(validator_name="is_year", validator_function=is_year,
-                                    fixer_function=no_fix_available)
-IsFloatOrNotSuppliedCellValidator = CellValidator(validator_name="is_float_or_not_supplied",
-                                                  validator_function=is_float_or_not_supplied,
-                                                  fixer_function=no_fix_available)
-IsIntCellValidator = CellValidator(validator_name="is_int", validator_function=is_int, fixer_function=no_fix_available)
-IsUUIDCellValidator = CellValidator(validator_name="is_uuid", validator_function=validate_is_uuid, fixer_function=generate_uuid)
+HasNoCommasCellValidator = CellValidator(
+    validator_name="has_no_commas",
+    validator_function=has_no_commas,
+    fixer_function=no_fix_available,
+)
+IsLegalIdCellValidator = CellValidator(
+    validator_name="is_legal_id",
+    validator_function=is_legal_id,
+    fixer_function=no_fix_available,
+)
+IsAsciiCellValidator = CellValidator(
+    validator_name="is_ascii",
+    validator_function=is_ascii,
+    fixer_function=no_fix_available,
+)
+IsDateCellValidator = CellValidator(
+    validator_name="is_date",
+    validator_function=is_date,
+    fixer_function=no_fix_available,
+)
+IsLinkCellValidator = CellValidator(
+    validator_name="is_link",
+    validator_function=is_link,
+    fixer_function=no_fix_available,
+)
+IsYearCellValidator = CellValidator(
+    validator_name="is_year",
+    validator_function=is_year,
+    fixer_function=no_fix_available,
+)
+IsFloatOrNotSuppliedCellValidator = CellValidator(
+    validator_name="is_float_or_not_supplied",
+    validator_function=is_float_or_not_supplied,
+    fixer_function=no_fix_available,
+)
+IsIntCellValidator = CellValidator(
+    validator_name="is_int", validator_function=is_int, fixer_function=no_fix_available
+)
+IsUUIDCellValidator = CellValidator(
+    validator_name="is_uuid",
+    validator_function=validate_is_uuid,
+    fixer_function=generate_uuid,
+)
 
 
 # Mapping of strings in the schema file to the corresponding CellValidators

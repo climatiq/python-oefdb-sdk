@@ -9,7 +9,7 @@ from oefdb.validators.schema.cell_validators import cell_validator_return_type
 
 
 def no_fix_available(cell_value: str) -> None:
-    """Dummy function when no fixing function is available"""
+    """No-op function when no fixing function is available."""
     return None
 
 
@@ -132,5 +132,5 @@ def is_uuid(val: typing.Any) -> bool:
 
 
 def generate_uuid(cell_value: str) -> typing.Union[str, None]:
-    """Generates a v4 UUID"""
+    """Generate a v4 UUID."""
     return str(uuid.uuid4())
