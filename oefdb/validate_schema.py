@@ -55,7 +55,7 @@ def validate_schema_cli_command(schema: str, input: str, fix: bool) -> None:
         if fix:
             oefdb_csv = fix_oefdb_in_place(schema, input, oefdb_csv)
 
-        # Validate after fixes
+        # Validate after potential fixes
         validation_result = schema.validate_all(oefdb_csv)
 
         if validation_result.column_errors:
@@ -88,7 +88,7 @@ def fix_oefdb_in_place(schema: Schema, input_path: str, oefdb_csv: CsvRows) -> C
 
     if fix_result.changes_applied():
         echo("--- FIXES APPLIED!")
-        for change in fix_result.changed_rows:
+        for change in fix_result.changed_row_indexes:
             echo(f"Applied fixes on row {change}")
 
         # First write backup file

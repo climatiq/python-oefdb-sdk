@@ -99,7 +99,7 @@ class Schema(BaseModel):
         rows = csv[1:]
 
         updated_rows = []
-        rows_that_were_changed = []
+        indexes_of_changed_rows = []
         for index, row in enumerate(rows):
             # We don't have the header here,  so we need to skip 1, and 1 more as a CSV is 1-indexed
             csv_index = index + 2
@@ -108,14 +108,14 @@ class Schema(BaseModel):
 
             if changed_value:
                 updated_rows.append(changed_value)
-                rows_that_were_changed.append(csv_index)
+                indexes_of_changed_rows.append(csv_index)
             else:
                 updated_rows.append(row)
 
         all_rows_fixed = csv[0:1] + updated_rows
 
         return SchemaFixResult(
-            changed_rows=rows_that_were_changed, rows_with_fixed_values=all_rows_fixed
+            changed_row_indexes=indexes_of_changed_rows, rows_with_fixed_values=all_rows_fixed
         )
 
     @staticmethod

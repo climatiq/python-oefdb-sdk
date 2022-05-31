@@ -33,11 +33,11 @@ def test_fixing_infrastructure_returns_updated_rows():
 
     fix_result = schema.fix_all(csv)
 
-    pprint.pp(fix_result.changed_rows)
+    pprint.pp(fix_result.changed_row_indexes)
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is True
-    assert fix_result.changed_rows == [2]
+    assert fix_result.changed_row_indexes == [2]
     assert fix_result.rows_with_fixes() == [
         ["hello", "world"],
         ["3", "2013"],
@@ -60,11 +60,11 @@ def test_fixing_does_not_fix_empty_values_if_allow_empty_true():
 
     fix_result = schema.fix_all(csv)
 
-    pprint.pp(fix_result.changed_rows)
+    pprint.pp(fix_result.changed_row_indexes)
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is True
-    assert fix_result.changed_rows == [2]
+    assert fix_result.changed_row_indexes == [2]
     assert fix_result.rows_with_fixes() == [
         ["hello", "world"],
         ["3", "2013"],
@@ -92,11 +92,11 @@ def test_fixing_attempts_to_fix_empty_values_if_allow_empty_false():
 
     fix_result = schema.fix_all(csv)
 
-    pprint.pp(fix_result.changed_rows)
+    pprint.pp(fix_result.changed_row_indexes)
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is True
-    assert fix_result.changed_rows == [2, 3]
+    assert fix_result.changed_row_indexes == [2, 3]
     assert fix_result.rows_with_fixes() == [
         ["hello", "world"],
         ["1...", "2013..."],
@@ -132,12 +132,12 @@ def test_fixing_only_attempts_fix_if_validation_of_row_fails():
     fix_result = schema.fix_all(csv)
 
     print("changed")
-    pprint.pp(fix_result.changed_rows)
+    pprint.pp(fix_result.changed_row_indexes)
     print("new values")
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is False
-    assert fix_result.changed_rows == []
+    assert fix_result.changed_row_indexes == []
     assert fix_result.rows_with_fixes() == [
         ["hello", "world"],
         ["1", "2013"],
@@ -165,12 +165,12 @@ def test_can_generate_uuid_if_none_exists():
     fix_result = schema.fix_all(csv)
 
     print("changed")
-    pprint.pp(fix_result.changed_rows)
+    pprint.pp(fix_result.changed_row_indexes)
     print("new values")
     pprint.pp(fix_result.rows_with_fixed_values)
 
     assert fix_result.changes_applied() is True
-    assert fix_result.changed_rows == [3, 4]
+    assert fix_result.changed_row_indexes == [3, 4]
 
     rows_with_fixes = fix_result.rows_with_fixes()
 

@@ -4,7 +4,7 @@ from oefdb.validators.schema.cell_validators import (
     IsAsciiCellValidator,
     IsFloatOrNotSuppliedCellValidator,
     IsLegalIdCellValidator,
-    IsYearCellValidator,
+    IsYearCellValidator, IsUUIDCellValidator,
 )
 from oefdb.validators.schema.column_schema import ColumnSchema
 
@@ -107,11 +107,18 @@ def test_is_legal_id_rejects_punctuation():
 
 
 def test_is_uuid_accepts_valid_uuid():
-    assert validate_is_uuid("65039dea-f120-4495-8d9e-7a7b5354a27b") is None
+    config = ColumnSchema(
+        name="id", validators=[IsUUIDCellValidator], allow_empty=False
+    )
+
+    assert config.validate_cell("65039dea-f120-4495-8d9e-7a7b5354a27b") is None
 
 
 def test_is_uuid_accepts_rejects_invalid_uuid():
-    assert (
-        validate_is_uuid("foo-bar-qux")
-        == "'foo-bar-qux' was not a valid version 4 UUID"
+    config = ColumnSchema(
+        name="id", validators=[IsUUIDCellValidator], allow_empty=False
     )
+
+    assert config.validate_cell("foo-bar-qux") == {
+        "is_uuid": "'foo-bar-qux' was not a valid version 4 UUID"
+    }

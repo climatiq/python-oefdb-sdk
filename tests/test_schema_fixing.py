@@ -89,3 +89,5 @@ def test_fix_schema_cli():
             contents = backup.read()
             print(contents)
             assert contents == original_csv_content
+        backup_file_path.unlink() # Delete tmp file after test
+

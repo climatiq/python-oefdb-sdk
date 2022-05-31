@@ -42,7 +42,7 @@ class ColumnSchema(BaseModel):
         """
         Fix a cell.
 
-        Returns None for a valid cell, or an updated cell value for a cell that could be fixed
+        Returns None for a valid or unfixable, or a string representing the updated value.
         """
         # Do not attempt to fix empty cells if they are allowed
         if cell_value == "" and self.allow_empty:
@@ -56,7 +56,7 @@ class ColumnSchema(BaseModel):
         # TODO
         # This might break at some point if we have fixers that are incompatible, as the "latest" fixer
         # supplied will "win" and the user will get the message that the problem was fixed even though the cell
-        # still won't validate. I think that's okay.
+        # still won't validate. We have so few fixers that this might not ever become a problem.
         for validator in self.validators:
             fix_result = validator.fix_cell(cell_value)
             if fix_result is None:
