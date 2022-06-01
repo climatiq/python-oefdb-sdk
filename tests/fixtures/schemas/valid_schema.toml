@@ -11,7 +11,7 @@ validators = ["has_no_commas", "is_ascii"]
 [[columns]]
 name = "activity_id"
 allow_empty = false
-validators = ["is_legal_id", "is_ascii"]
+validators = ["is_valid_activity_id", "is_ascii"]
 
 [[columns]]
 name = "name"

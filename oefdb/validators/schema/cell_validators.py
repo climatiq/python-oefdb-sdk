@@ -51,6 +51,7 @@ HasNoCommasCellValidator = CellValidator(
     validator_function=has_no_commas,
     fixer_function=no_fix_available,
 )
+#todo rename
 IsLegalIdCellValidator = CellValidator(
     validator_name="is_legal_id",
     validator_function=is_legal_id,
@@ -94,7 +95,7 @@ IsUUIDCellValidator = CellValidator(
 # Mapping of strings in the schema file to the corresponding CellValidators
 ALL_VALIDATORS = {
     "has_no_commas": HasNoCommasCellValidator,
-    "is_legal_id": IsLegalIdCellValidator,
+    "is_valid_activity_id": IsLegalIdCellValidator,
     "is_ascii": IsAsciiCellValidator,
     "is_date": IsDateCellValidator,
     "is_link": IsLinkCellValidator,
