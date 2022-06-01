@@ -80,11 +80,13 @@ def test_is_ascii_rejects_non_ascii_string():
     }
 
 
-def test_is_legal_id_rejects_punctuation():
-    config = ColumnSchema(name="config", validators=["is_legal_id"], allow_empty=False)
+def test_is_valid_activity_id_rejects_punctuation():
+    config = ColumnSchema(
+        name="config", validators=["is_valid_activity_id"], allow_empty=False
+    )
 
     validation_error = config.validate_cell("hello!")
 
     assert validation_error == {
-        "is_legal_id": 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
+        "is_valid_activity_id": 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
     }

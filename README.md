@@ -87,7 +87,7 @@ These are only called if the value is not-empty.
 ### Cell validators
 A list of all the cell validators currently
 - `has_no_commas`: No commas exist in this cell
-- `is_legal_id`: This cell is a legal id. Checks whether this only consists of alphanumeric characters and `-` `_` and `.`
+- `is_valid_activity_id`: This cell is a valid activity id. Checks whether this only consists of alphanumeric characters and `-` `_` and `.`
 - `is_ascii`: This cell only contains valid ASCII characters
 - `is_date`: This cell is a valid date on the format `YYYY/MM/DD` such as "2022/01/12"
 - `is_link`: This cell starts with "http"
