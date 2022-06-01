@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from oefdb.validators._typing import cell_validator_return_type
 from oefdb.validators.schema.cell_validator_functions import (
-    generate_uuid,
+    generate_uuid_if_empty,
     has_no_commas,
     is_ascii,
     is_date,
@@ -87,7 +87,7 @@ IsIntCellValidator = CellValidator(
 IsUUIDCellValidator = CellValidator(
     validator_name="is_uuid",
     validator_function=validate_is_uuid,
-    fixer_function=generate_uuid,
+    fixer_function=generate_uuid_if_empty,
 )
 
 

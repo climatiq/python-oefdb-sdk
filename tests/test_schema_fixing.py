@@ -21,7 +21,7 @@ def test_fix_schema_cli():
             [
                 ["id", "foo"],
                 ["", ""],
-                ["not-valid-id", ""],
+                ["", ""],
                 ["34c1ae79-cc9d-4435-b7f3-29fbeb71e742", ""],
             ]
         )

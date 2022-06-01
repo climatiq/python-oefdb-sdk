@@ -129,7 +129,7 @@ def test_fixing_only_attempts_fix_if_validation_of_row_fails():
     ]
 
 
-def test_can_generate_uuid_if_none_exists():
+def test_can_generate_uuid_if_cell_is_empty_but_does_not_override_invalid_id():
     csv = [
         ["id", "world"],
         ["dce9092b-85b7-4b6b-bffb-faa77c4191e6", "2013"],
@@ -149,10 +149,10 @@ def test_can_generate_uuid_if_none_exists():
     fix_result = schema.fix_all(csv)
 
     assert fix_result.changes_applied() is True
-    assert fix_result.changed_row_indexes == [3, 4]
+    assert fix_result.changed_row_indexes == [3]
 
     rows_with_fixes = fix_result.rows_with_fixes()
 
     assert rows_with_fixes[1] == ["dce9092b-85b7-4b6b-bffb-faa77c4191e6", "2013"]
     assert is_uuid(rows_with_fixes[2][0])
-    assert is_uuid(rows_with_fixes[3][0])
+    assert rows_with_fixes[3][0] == "not_an_id"

@@ -131,6 +131,8 @@ def is_uuid(val: typing.Any) -> bool:
         return False
 
 
-def generate_uuid(cell_value: str) -> typing.Union[str, None]:
-    """Generate a v4 UUID."""
-    return str(uuid.uuid4())
+def generate_uuid_if_empty(cell_value: str) -> typing.Union[str, None]:
+    """Generate a v4 UUID if the cell_value is empty."""
+    if cell_value == "":
+        return str(uuid.uuid4())
+    return None

@@ -94,7 +94,7 @@ A list of all the cell validators currently
 - `is_year`: This cell consists of a single valid year
 - `is_float_or_not_supplied`: This cell consists of a float, or the string `not-supplied`
 - `is_int`: This cell is a valid integer
-- `is_uuid`: This cell must a valid v4 UUID. This validator has a `fix` which will override any non-valid UUID with a valid UUID.
+- `is_uuid`: This cell must a valid v4 UUID. This validator has a `fix` which will generate a UUID if the cell is empty.
 
 ## Command line scripts
 
