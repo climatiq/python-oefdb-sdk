@@ -28,7 +28,6 @@ class ColumnSchema(BaseModel):
                     "allow_empty": "The cell was empty, but empty cells are not allowed."
                 }
 
-        # print(self.allowed_values)
         if self.allowed_values:
             if cell_value not in self.allowed_values:
                 return {

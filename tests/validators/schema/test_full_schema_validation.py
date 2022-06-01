@@ -1,5 +1,3 @@
-import pprint
-
 from oefdb.validators.schema.cell_validators import IsValidActivityIdCellValidator, IsAsciiCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
@@ -176,7 +174,6 @@ def test_validation_rejects_values_not_in_allowed_values():
 
     schema = Schema.from_toml_string(toml_conf)
 
-    pprint.pp(schema)
     validation_result = schema.validate_all(csv)
 
     assert validation_result.is_valid() is False
