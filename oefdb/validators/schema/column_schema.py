@@ -11,6 +11,7 @@ class ColumnSchema(BaseModel):
     column_name: str = Field(alias="name")
     validators: typing.List[CellValidator]
     allow_empty: bool
+    allowed_values: typing.Union[None, typing.List[str]]
 
     def validate_cell(self, cell_value: str) -> None | dict[str, str]:
         """
@@ -25,6 +26,13 @@ class ColumnSchema(BaseModel):
             else:
                 return {
                     "allow_empty": "The cell was empty, but empty cells are not allowed."
+                }
+
+        print(self.allowed_values)
+        if self.allowed_values:
+            if cell_value not in self.allowed_values:
+                return {
+                    "allowed_values": f"The value '{cell_value}' was not part of the 'allowed_values' list. Please edit the cell or the list of allowed values."
                 }
 
         all_errors = {}
