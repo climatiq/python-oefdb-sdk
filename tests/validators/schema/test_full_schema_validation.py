@@ -1,4 +1,4 @@
-from oefdb.validators.schema.cell_validators import IsValidActivityIdCellValidator, IsAsciiCellValidator
+from oefdb.validators.schema.cell_validators import IsAsciiCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
 
@@ -187,6 +187,7 @@ def test_validation_rejects_values_not_in_allowed_values():
         },
     }
 
+
 def test_validation_does_not_reject_empty_values_if_allow_empty_is_set_to_true_even_if_value_is_not_in_allowed_values():
     csv = [
         ["hello", "world"],
@@ -195,9 +196,7 @@ def test_validation_does_not_reject_empty_values_if_allow_empty_is_set_to_true_e
 
     schema = Schema(
         columns=[
-            ColumnSchema(
-                name="hello", validators=[], allow_empty=True
-            ),
+            ColumnSchema(name="hello", validators=[], allow_empty=True),
             ColumnSchema(
                 name="world", validators=[], allow_empty=True, allowed_values=["2014"]
             ),
@@ -217,11 +216,12 @@ def test_validation_still_fails_on_elements_in_allowed_values_if_validator_fails
 
     schema = Schema(
         columns=[
+            ColumnSchema(name="hello", validators=[], allow_empty=True),
             ColumnSchema(
-                name="hello", validators=[], allow_empty=True
-            ),
-            ColumnSchema(
-                name="world", validators=[IsAsciiCellValidator], allow_empty=True, allowed_values=["æøå"]
+                name="world",
+                validators=[IsAsciiCellValidator],
+                allow_empty=True,
+                allowed_values=["æøå"],
             ),
         ]
     )
