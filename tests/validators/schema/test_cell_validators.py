@@ -2,8 +2,8 @@ from oefdb.validators.schema.cell_validators import (
     HasNoCommasCellValidator,
     IsAsciiCellValidator,
     IsFloatOrNotSuppliedCellValidator,
-    IsLegalIdCellValidator,
     IsUUIDCellValidator,
+    IsValidActivityIdCellValidator,
     IsYearCellValidator,
 )
 from oefdb.validators.schema.column_schema import ColumnSchema
@@ -96,7 +96,7 @@ def test_is_ascii_rejects_non_ascii_string():
 
 def test_is_valid_activity_id_rejects_punctuation():
     config = ColumnSchema(
-        name="config", validators=["is_valid_activity_id"], allow_empty=False
+        name="config", validators=[IsValidActivityIdCellValidator], allow_empty=False
     )
 
     validation_error = config.validate_cell("hello!")

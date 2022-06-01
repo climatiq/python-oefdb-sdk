@@ -12,8 +12,8 @@ from oefdb.validators.schema.cell_validator_functions import (
     is_date,
     is_float_or_not_supplied,
     is_int,
-    is_legal_id,
     is_link,
+    is_valid_activity_id,
     is_year,
     no_fix_available,
     validate_is_uuid,
@@ -51,10 +51,9 @@ HasNoCommasCellValidator = CellValidator(
     validator_function=has_no_commas,
     fixer_function=no_fix_available,
 )
-#todo rename
-IsLegalIdCellValidator = CellValidator(
-    validator_name="is_legal_id",
-    validator_function=is_legal_id,
+IsValidActivityIdCellValidator = CellValidator(
+    validator_name="is_valid_activity_id",
+    validator_function=is_valid_activity_id,
     fixer_function=no_fix_available,
 )
 IsAsciiCellValidator = CellValidator(
@@ -95,7 +94,7 @@ IsUUIDCellValidator = CellValidator(
 # Mapping of strings in the schema file to the corresponding CellValidators
 ALL_VALIDATORS = {
     "has_no_commas": HasNoCommasCellValidator,
-    "is_valid_activity_id": IsLegalIdCellValidator,
+    "is_valid_activity_id": IsValidActivityIdCellValidator,
     "is_ascii": IsAsciiCellValidator,
     "is_date": IsDateCellValidator,
     "is_link": IsLinkCellValidator,
