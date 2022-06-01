@@ -1,3 +1,5 @@
+import pprint
+
 from oefdb.validators.schema.cell_validators import IsValidActivityIdCellValidator, IsAsciiCellValidator
 from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
@@ -159,17 +161,22 @@ def test_validation_rejects_values_not_in_allowed_values():
         ["", "2013"],
     ]
 
-    schema = Schema(
-        columns=[
-            ColumnSchema(
-                name="hello", validators=[], allow_empty=True
-            ),
-            ColumnSchema(
-                name="world", validators=[], allow_empty=True, allowed_values=["2014"]
-            ),
-        ]
-    )
+    toml_conf = """
+        [[columns]]
+        name = "hello"
+        validators = []
+        allow_empty = true
 
+        [[columns]]
+        name = "world"
+        validators = []
+        allow_empty = true
+        allowed_values = ["2014"]
+        """
+
+    schema = Schema.from_toml_string(toml_conf)
+
+    pprint.pp(schema)
     validation_result = schema.validate_all(csv)
 
     assert validation_result.is_valid() is False
