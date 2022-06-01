@@ -72,6 +72,10 @@ This SDK supports schema-based validation, where a schema is defined in a TOML f
 name = "kgCO2e-AR5"
 allow_empty = true
 validators = ["is_float_or_not_supplied"]
+allowed_values = [
+    "foo",
+    "bar"
+]
 
 [[columns]]
 # ... next column here
@@ -83,6 +87,8 @@ Then an `allow_empty` - if this is set to true, empty values are always allowed.
 empty values are never allowed.
 Afterwards, a list of `validators` - which is the name of functions that take the value and ensure it lives up to some sort of standard.
 These are only called if the value is not-empty.
+An optional property, `allowed_values` can be set, if only a predetermined list of values are allowed to be in this field. If `allow_empty` is set to true,
+empty values are allowed, even if they are not in the `allowed_values` list.
 
 ### Cell validators
 A list of all the cell validators currently
