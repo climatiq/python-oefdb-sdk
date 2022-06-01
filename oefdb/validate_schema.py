@@ -59,6 +59,7 @@ def validate_schema_cli_command(schema: str, input: str) -> None:
             output_row_errors(validation_result.row_errors)
             exit(1)
 
+        echo("Everything looks good!")
         exit(0)
     except Exception as error:  # noqa:B902
         echo("---Internal exception when running command---" "")

@@ -1,124 +1,124 @@
 [[columns]]
 name = "sector"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "category"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "activity_id"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["is_valid_activity_id", "is_ascii"]
 
 [[columns]]
 name = "name"
-validators = ["is_allowed_string"]
 allow_empty = false
+validators = ["has_no_commas"]
 
 [[columns]]
 name = "activity_unit"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "kgCO2e-AR5"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgCO2e-AR4"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgCO2"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgCH4"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgN2O"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgCO2e-OtherGHGs-AR5"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "kgCO2e-OtherGHGs-AR4"
-validators = ["is_float_or_not_supplied"]
 allow_empty = true
+validators = ["is_float_or_not_supplied"]
 
 [[columns]]
 name = "uncertainty"
-validators = ["is_int"]
 allow_empty = true
+validators = ["is_int"]
 
 [[columns]]
 name = "scope"
-validators = []
 allow_empty = true
+validators = []
 
 [[columns]]
 name = "lca_activity"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "source"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "year_released"
-validators = ["is_year"]
 allow_empty = false
+validators = ["is_year"]
 
 [[columns]]
 name = "years_valid"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = true
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "years_calculated_from"
-validators = ["is_year"]
 allow_empty = true
+validators = ["is_year"]
 
 [[columns]]
 name = "region"
-validators = ["is_allowed_string", "is_ascii"]
 allow_empty = false
+validators = ["has_no_commas", "is_ascii"]
 
 [[columns]]
 name = "data_quality"
+allow_empty = true
 validators = []
-allow_empty = false
 
 [[columns]]
 name = "contributor"
-validators = ["is_allowed_string"]
 allow_empty = true
+validators = ["has_no_commas"]
 
 [[columns]]
 name = "date_accessed"
-validators = ["is_date"]
 allow_empty = false
+validators = ["is_date"]
 
 [[columns]]
 name = "description"
-validators = ["is_allowed_string"]
 allow_empty = false
+validators = ["has_no_commas"]
 
 [[columns]]
 name = "source_link"
-validators = ["is_link"]
 allow_empty = false
+validators = ["is_link"]

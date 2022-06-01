@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import typing
 from datetime import datetime
 
@@ -23,18 +24,27 @@ class CellValidator(BaseModel):
         return self.validator_function(cell_value)  # type: ignore
 
 
-def is_allowed_string(cell_value: typing.Any) -> cell_validator_return_type:
+def has_no_commas(cell_value: typing.Any) -> cell_validator_return_type:
     """Ensure that the given cell is a non-empty string and contains no commas."""
     if isinstance(cell_value, str):
         if "," in cell_value:
             return f"String '{cell_value}' contains commas. Those are not allowed."
 
-        if cell_value == "":
-            return "Cell is empty"
-        else:
-            return None
+        return None
 
     return f"'{cell_value}' was not a valid string"
+
+
+valid_id_punctuation_regex = re.compile(r"-|_|\.")
+
+
+def is_valid_activity_id(cell_value: str) -> cell_validator_return_type:
+    # If we have an alphanumeric string after removing all valid punctuation, then our ID is legal
+    value_without_punctuation = re.sub(valid_id_punctuation_regex, "", cell_value)
+    if not value_without_punctuation.isalnum():
+        return 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'
+
+    return None
 
 
 def is_ascii(cell_value: typing.Any) -> cell_validator_return_type:
@@ -118,7 +128,8 @@ def is_link(cell_value: str) -> cell_validator_return_type:
 
 # Mapping of strings in the schema file to the validation function
 ALL_VALIDATORS = {
-    "is_allowed_string": is_allowed_string,
+    "has_no_commas": has_no_commas,
+    "is_valid_activity_id": is_valid_activity_id,
     "is_ascii": is_ascii,
     "is_date": is_date,
     "is_link": is_link,
