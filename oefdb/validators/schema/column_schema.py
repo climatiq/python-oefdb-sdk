@@ -1,36 +1,16 @@
 from __future__ import annotations
 
-from typing import List
+import typing
 
-import pydantic
 from pydantic import BaseModel, Field
 
-from oefdb.validators.schema.cell_validators import ALL_VALIDATORS, CellValidator
+from oefdb.validators.schema.cell_validators import CellValidator
 
 
 class ColumnSchema(BaseModel):
     column_name: str = Field(alias="name")
-    validator_strings: List[str] = Field(alias="validators")
+    validators: typing.List[CellValidator]
     allow_empty: bool
-
-    @pydantic.validator("validator_strings")
-    def check_validator_exists(cls, v: str) -> str:
-        for validator in v:
-            if validator not in ALL_VALIDATORS:
-                keys = list(ALL_VALIDATORS.keys())
-                raise ValueError(
-                    f"Wrong validator '{validator}' provided. Validator must one of: {keys}"
-                )
-        return v
-
-    def validators(self) -> List[CellValidator]:
-        return [
-            CellValidator(
-                validator_name=validator_name,
-                validator_function=ALL_VALIDATORS[validator_name],
-            )
-            for validator_name in self.validator_strings
-        ]
 
     def validate_cell(self, cell_value: str) -> None | dict[str, str]:
         """
@@ -49,7 +29,7 @@ class ColumnSchema(BaseModel):
 
         all_errors = {}
 
-        for validator in self.validators():
+        for validator in self.validators:
             error = validator.validate_cell(cell_value)
             if error:
                 all_errors[validator.validator_name] = error
@@ -57,3 +37,33 @@ class ColumnSchema(BaseModel):
         if all_errors:
             return all_errors
         return None
+
+    def fix_cell(self, cell_value: str) -> typing.Union[None, str]:
+        """
+        Fix a cell.
+
+        Returns None for a valid or unfixable, or a string representing the updated value.
+        """
+        # Do not attempt to fix empty cells if they are allowed
+        if cell_value == "" and self.allow_empty:
+            return None
+
+        # If the cell is already valid, do not attempt to fix it
+        if self.validate_cell(cell_value) is None:
+            return None
+
+        original_cell_value = cell_value
+        # TODO
+        # This might break at some point if we have fixers that are incompatible, as the "latest" fixer
+        # supplied will "win" and the user will get the message that the problem was fixed even though the cell
+        # still won't validate. We have so few fixers that this might not ever become a problem.
+        for validator in self.validators:
+            fix_result = validator.fix_cell(cell_value)
+            if fix_result is None:
+                pass
+            else:
+                cell_value = fix_result
+
+        if original_cell_value == cell_value:
+            return None
+        return cell_value
