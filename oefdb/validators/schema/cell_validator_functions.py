@@ -28,7 +28,7 @@ valid_id_punctuation_regex = re.compile(r"-|_|\.")
 
 
 def is_valid_activity_id(cell_value: str) -> cell_validator_return_type:
-    # If we have an alphanumeric string after removing all valid punctuation, then our ID is legal
+    # If we have an alphanumeric string after removing all valid punctuation, then our ID is valid
     value_without_punctuation = re.sub(valid_id_punctuation_regex, "", cell_value)
     if not value_without_punctuation.isalnum():
         return 'Cell contains invalid punctuation. IDs can only contain alphanumeric characters and "-", "_" and "."'

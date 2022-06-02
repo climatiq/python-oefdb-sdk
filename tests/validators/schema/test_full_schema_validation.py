@@ -1,3 +1,5 @@
+from oefdb.validators.schema.cell_validators import IsAsciiCellValidator
+from oefdb.validators.schema.column_schema import ColumnSchema
 from oefdb.validators.schema.schema import Schema
 
 
@@ -146,6 +148,93 @@ def test_validation_is_empty_rejects_empty_values_if_set_to_false():
         2: {
             "hello": {
                 "allow_empty": "The cell was empty, but empty cells are not allowed."
+            }
+        },
+    }
+
+
+def test_validation_rejects_values_not_in_allowed_values():
+    csv = [
+        ["hello", "world"],
+        ["", "2013"],
+    ]
+
+    toml_conf = """
+        [[columns]]
+        name = "hello"
+        validators = []
+        allow_empty = true
+
+        [[columns]]
+        name = "world"
+        validators = []
+        allow_empty = true
+        allowed_values = ["2014"]
+        """
+
+    schema = Schema.from_toml_string(toml_conf)
+
+    validation_result = schema.validate_all(csv)
+
+    assert validation_result.is_valid() is False
+    assert not validation_result.column_errors
+
+    assert validation_result.row_errors == {
+        2: {
+            "world": {
+                "allowed_values": "The value '2013' was not part of the 'allowed_values' list. Please edit the cell or the list of allowed values."
+            }
+        },
+    }
+
+
+def test_validation_does_not_reject_empty_values_if_allow_empty_is_set_to_true_even_if_value_is_not_in_allowed_values():
+    csv = [
+        ["hello", "world"],
+        ["", ""],
+    ]
+
+    schema = Schema(
+        columns=[
+            ColumnSchema(name="hello", validators=[], allow_empty=True),
+            ColumnSchema(
+                name="world", validators=[], allow_empty=True, allowed_values=["2014"]
+            ),
+        ]
+    )
+
+    validation_result = schema.validate_all(csv)
+
+    assert validation_result.is_valid() is True
+
+
+def test_validation_still_fails_on_elements_in_allowed_values_if_validator_fails():
+    csv = [
+        ["hello", "world"],
+        ["", "æøå"],
+    ]
+
+    schema = Schema(
+        columns=[
+            ColumnSchema(name="hello", validators=[], allow_empty=True),
+            ColumnSchema(
+                name="world",
+                validators=[IsAsciiCellValidator],
+                allow_empty=True,
+                allowed_values=["æøå"],
+            ),
+        ]
+    )
+
+    validation_result = schema.validate_all(csv)
+
+    assert validation_result.is_valid() is False
+    assert not validation_result.column_errors
+
+    assert validation_result.row_errors == {
+        2: {
+            "world": {
+                "is_ascii": "String 'æøå' contains disallowed non-ASCII characters. First invalid character is 'æ' at index 0."
             }
         },
     }
