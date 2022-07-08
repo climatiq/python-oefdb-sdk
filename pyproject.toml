@@ -62,6 +62,7 @@ install_kernel = "python -m ipykernel install --user --name python-oefdb-sdk"
 
 [tool.poetry.scripts]
 oefdb_validate = "oefdb.validate:cli"
+oefdb_format = "oefdb.format_csv:format_csv_cli_command"
 oefdb_validate_schema = "oefdb.validate_schema:validate_schema_cli_command"
 oefdb_import_from_github = "oefdb.import_from_github:cli"
 oefdb_export_for_github = "oefdb.export_for_github:cli"
