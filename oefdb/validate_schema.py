@@ -102,9 +102,9 @@ def fix_oefdb_in_place(schema: Schema, input_path: str, oefdb_csv: CsvRows) -> C
         # open with newline='' to disable newline translation
         # which gives us CRLF line endings
         # https://docs.python.org/3/library/csv.html#examples
-        with open(input_path, "w+", newline='') as csvfile:
+        with open(input_path, "w+", newline="") as csvfile:
             echo(f"Writing back to file {csvfile.name}")
-            writer = csv.writer(csvfile)
+            writer = csv.writer(csvfile, lineterminator="\n")
             writer.writerows(fix_result.rows_with_fixes())
 
     return fix_result.rows_with_fixes()

@@ -1,23 +1,18 @@
 from __future__ import annotations
 
 import csv
-import pathlib
+import filecmp
+import shutil
 import traceback
-import typing
 from typing import Dict
 
 import click
-import pydantic
 from click import echo
 
-from oefdb.util.from_oefdb_csv import from_oefdb_csv_raw
-from oefdb.validators._typing import CsvRows, validator_result_type
-from oefdb.validators.schema.schema import Schema
-from oefdb.validators.schema.validation_result import RowErrorsType
-import io
+from oefdb.validators._typing import validator_result_type
+
 results_from_validators_type = Dict[str, validator_result_type]
-import filecmp
-import shutil
+
 
 @click.command()
 @click.option(
@@ -29,24 +24,33 @@ import shutil
 )
 def format_csv_cli_command(input: str) -> None:
     try:
-        # Read the csv both as rows and as a string
+        # Read the original csv
         with open(input, newline="") as csvfile:
-            original_csv_string = csvfile.read()
-            csvfile.seek(0)
             reader = csv.reader(csvfile)
             csv_rows = list(reader)
 
-        # Write csv out to a temporary file
+        # Write the new csv out to a temporary file
+        # This is to make it easier to ensure that newlines
+        # are correct when comparing files
+        # writing to a StringIO seems to not be consistent with newline handling
         temporary_file = f"{input}.formatting"
-        with open(temporary_file, "w", encoding="utf-8", newline='',) as f:
+        with open(
+            temporary_file,
+            "w",
+            encoding="utf-8",
+            newline="",
+        ) as f:
             writer = csv.writer(f, quoting=csv.QUOTE_NONE, lineterminator="\n")
             writer.writerows(csv_rows)
 
         if filecmp.cmp(input, temporary_file, shallow=False):
-            echo("Formatting not okay. Formatting CSV in-place")
+            echo("Formatting okay!")
         else:
-            echo("Formatting okay! Not doing anything.")
+            echo("Formatting not okay. Formatting CSV in-place")
 
+        # Override regular file with temporary file
+        # If they're not identical this fixes the formatting
+        # If they are identical, this does nothing (apart from modifying the files modified time)
         shutil.move(temporary_file, input)
 
     except Exception as error:  # noqa:B902

@@ -138,7 +138,7 @@ This library uses the GitHub API to import OEFDB data and the API has a rate lim
 
 #### Authenticating with the GitHub API
 
-1. Go to [https://github.com/settings/tokens/new]() to create a read-only personal access token. No checkboxes needs to be checked.
+1. Go to [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new) to create a read-only personal access token. No checkboxes needs to be checked.
 
 2. Call it something like `oefdb-github-api-token` and press `Generate token`.
 

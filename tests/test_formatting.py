@@ -1,18 +1,15 @@
-import csv
-import pathlib
 import tempfile
 
 from click.testing import CliRunner
 
 from oefdb.format_csv import format_csv_cli_command
-from oefdb.validate_schema import validate_schema_cli_command
-from oefdb.validators.schema.cell_validator_functions import is_uuid
 
 
 def test_format_csv_cli():
 
     with tempfile.NamedTemporaryFile(
         "w+",
+        newline="",
     ) as csv_file:
         runner = CliRunner()
 
@@ -20,6 +17,7 @@ def test_format_csv_cli():
 
         # --- Write CSV file and record original contents for comparison with backup file
         csv_file.write(csv_content)
+        csv_file.flush()
 
         # Invoke CLI
         result = runner.invoke(
@@ -32,10 +30,13 @@ def test_format_csv_cli():
 
         assert result.exit_code == 0
 
-        # Assert that the written CSV file now has UUIDs in the id column
-        csv_file.seek(0)
-        csv = csv_file.read()
-
-        print(repr(csv))
-
-        raise "123"
+        with open(csv_file.name, newline="") as f:
+            updated_contents = f.read()
+            # Contents have been updated with:
+            # 1. Newlines changed to \n from \r\n
+            # 2. Quoted strings have been unquoted
+            # 3. A trailing newline has been added
+            assert (
+                updated_contents
+                == "id,foo\nsome string with quotes,123\nno quotes, 1234\n"
+            )
