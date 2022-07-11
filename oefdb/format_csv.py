@@ -30,7 +30,7 @@ def format_csv_cli_command(input: str) -> None:
             reader = csv.reader(csvfile)
             csv_rows = pandas.read_csv(csvfile, dtype=str, keep_default_na=False)
 
-        sort_order = ["UUID"]
+        sort_order = ["name"]
         sort_ascending = [True]
         csv_rows.sort_values(by=sort_order, ascending=sort_ascending, inplace=True, key=lambda col: col.str.lower())
 
