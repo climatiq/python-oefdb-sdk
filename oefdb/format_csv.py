@@ -28,7 +28,7 @@ def format_csv_cli_command(input: str) -> None:
         # Read the original csv
         with open(input, newline="") as csvfile:
             reader = csv.reader(csvfile)
-            csv_rows = pandas.read_csv(csvfile)
+            csv_rows = pandas.read_csv(csvfile, dtype=str, keep_default_na=False)
 
         sort_order = ["sector", "category", "name", "region", "year_released", "source"]
         sort_ascending = [True, True, True, True, False, True]
