@@ -30,8 +30,8 @@ def format_csv_cli_command(input: str) -> None:
             reader = csv.reader(csvfile)
             csv_rows = pandas.read_csv(csvfile, dtype=str, keep_default_na=False)
 
-        sort_order = ["sector", "category", "name", "region", "year_released", "source"]
-        sort_ascending = [True, True, True, True, False, True]
+        sort_order = ["sector", "category", "name", "region", "year_released", "source", "UUID"]
+        sort_ascending = [True, True, True, True, False, True, True]
         csv_rows.sort_values(by=sort_order, ascending=sort_ascending, inplace=True, key=lambda col: col.str.lower())
 
         print(csv_rows)
