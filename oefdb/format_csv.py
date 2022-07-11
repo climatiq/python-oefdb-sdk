@@ -7,6 +7,8 @@ import traceback
 from typing import Dict
 
 import click
+import pandas
+import pyuca
 from click import echo
 
 from oefdb.validators._typing import validator_result_type
@@ -27,7 +29,16 @@ def format_csv_cli_command(input: str) -> None:
         # Read the original csv
         with open(input, newline="") as csvfile:
             reader = csv.reader(csvfile)
-            csv_rows = list(reader)
+            csv_rows = pandas.read_csv(csvfile, dtype=str, keep_default_na=False)
+
+        collator = pyuca.Collator()
+
+        sort_order = ["sector", "category", "name", "region", "year_released", "source"]
+        sort_ascending = [True, True, True, True, False, True]
+        csv_rows.sort_values(by=sort_order, ascending=sort_ascending, inplace=True, key=lambda col: col.transform(lambda v: collator.sort_key(v)), kind="stable")
+
+        print(csv_rows)
+
 
         # Write the new csv out to a temporary file
         # This is to make it easier to ensure that newlines
@@ -40,8 +51,7 @@ def format_csv_cli_command(input: str) -> None:
             encoding="utf-8",
             newline="",
         ) as f:
-            writer = csv.writer(f, quoting=csv.QUOTE_NONE, lineterminator="\n")
-            writer.writerows(csv_rows)
+            csv_rows.to_csv(f, quoting=csv.QUOTE_NONE, line_terminator="\n", index=False)
 
         if filecmp.cmp(input, temporary_file, shallow=False):
             echo("Formatting okay!")

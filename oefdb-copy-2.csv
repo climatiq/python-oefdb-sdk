@@ -1,0 +1,11 @@
+UUID,sector,category,activity_id,name,source,year_released,region
+6d36dd54-4020-4b93-a3ea-2a38077fb17c,Energy,Fuel,fuel_type_avgas-fuel_use_aviation,Aviation spirit,BEIS,2021,GB
+a6ccaf6a-b1fe-4113-b0cc-d50cd41b9063,Energy,Fuel,fuel_type_avgas-fuel_use_aviation,Aviation spirit,BEIS,2021,GB
+88946dae-8f98-45d4-86e6-0332a5973910,Energy,Fuel,fuel_type_avgas-fuel_use_aviation,Aviation Spirit - WTT,BEIS,2021,GB
+cf94b5ff-3e51-477d-bd53-e3a537aadfa7,Energy,Fuel,fuel_type_avgas-fuel_use_aviation,Aviation Spirit - WTT,BEIS,2021,GB
+13c4f3ff-2158-457f-bc88-df81bfa7f106,Energy,Fuel,fuel_type_avgas_gross-fuel_use_aviation,Aviation Spirit - WTT (gross calorific value),BEIS,2021,GB
+d1296168-7977-4b15-817a-54acf1aa1616,Energy,Fuel,fuel_type_avgas_net-fuel_use_aviation,Aviation Spirit - WTT (net calorific value),BEIS,2021,GB
+ff0a4c63-9c7f-4ba0-9c72-89b5652c86ea,Energy,Fuel,fuel_type_avgas_gross-fuel_use_aviation,Aviation spirit (gross calorific value),BEIS,2021,GB
+009ee736-a258-436a-80f8-01426ea16ce6,Energy,Fuel,fuel_type_avgas_net-fuel_use_aviation,Aviation spirit (net calorific value),BEIS,2021,GB
+47119b2b-7b41-42ff-b93c-babe4e6d3604,Energy,Fuel,fuel_type_avtur-fuel_use_aviation,Aviation turbine fuel,BEIS,2021,GB
+64dcb83c-dca4-4451-9092-63720e6106ec,Energy,Fuel,fuel_type_avtur-fuel_use_aviation,Aviation turbine fuel,BEIS,2021,GB
