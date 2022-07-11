@@ -33,8 +33,8 @@ def format_csv_cli_command(input: str) -> None:
 
         collator = pyuca.Collator()
 
-        sort_order = ["name"]
-        sort_ascending = [True]
+        sort_order = ["sector", "category", "name", "region", "year_released", "source"]
+        sort_ascending = [True, True, True, True, False, True]
         csv_rows.sort_values(by=sort_order, ascending=sort_ascending, inplace=True, key=lambda col: col.transform(lambda v: collator.sort_key(v)), kind="stable")
 
         print(csv_rows)
