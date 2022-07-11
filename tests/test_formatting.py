@@ -1,5 +1,7 @@
+import pprint
 import tempfile
 
+import pyuca as pyuca
 from click.testing import CliRunner
 
 from oefdb.format_csv import format_csv_cli_command
@@ -40,3 +42,41 @@ def test_format_csv_cli():
                 updated_contents
                 == "id,foo\nsome string with quotes,123\nno quotes, 1234\n"
             )
+
+
+def test_foo():
+    strings = [
+        "Aviation spirit",
+        "Aviation spirit",
+        "Aviation spirit - WTT",
+        "Aviation spirit - WTT",
+        "Aviation spirit - WTT (gross calorific value)",
+        "Aviation spirit - WTT (net calorific value)",
+        "Aviation spirit (gross calorific value)",
+        "Aviation spirit (net calorific value)",
+        "Aviation turbine fuel",
+        "Aviation turbine fuel",
+    ]
+
+    c = pyuca.Collator()
+
+
+#     strings = [
+# "Aviation spirit",
+# "Aviation spirit",
+# "Aviation spirit (gross calorific value)",
+# "Aviation spirit (net calorific value)",
+# "Aviation Spirit WTT",
+# "Aviation Spirit WTT",
+# "Aviation Spirit WTT (gross calorific value)",
+# "Aviation Spirit WTT (net calorific value)",
+# "Aviation turbine fuel",
+# "Aviation turbine fuel",
+#     ]
+
+    x = sorted(strings, key=c.sort_key)
+
+    pprint.pprint(x)
+
+    raise 123;
+
